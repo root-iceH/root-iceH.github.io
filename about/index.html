@@ -239,9 +239,43 @@
 <p>🔵 不要让我准时上班，这是不可能的；<br>💠 不要吵我睡觉，分分钟掏把刀出来；<br>🔺 <del>我肯定喜欢日站啊</del>其实我觉得看番比较重要。</p>
 <p>🌌 兴趣至上！萝莉即正义<br>💻 当然…御姐也可以</p>
 <p>💌 没事不要发邮件给我。。一般都不会看的，，看了也不会回</p>
+<hr>
+
 
 </article>
 
+
+  <!-- Comments -->
+  <article class="comments" id="comments">
+    
+    
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    Fluid.utils.waitElementVisible('vcomments', function() {
+      Fluid.utils.createScript('https://cdn.staticfile.org/valine/1.4.14/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "MnjV8raNBztIVGGKiicFL3Sq-MdYXbMMI",
+          app_key: "hS70MmgmzDqbMSkSAfkDe42h",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "wavatar",
+          meta: ["nick","mail"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments powered by Valine.</a>
+  </noscript>
+
+
+  </article>
 
 
               </div>

