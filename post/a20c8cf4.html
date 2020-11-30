@@ -218,7 +218,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      609 字
+      586 字
     </span>
   
 
@@ -261,7 +261,7 @@
             <h1 style="display: none">Linux提权之Suid提权</h1>
             
             <div class="markdown-body">
-              <h2 id="漏洞介绍"><a href="#漏洞介绍" class="headerlink" title="漏洞介绍"></a>漏洞介绍</h2><p>SUID代表设置的用户ID，是一种Linux功能，允许用户在指定用户的许可下执行文件。例如，Linux ping命令通常需要root权限才能打开原始网络套接字。只要低特权用户执行suid权限程序，便会以root特权执行。</p>
+              <h2 id="漏洞介绍"><a href="#漏洞介绍" class="headerlink" title="漏洞介绍"></a>漏洞介绍</h2><p>SUID代表设置的用户ID，是一种Linux功能，允许用户在指定用户的许可下执行文件。只要低特权用户执行suid权限程序，便会以root特权执行。</p>
 <p>SUID是一项功能，如果使用得当，它实际上可以增强Linux的安全性。问题在于，管理员在安装第三方应用程序或进行逻辑配置更改时可能会在不知不觉中引入危险的SUID配置。</p>
 <p>许多系统管理员不知道应该在什么情况设置SUID位，SUID位不应该设置在文件编辑器上，因为攻击者可以修改系统上存在的任何文件。</p>
 <h2 id="常见的可用于suid提权的命令"><a href="#常见的可用于suid提权的命令" class="headerlink" title="常见的可用于suid提权的命令"></a>常见的可用于suid提权的命令</h2><pre><code class="hljs bash">Nmap
