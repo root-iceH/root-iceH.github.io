@@ -1,0 +1,712 @@
+<!DOCTYPE html><html lang="zh-CN" data-default-color-scheme="&#34;auto&#34;"><head><meta charset="UTF-8"><link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png"><link rel="icon" type="image/png" href="/img/favicon.png"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no"><meta http-equiv="x-ua-compatible" content="ie=edge"><meta name="theme-color" content="#2f4154"><meta name="description" content="没有天生的大牛，更没有永远的菜鸟求知若饥 , 虚心若愚"><meta name="author" content="iceH"><meta name="keywords" content=""><title>Golang学习之函数与工程管理 - iceH’s Blog</title><link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css"><link rel="stylesheet" href="/lib/hint/hint.min.css"><link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.1.2/styles/github-gist.min.css"><link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css"><link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css"><link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css"><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/css/gundongtiao.css#%20%E6%BB%9A%E5%8A%A8%E6%9D%A1%E9%A2%9C%E8%89%B2.css"><link rel="stylesheet" href="/css/shubiao.css#%20%E9%BC%A0%E6%A0%87%E6%8C%87%E9%92%88.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><link rel="stylesheet" href="/css/valine.css"><script id="fluid-configs">var Fluid=window.Fluid||{},CONFIG={hostname:"www.secice.cn",root:"/",version:"1.8.5",typing:{enable:!0,typeSpeed:70,cursorChar:"_",loop:!1},toc:{enable:!0,headingSelector:"h1,h2,h3,h4,h5,h6",collapseDepth:0},anchorjs:{enable:!0,element:"h1,h2,h3,h4,h5,h6",placement:"right",visible:"hover",icon:""},copy_btn:!0,image_zoom:{enable:!0},lazyload:{enable:!0,onlypost:!1},web_analytics:{enable:!1,baidu:null,google:null,gtag:null,tencent:{sid:null,cid:null},woyaola:null,cnzz:null,leancloud:{app_id:null,app_key:null,server_url:null}}}</script><script src="/js/utils.js"></script><script src="/js/color-schema.js"></script><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="iceH’s Blog" type="application/atom+xml">
+</head><body><header style="height:70vh"><nav id="navbar" class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar"><div class="container"><a class="navbar-brand" href="/">&nbsp;<strong>iceH's Blog</strong>&nbsp;</a> <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><div class="animated-icon"><span></span><span></span><span></span></div></button><div class="collapse navbar-collapse" id="navbarSupportedContent"><ul class="navbar-nav ml-auto text-center"><li class="nav-item"><a class="nav-link" href="/"><i class="iconfont icon-home-fill"></i> 首页</a></li><li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="iconfont icon-books"></i> 博文</a><div class="dropdown-menu" aria-labelledby="navbarDropdown"><a class="dropdown-item" href="/archives/"><i class="iconfont icon-archive-fill"></i> 归档 </a><a class="dropdown-item" href="/categories/"><i class="iconfont icon-category-fill"></i> 分类 </a><a class="dropdown-item" href="/tags/"><i class="iconfont icon-tags-fill"></i> 标签</a></div></li><li class="nav-item"><a class="nav-link" href="/playlist/"><i class="iconfont icon-music"></i> 音乐</a></li><li class="nav-item"><a class="nav-link" href="/about/"><i class="iconfont icon-user-fill"></i> 关于</a></li><li class="nav-item"><a class="nav-link" href="/links/"><i class="iconfont icon-link-fill"></i> 友链</a></li><li class="nav-item" id="search-btn"><a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a></li><li class="nav-item" id="color-toggle-btn"><a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a></li></ul></div></div></nav><div class="banner intro-2" id="background" parallax="true" style="background:url(/img/background1.jpg) no-repeat center center;background-size:cover"><div class="full-bg-img"><div class="mask flex-center" style="background-color:rgba(0,0,0,.3)"><div class="page-header text-center fade-in-up"><span class="h2" id="subtitle" title="Golang学习之函数与工程管理"></span><div class="mt-3"><span class="post-meta"><i class="iconfont icon-date-fill" aria-hidden="true"></i> <time datetime="2021-01-06 16:16" pubdate>2021年1月6日 下午</time></span></div><div class="mt-1"><span class="post-meta mr-2"><i class="iconfont icon-chart"></i> 7.9k 字 </span><span class="post-meta mr-2"><i class="iconfont icon-clock-fill"></i> 101 分钟</span></div></div></div></div></div></header><main><div class="container-fluid"><div class="row"><div class="d-none d-lg-block col-lg-2"></div><div class="col-lg-8 nopadding-md"><div class="container nopadding-md" id="board-ctn"><div class="py-5" id="board"><article class="post-content mx-auto"><h1 style="display:none">Golang学习之函数与工程管理</h1><div class="markdown-body"><h2 id="一、基础函数"><a href="#一、基础函数" class="headerlink" title="一、基础函数"></a>一、基础函数</h2><p>函数构成代码执行的逻辑结构。</p><h3 id="1-1-定义格式"><a href="#1-1-定义格式" class="headerlink" title="1.1 定义格式"></a>1.1 定义格式</h3><p>函数基本构成元素：由关键字 <code>func</code> 开头，紧接着是一个函数名 <code>FuncName</code>，然后才是参数列表、返回值、函数体和返回语句。（参数列表、返回值、返回语句是可选的）</p><h4 id="1-1-1-基本语法"><a href="#1-1-1-基本语法" class="headerlink" title="1.1.1 基本语法"></a>1.1.1 基本语法</h4><p>示例：</p><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">FuncName</span><span class="hljs-params">(/*参数列表*/)</span> <span class="hljs-params">(o1 type1, o2 type2/*返回值：名称 数据类型*/)</span></span> &#123;
+	<span class="hljs-comment">//函数体</span>
+	<span class="hljs-comment">//也就是这一块区域里的代码</span>
+
+	<span class="hljs-keyword">return</span> v1, v2 <span class="hljs-comment">//返回值</span>
+&#125;</code></pre><h4 id="1-1-2-定义格式的说明"><a href="#1-1-2-定义格式的说明" class="headerlink" title="1.1.2 定义格式的说明"></a>1.1.2 定义格式的说明</h4><h5 id="1-1-2-1-func"><a href="#1-1-2-1-func" class="headerlink" title="1.1.2.1 func"></a>1.1.2.1 func</h5><p><code>func</code> 是声明函数的关键字。</p><h5 id="1-1-2-2-函数名称"><a href="#1-1-2-2-函数名称" class="headerlink" title="1.1.2.2 函数名称"></a>1.1.2.2 函数名称</h5><p>函数名称采用<code>驼峰格式</code>命名。Golang 规定：<strong>函数名首字母小写即对外部不可见，函数名首字母大写即对外部可见</strong>。</p><h5 id="1-1-2-3-参数列表"><a href="#1-1-2-3-参数列表" class="headerlink" title="1.1.2.3 参数列表"></a>1.1.2.3 参数列表</h5><p>紧跟在函数名称后面的一对小括号 <code>()</code>，不管有没有参数，这对<strong>小括号 () 必须写上</strong>！<br>参数是可选的，可以是 0 个或者多个参数。参数格式为：<code>参数名 数据类型</code>。<br><strong>Golang 没有默认参数</strong>！</p><h5 id="1-1-2-4-返回值"><a href="#1-1-2-4-返回值" class="headerlink" title="1.1.2.4 返回值"></a>1.1.2.4 返回值</h5><p>可选。如果这个函数没有返回值，就直接省略最后的返回参数以及 <code>return</code> 语句。<br>如果只有一个返回值且没有声明返回值的名称，那么就可以省略不写返回值名称以及括号，直接在函数体中使用 <code>return</code> 语句把这个只有一个的返回值给返回出去。但返回值的数据类型必须写！同理 1.1.1 的示例中，返回值声明了两个变量名（返回参数名称）o1 和 o2，这个也不是必须写的，可以只写数据类型而不写返回参数名称。<br>注意：Golang 没有默认值，如果函数没有返回值，Golang 是不会返回任何内容。<strong>在Golang中，函数没有返回值，那就是真的没有任何内容会返回出来了！</strong><br>例：</p><pre><code class="hljs go"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span>
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">myFunc</span><span class="hljs-params">()</span></span> &#123;
+	a := <span class="hljs-number">6</span>
+	fmt.Println(<span class="hljs-string">&quot;a = &quot;</span>, a)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	myFunc()
+&#125;</code></pre><p>如果有返回参数，函数体内必须写上 <code>return</code> 语句。</p><h3 id="1-2-有参数无返回值函数（普通参数列表）"><a href="#1-2-有参数无返回值函数（普通参数列表）" class="headerlink" title="1.2 有参数无返回值函数（普通参数列表）"></a>1.2 有参数无返回值函数（普通参数列表）</h3><p><strong>Golang 函数参数都属于必备参数，调用时必须传给它实参</strong>！</p><h4 id="1-2-1-形参与实参"><a href="#1-2-1-形参与实参" class="headerlink" title="1.2.1 形参与实参"></a>1.2.1 形参与实参</h4><p>形参：定义函数时，函数的参数。<br>实参：调用函数时，传递过去的值。</p><pre><code class="hljs go"><span class="hljs-comment">//定义函数时，在函数第一个圆括号内定义的参数叫形成</span>
+<span class="hljs-comment">//参数传递是单向传递，且只能由实参传递给形参，不能反过来</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">MyTest</span><span class="hljs-params">(a <span class="hljs-keyword">int</span>)</span></span> &#123;
+	fmt.Println(<span class="hljs-string">&quot;a=&quot;</span>, a)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-comment">//调用函数时，传递过去的参数叫实参</span>
+	MyTest(<span class="hljs-number">111</span>)
+&#125;</code></pre><h4 id="1-2-2-多个同类型参数的简写方式"><a href="#1-2-2-多个同类型参数的简写方式" class="headerlink" title="1.2.2 多个同类型参数的简写方式"></a>1.2.2 多个同类型参数的简写方式</h4><p>这样写非常简洁，但参数一多就容易发生混乱，到底这个参数是什么类型。</p><pre><code class="hljs go"><span class="hljs-comment">//都同类型参数的时候，可以简写</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">MyTest</span><span class="hljs-params">(a, b, c <span class="hljs-keyword">int</span>)</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;a=%d\tb=%d\tc=%d\t&quot;</span>, a, b, c)
+	<span class="hljs-comment">//a=111	b=222	c=333	</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	MyTest(<span class="hljs-number">111</span>, <span class="hljs-number">222</span>, <span class="hljs-number">333</span>)
+&#125;</code></pre><h4 id="1-2-3-多个不同类型参数列表的写法"><a href="#1-2-3-多个不同类型参数列表的写法" class="headerlink" title="1.2.3 多个不同类型参数列表的写法"></a>1.2.3 多个不同类型参数列表的写法</h4><p>参数多起来，建议每个参数都写明数据类型，这样不会造成数据类型弄错或忘记。</p><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">MyTest</span><span class="hljs-params">(name <span class="hljs-keyword">string</span>, age <span class="hljs-keyword">int</span>, salary <span class="hljs-keyword">float64</span>)</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;name=%s\tage=%d\tsalary=%f\n&quot;</span>, name, age, salary)
+	<span class="hljs-comment">//name=golang	age=11	salary=1234567890.000000</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	MyTest(<span class="hljs-string">&quot;golang&quot;</span>, <span class="hljs-number">11</span>, <span class="hljs-number">1234567890</span>)
+&#125;</code></pre><h4 id="1-2-4-定义了几个参数，就必须传递几个值"><a href="#1-2-4-定义了几个参数，就必须传递几个值" class="headerlink" title="1.2.4 定义了几个参数，就必须传递几个值"></a>1.2.4 定义了几个参数，就必须传递几个值</h4><p>如果定义的是普通参数列表，定义了几个参数，就必须传递几个值过去，否则就报错！</p><h3 id="1-3-不定参数列表"><a href="#1-3-不定参数列表" class="headerlink" title="1.3 不定参数列表"></a>1.3 不定参数列表</h3><p>如果不知道到底会有几个参数，那么就可以用不定参数列表。不定参数列表是指函数传入的参数数量不确定，它是通过切片来实现的，且<strong>只能放在形参中的最后一个</strong>！</p><h4 id="1-3-1-不定参数类型的定义"><a href="#1-3-1-不定参数类型的定义" class="headerlink" title="1.3.1 不定参数类型的定义"></a>1.3.1 不定参数类型的定义</h4><p>首先将一个函数的形参定义为接受不定参数类型。<br>语法：<code>func FuncName(varName ...Type)</code>。（<code>...Type</code>其实就是一种语法糖，接收 0 个或者多个 Type 类型参数）</p><pre><code class="hljs go"><span class="hljs-comment">//...int就是不定参数类型，接收0个或者多个int参数</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">myTest</span><span class="hljs-params">(a ...<span class="hljs-keyword">int</span>)</span></span> &#123;
+
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	myTest(<span class="hljs-number">111</span>, <span class="hljs-number">222</span>)
+&#125;</code></pre><h4 id="1-3-2-不定参数的传参"><a href="#1-3-2-不定参数的传参" class="headerlink" title="1.3.2 不定参数的传参"></a>1.3.2 不定参数的传参</h4><p>此时，传递过去的实参可以是 0 个或者多个。</p><pre><code class="hljs go"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span>
+
+<span class="hljs-comment">//...int就是不定参数类型，接收0个或者多个int参数</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">myTest</span><span class="hljs-params">(a ...<span class="hljs-keyword">int</span>)</span></span> &#123;
+	fmt.Println(a)
+	fmt.Printf(<span class="hljs-string">&quot;a type is : %T\n&quot;</span>, a)
+	fmt.Println(<span class="hljs-string">&quot;--------------------------------&quot;</span>)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	myTest()
+	myTest(<span class="hljs-number">1</span>)
+	myTest(<span class="hljs-number">111</span>, <span class="hljs-number">222</span>)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">[]</span>
+<span class="hljs-comment">a type is : []int</span>
+<span class="hljs-comment">--------------------------------</span>
+<span class="hljs-comment">[1]</span>
+<span class="hljs-comment">a type is : []int</span>
+<span class="hljs-comment">--------------------------------</span>
+<span class="hljs-comment">[111 222]</span>
+<span class="hljs-comment">a type is : []int</span>
+<span class="hljs-comment">--------------------------------</span>
+<span class="hljs-comment">*/</span></code></pre><p>可以看到，不定参数使用切片来实现。</p><h4 id="1-3-3-不定参数必须放在形参的最后面"><a href="#1-3-3-不定参数必须放在形参的最后面" class="headerlink" title="1.3.3 不定参数必须放在形参的最后面"></a>1.3.3 不定参数必须放在形参的最后面</h4><pre><code class="hljs go"><span class="hljs-comment">//注意：不定参数，一定（只能）放在形参中的最后一个参数</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">myFunc03</span><span class="hljs-params">(args ...<span class="hljs-keyword">int</span>, a <span class="hljs-keyword">int</span>)</span></span> &#123;
+
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	myFunc02(<span class="hljs-number">111</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果:</span>
+<span class="hljs-comment"># command-line-arguments</span>
+<span class="hljs-comment">.\32_不定参数类型.go:34:15: syntax error: cannot use ... with non-final parameter args</span>
+<span class="hljs-comment">*/</span></code></pre><p>报错大意：<code>...</code> 在列表中只能作为最后一个参数。</p><h4 id="1-3-4-不定实参传递给另一个函数的不定形参"><a href="#1-3-4-不定实参传递给另一个函数的不定形参" class="headerlink" title="1.3.4 不定实参传递给另一个函数的不定形参"></a>1.3.4 不定实参传递给另一个函数的不定形参</h4><p>不定参数作为实参，传递给另外一个函数的不定形参，另一个函数的形参必须也是一个不定参数类型。</p><h5 id="1-3-4-1-基本示例"><a href="#1-3-4-1-基本示例" class="headerlink" title="1.3.4.1 基本示例"></a>1.3.4.1 基本示例</h5><pre><code class="hljs go"><span class="hljs-comment">//参数类型被定义为不定参数</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">f1</span><span class="hljs-params">(a ...<span class="hljs-keyword">int</span>)</span></span> &#123;
+	f2(a...) <span class="hljs-comment">//不定参数作为实参，传递给目标函数</span>
+&#125;
+
+<span class="hljs-comment">//目标函数的形参也必须是不定参数类型</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">f2</span><span class="hljs-params">(a ...<span class="hljs-keyword">int</span>)</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;a type is : %T, a=%v\n&quot;</span>, a, a)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	f1(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">a type is : []int, a=[1 2 3 4 5]</span>
+<span class="hljs-comment">*/</span></code></pre><h5 id="1-3-4-2-形参和实参都要加上"><a href="#1-3-4-2-形参和实参都要加上" class="headerlink" title="1.3.4.2 形参和实参都要加上..."></a>1.3.4.2 形参和实参都要加上<code>...</code></h5><p>目标函数的形参需要定义成不定参数类型，传递过去的实参后面也需要加上 <code>...</code>。<br>示例：</p><pre><code class="hljs go"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span>
+
+<span class="hljs-comment">//想要接受不定参数，这里的形参也必须定义成不定参数</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">myFunc</span><span class="hljs-params">(tmps ...<span class="hljs-keyword">int</span>)</span></span> &#123;
+	fmt.Println(tmps)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">test</span><span class="hljs-params">(args ...<span class="hljs-keyword">int</span>)</span></span> &#123;
+	<span class="hljs-comment">//此处，想要把args全部传递给myFunc，需要这样写</span>
+	myFunc(args...) <span class="hljs-comment">//所有的都传过去了。...不能忘</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	test(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">[1 2 3 4 5]</span>
+<span class="hljs-comment">*/</span></code></pre><p>注意：传递过去的时候，第 12 行 args 后面的 <code>...</code> 不能忘。不定参数的类型是一个切片，不加 <code>...</code> 就是一个数组类型。在 Golang 中，数组和切片是不同类型。</p><h5 id="1-3-4-3-可以使用切片截取"><a href="#1-3-4-3-可以使用切片截取" class="headerlink" title="1.3.4.3 可以使用切片截取"></a>1.3.4.3 可以使用切片截取</h5><p>如果只想传递某几个元素过去，可以使用切片截取某个片段。<br>示例：</p><pre><code class="hljs go"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span>
+
+<span class="hljs-comment">//想要接受不定参数，这里的形参也必须定义成不定参数</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">myFunc</span><span class="hljs-params">(tmps ...<span class="hljs-keyword">int</span>)</span></span> &#123;
+	fmt.Println(tmps)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">test</span><span class="hljs-params">(args ...<span class="hljs-keyword">int</span>)</span></span> &#123;
+	<span class="hljs-comment">//只想把元素2,3,4传递给myFunc</span>
+	myFunc(args[<span class="hljs-number">1</span>:<span class="hljs-number">4</span>]...) <span class="hljs-comment">//...不能忘</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	test(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">[2 3 4]</span>
+<span class="hljs-comment">*/</span></code></pre><h3 id="1-4-无参有返回值"><a href="#1-4-无参有返回值" class="headerlink" title="1.4 无参有返回值"></a>1.4 无参有返回值</h3><p>有返回值的函数，在函数体内必须通过 <code>return</code> 返回。</p><h4 id="1-4-1-一个返回值"><a href="#1-4-1-一个返回值" class="headerlink" title="1.4.1 一个返回值"></a>1.4.1 一个返回值</h4><p>只有一个返回值，可以不写该返回值的名称。</p><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">test</span><span class="hljs-params">()</span> <span class="hljs-title">int</span></span> &#123; <span class="hljs-comment">//不给返回值起名称</span>
+	<span class="hljs-keyword">return</span> <span class="hljs-number">777</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Println(test()) <span class="hljs-comment">//777</span>
+&#125;</code></pre><h4 id="1-4-2-多个返回值"><a href="#1-4-2-多个返回值" class="headerlink" title="1.4.2 多个返回值"></a>1.4.2 多个返回值</h4><p>有多个返回值的时候，官方推荐给每个返回值起个名字。<br>下面这种写法是官方推荐：</p><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">test</span><span class="hljs-params">()</span> <span class="hljs-params">(name <span class="hljs-keyword">string</span>, age <span class="hljs-keyword">int</span>)</span></span> &#123; <span class="hljs-comment">//每个返回值都起了名称</span>
+	<span class="hljs-comment">//函数中可以直接使用这及格返回值的名称</span>
+	name = <span class="hljs-string">&quot;golang&quot;</span>
+	age = <span class="hljs-number">11</span>
+	<span class="hljs-keyword">return</span> <span class="hljs-comment">//按照返回值参数定义的顺序，自动把name和age都给返回回去了</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Println(test())
+	<span class="hljs-comment">//golang 11</span>
+&#125;</code></pre><p><strong>Golang 是按照返回值参数定义的顺序进行返回</strong>。<br>使用 Goland 时，按住 <code>Ctrl</code>，鼠标移动到函数上的时候，就能清晰看到那个函数返回了哪些信息，信息更加明显：</p><h3 id="1-5-有参数有返回值"><a href="#1-5-有参数有返回值" class="headerlink" title="1.5 有参数有返回值"></a>1.5 有参数有返回值</h3><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">maxAndMin</span><span class="hljs-params">(a <span class="hljs-keyword">int</span>, b <span class="hljs-keyword">int</span>)</span> <span class="hljs-params">(max <span class="hljs-keyword">int</span>, min <span class="hljs-keyword">int</span>)</span></span> &#123;
+	<span class="hljs-keyword">if</span> a &gt; b &#123;
+		max = a
+		min = b
+	&#125; <span class="hljs-keyword">else</span> &#123;
+		max = b
+		min = a
+	&#125;
+
+	<span class="hljs-keyword">return</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	max, min := maxAndMin(<span class="hljs-number">10</span>, <span class="hljs-number">20</span>)
+	fmt.Printf(<span class="hljs-string">&quot;max=%d, min=%d\n&quot;</span>, max, min)
+
+	a, _ := maxAndMin(<span class="hljs-number">10</span>, <span class="hljs-number">20</span>)
+	fmt.Printf(<span class="hljs-string">&quot;max=%d&quot;</span>, a)
+&#125;</code></pre><h2 id="二、递归函数"><a href="#二、递归函数" class="headerlink" title="二、递归函数"></a>二、递归函数</h2><h3 id="2-1-普通函数调用流程"><a href="#2-1-普通函数调用流程" class="headerlink" title="2.1 普通函数调用流程"></a>2.1 普通函数调用流程</h3><p>先调用后返回，先进后出（<code>FILO</code>）。<br>示例：</p><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">funcc</span><span class="hljs-params">(c <span class="hljs-keyword">int</span>)</span></span> &#123;
+	fmt.Println(<span class="hljs-string">&quot;c = &quot;</span>, c)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">funcb</span><span class="hljs-params">(b <span class="hljs-keyword">int</span>)</span></span> &#123;
+	funcc(b - <span class="hljs-number">1</span>)
+	fmt.Println(<span class="hljs-string">&quot;b = &quot;</span>, b)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">funca</span><span class="hljs-params">(a <span class="hljs-keyword">int</span>)</span></span> &#123;
+	funcb(a - <span class="hljs-number">1</span>)
+	fmt.Println(<span class="hljs-string">&quot;a = &quot;</span>, a)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	funca(<span class="hljs-number">3</span>) <span class="hljs-comment">//函数调用</span>
+	fmt.Println(<span class="hljs-string">&quot;main&quot;</span>)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">c =  1</span>
+<span class="hljs-comment">b =  2</span>
+<span class="hljs-comment">a =  3</span>
+<span class="hljs-comment">main</span>
+<span class="hljs-comment">*/</span></code></pre><h3 id="2-2-递归函数的特性"><a href="#2-2-递归函数的特性" class="headerlink" title="2.2 递归函数的特性"></a>2.2 递归函数的特性</h3><p>递归函数可以直接或间接地调用自身，同样利用的是普通函数调用流程：先调用后返回、先进后出的特性。<br>递归函数通常有相同的结构：一个跳出条件和一个递归体。跳出条件就是根据传入的实参判断是否需要停止递归，递归体说白了就是包裹在函数体内的代码。</p><h3 id="2-3-递归函数调用流程"><a href="#2-3-递归函数调用流程" class="headerlink" title="2.3 递归函数调用流程"></a>2.3 递归函数调用流程</h3><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">test</span><span class="hljs-params">(a <span class="hljs-keyword">int</span>)</span></span> &#123;
+	<span class="hljs-keyword">if</span> a == <span class="hljs-number">1</span> &#123; <span class="hljs-comment">//函数终止调用的条件，非常重要</span>
+		fmt.Println(<span class="hljs-string">&quot;a = &quot;</span>, a)
+		<span class="hljs-keyword">return</span> <span class="hljs-comment">//终止函数调用</span>
+	&#125;
+
+	<span class="hljs-comment">//函数调用自身</span>
+	test(a - <span class="hljs-number">1</span>)
+	fmt.Println(<span class="hljs-string">&quot;a = &quot;</span>, a)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	test(<span class="hljs-number">3</span>)
+	fmt.Println(<span class="hljs-string">&quot;main&quot;</span>)
+&#125;</code></pre><h3 id="2-4-数字累加"><a href="#2-4-数字累加" class="headerlink" title="2.4 数字累加"></a>2.4 数字累加</h3><p>示例：</p><pre><code class="hljs go"><span class="hljs-comment">//实现1+2+3+...100</span>
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">test01</span><span class="hljs-params">()</span> <span class="hljs-params">(sum <span class="hljs-keyword">int</span>)</span></span> &#123;
+	<span class="hljs-keyword">for</span> i := <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">100</span>; i++ &#123;
+		sum += i
+	&#125;
+
+	<span class="hljs-keyword">return</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">test02</span><span class="hljs-params">(i <span class="hljs-keyword">int</span>)</span> <span class="hljs-params">(sum <span class="hljs-keyword">int</span>)</span></span> &#123;
+	<span class="hljs-keyword">if</span> i == <span class="hljs-number">100</span> &#123;
+		<span class="hljs-keyword">return</span> <span class="hljs-number">100</span>
+	&#125;
+
+	<span class="hljs-keyword">return</span> i + test02(i+<span class="hljs-number">1</span>)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-keyword">var</span> sum <span class="hljs-keyword">int</span>
+	sum = test01() <span class="hljs-comment">//普通方法实现</span>
+	fmt.Println(<span class="hljs-string">&quot;sum = &quot;</span>, sum)
+	sum = test02(<span class="hljs-number">1</span>) <span class="hljs-comment">//递归实现</span>
+	fmt.Println(<span class="hljs-string">&quot;sum = &quot;</span>, sum)
+&#125;</code></pre><h2 id="三、函数类型"><a href="#三、函数类型" class="headerlink" title="三、函数类型"></a>三、函数类型</h2><p>Golang中，函数也是一个数据类型：<strong>所有拥有相同的参数、相同的返回值的一种数据类型</strong>。</p><h3 id="3-1-大致流程"><a href="#3-1-大致流程" class="headerlink" title="3.1 大致流程"></a>3.1 大致流程</h3><h4 id="3-1-1-给函数起一个别名。"><a href="#3-1-1-给函数起一个别名。" class="headerlink" title="3.1.1 给函数起一个别名。"></a>3.1.1 给函数起一个别名。</h4><p>使用关键字 <code>type</code> 声明一个函数类型。<br>语法：<code>type 变量名 func(/*参数列表*/)</code>。例：<code>type myFunc func(int, int) int</code>。<br>注意：<strong>type 定义的函数类型，func() 后面不能接返回值和大括号</strong>。</p><h4 id="3-1-2-声明一个函数类型的变量名"><a href="#3-1-2-声明一个函数类型的变量名" class="headerlink" title="3.1.2 声明一个函数类型的变量名"></a>3.1.2 声明一个函数类型的变量名</h4><p>例：<code>var f myFunc</code>。声明一个变量，名称为 f，类型为 myFunc 函数类型。</p><h4 id="3-1-3-赋值给一个变量"><a href="#3-1-3-赋值给一个变量" class="headerlink" title="3.1.3 赋值给一个变量"></a>3.1.3 赋值给一个变量</h4><p>把某个同类型参数以及同类型返回值的函数体赋值给一个变量。<br>例：<code>f = add</code>。注意：这个 add 的参数数量和参数类型必须和 f 函数的类型一模一样！</p><h4 id="3-1-4-通过这个变量来调用函数"><a href="#3-1-4-通过这个变量来调用函数" class="headerlink" title="3.1.4 通过这个变量来调用函数"></a>3.1.4 通过这个变量来调用函数</h4><p>变量名+小括号+实参，实现调用。例：<code>f(10, 20)</code>。</p><h3 id="3-2-综合示例，演示多态的思想"><a href="#3-2-综合示例，演示多态的思想" class="headerlink" title="3.2 综合示例，演示多态的思想"></a>3.2 综合示例，演示多态的思想</h3><pre><code class="hljs go"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span>
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Add</span><span class="hljs-params">(a, b <span class="hljs-keyword">int</span>)</span> <span class="hljs-title">int</span></span> &#123;
+	<span class="hljs-keyword">return</span> a + b
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Minus</span><span class="hljs-params">(a, b <span class="hljs-keyword">int</span>)</span> <span class="hljs-title">int</span></span> &#123;
+	<span class="hljs-keyword">return</span> a - b
+&#125;
+
+<span class="hljs-comment">//函数也是一种数据类型，通过type给一个函数类型起名</span>
+<span class="hljs-comment">//FuncType它是一个函数类型</span>
+<span class="hljs-keyword">type</span> FuncType <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(<span class="hljs-keyword">int</span>, <span class="hljs-keyword">int</span>)</span> <span class="hljs-title">int</span> //没有函数名字，没有</span>&#123;&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-keyword">var</span> result <span class="hljs-keyword">int</span>
+	result = Add(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>) <span class="hljs-comment">//传统调用方式</span>
+	fmt.Println(<span class="hljs-string">&quot;result = &quot;</span>, result)
+
+	<span class="hljs-comment">//声明一个函数类型的变量，变量名叫fTest</span>
+	<span class="hljs-keyword">var</span> fTest FuncType
+	fTest = Add            <span class="hljs-comment">//是变量就可以赋值</span>
+	result = fTest(<span class="hljs-number">10</span>, <span class="hljs-number">20</span>) <span class="hljs-comment">//等价于Add(10,20)</span>
+	fmt.Println(<span class="hljs-string">&quot;result2 = &quot;</span>, result)
+
+	fTest = Minus
+	result = fTest(<span class="hljs-number">10</span>, <span class="hljs-number">5</span>) <span class="hljs-comment">//等价于Minus(10, 5)</span>
+	fmt.Println(<span class="hljs-string">&quot;result3 = &quot;</span>, result)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">result =  2</span>
+<span class="hljs-comment">result2 =  30</span>
+<span class="hljs-comment">result3 =  5</span>
+<span class="hljs-comment">*/</span></code></pre><h2 id="四、回调函数"><a href="#四、回调函数" class="headerlink" title="四、回调函数"></a>四、回调函数</h2><p>所谓回调函数就是函数的参数里有一个参数是函数类型。</p><h3 id="4-1-大致流程"><a href="#4-1-大致流程" class="headerlink" title="4.1 大致流程"></a>4.1 大致流程</h3><p>1.定义一个函数类型。<br>2 函数形参指定为一个函数类型。定义另一个函数，函数的参数列表里放入刚才定义的函数类型。此时，这个函数就变成了回调函数。<br>3.在回调函数内部去调用其他不同的函数。</p><h3 id="4-2-综合示例"><a href="#4-2-综合示例" class="headerlink" title="4.2 综合示例"></a>4.2 综合示例</h3><pre><code class="hljs go"><span class="hljs-comment">//1.首先要定义一个函数类型</span>
+<span class="hljs-keyword">type</span> myFunc <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(<span class="hljs-keyword">int</span>, <span class="hljs-keyword">int</span>)</span> <span class="hljs-title">int</span></span>
+
+<span class="hljs-comment">//每个函数的实现</span>
+<span class="hljs-comment">//参数数量和数据类型以及返回值类型，要跟myFunc函数类型一模一样</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">add</span><span class="hljs-params">(a, b <span class="hljs-keyword">int</span>)</span> <span class="hljs-title">int</span></span> &#123;
+	<span class="hljs-keyword">return</span> a + b
+&#125;
+
+<span class="hljs-comment">//每个函数的实现</span>
+<span class="hljs-comment">//参数数量和数据类型以及返回值类型，要跟myFunc函数类型一模一样</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">minus</span><span class="hljs-params">(a, b <span class="hljs-keyword">int</span>)</span> <span class="hljs-title">int</span></span> &#123;
+	<span class="hljs-keyword">return</span> a - b
+&#125;
+
+<span class="hljs-comment">//每个函数的实现</span>
+<span class="hljs-comment">//参数数量和数据类型以及返回值类型，要跟myFunc指向的函数类型一模一样</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">mul</span><span class="hljs-params">(a, b <span class="hljs-keyword">int</span>)</span> <span class="hljs-title">int</span></span> &#123;
+	<span class="hljs-keyword">return</span> a * b
+&#125;
+
+<span class="hljs-comment">//2.定义一个回调函数。函数的参数列表里，funcName形参被指定为myFunc函数类型，此时Calc就是一个回调函数</span>
+<span class="hljs-comment">//多态：多种形态。调用同一个接口，可以实现不同的功能</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Calc</span><span class="hljs-params">(a, b <span class="hljs-keyword">int</span>, funcName myFunc)</span> <span class="hljs-params">(result <span class="hljs-keyword">int</span>)</span></span> &#123;
+	<span class="hljs-comment">//传过来就是add,minus,mul三个中的一个，funcName可以动态变成add或minus或mul，以实现不同的功能</span>
+	<span class="hljs-comment">//调用函数依然采用：函数名+小括号的方式调用，这里就可以根据实际传过来的函数名去动态调用，动态实现不同功能</span>
+	result = funcName(a, b)
+	<span class="hljs-comment">//return add(a, b) //这样就写死了，Calc这个函数只能实现add这个功能，而不能实现其他功能</span>
+	<span class="hljs-keyword">return</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	a := Calc(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, add)
+	fmt.Println(<span class="hljs-string">&quot;add a:&quot;</span>, a)
+
+	a = Calc(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, minus)
+	fmt.Println(<span class="hljs-string">&quot;minus a:&quot;</span>, a)
+
+	a = Calc(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, mul)
+	fmt.Println(<span class="hljs-string">&quot;mul a:&quot;</span>, a)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">add a: 7</span>
+<span class="hljs-comment">minus a: -1</span>
+<span class="hljs-comment">mul a: 12</span>
+<span class="hljs-comment">*/</span></code></pre><p>注意：关键字 <code>type</code> 定义的函数类型的数据类型是什么，其他函数也必须跟它一样，不然数据类型不匹配就会报错。</p><h2 id="五、匿名函数与闭包"><a href="#五、匿名函数与闭包" class="headerlink" title="五、匿名函数与闭包"></a>五、匿名函数与闭包</h2><p>匿名函数是指不需要定义函数名称的一种函数实现方式。<br>在 Golang 中，所有的匿名函数（Golang 规范中称之为函数字面量）都是闭包。<br>闭包就是一个函数”捕获”了和它在同一作用域的其他常量和变量，闭包不关心”捕获”的常量和变量是否已经超出了作用域，只要闭包还在使用它们，这些常量和变量就还会存在。<br>闭包需要通过匿名函数来实现。</p><h3 id="5-1-无参无返回值的匿名函数"><a href="#5-1-无参无返回值的匿名函数" class="headerlink" title="5.1 无参无返回值的匿名函数"></a>5.1 无参无返回值的匿名函数</h3><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	age := <span class="hljs-number">11</span>
+	name := <span class="hljs-string">&quot;golang&quot;</span>
+
+	<span class="hljs-comment">//定义匿名函数</span>
+	f1 := <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123; <span class="hljs-comment">//自动推导成为函数类型</span>
+		fmt.Println(<span class="hljs-string">&quot;name=&quot;</span>, name)
+		fmt.Println(<span class="hljs-string">&quot;age=&quot;</span>, age)
+	&#125;
+	f1() <span class="hljs-comment">//调用匿名函数</span>
+
+	<span class="hljs-keyword">type</span> myFunc <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span> //无参无返回值的函数类型</span>
+	<span class="hljs-keyword">var</span> f2 myFunc      <span class="hljs-comment">//声明变量f2为myFunc类型</span>
+	f2 = f1            <span class="hljs-comment">//都是无参无返回值的同类型函数，所以可以相互赋值</span>
+	f2()			   <span class="hljs-comment">//本质上就是在调用f1</span>
+
+	<span class="hljs-comment">//定义匿名函数且同时调用</span>
+	<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;
+		fmt.Printf(<span class="hljs-string">&quot;name=%s\tage=%d\n&quot;</span>, name, age)
+	&#125;() <span class="hljs-comment">//这个圆括号代表直接调用此匿名函数</span>
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">name= golang</span>
+<span class="hljs-comment">age= 11</span>
+<span class="hljs-comment">name= golang</span>
+<span class="hljs-comment">age= 11</span>
+<span class="hljs-comment">name=golang	age=11</span>
+<span class="hljs-comment">*/</span></code></pre><h3 id="5-2-带参数的匿名函数"><a href="#5-2-带参数的匿名函数" class="headerlink" title="5.2 带参数的匿名函数"></a>5.2 带参数的匿名函数</h3><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-comment">//匿名函数不需要写函数名称，这里只写上参数即可</span>
+	<span class="hljs-comment">//例如：func(i, j int) &#123;/**/&#125;</span>
+
+	<span class="hljs-comment">//自动类型推导</span>
+	f1 := <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(i, j <span class="hljs-keyword">int</span>)</span></span> &#123;
+		fmt.Printf(<span class="hljs-string">&quot;i=%d,j=%d\n&quot;</span>, i, j)
+	&#125;
+	f1(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
+
+	<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(i, j <span class="hljs-keyword">int</span>)</span></span> &#123;
+		fmt.Printf(<span class="hljs-string">&quot;i=%d,j=%d\n&quot;</span>, i, j)
+	&#125;(<span class="hljs-number">10</span>, <span class="hljs-number">20</span>) <span class="hljs-comment">//简单粗暴，定义且直接调用，记得小括号中要给参数，因为定义了有2个参数</span>
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">i=1,j=2</span>
+<span class="hljs-comment">i=10,j=20</span>
+<span class="hljs-comment">*/</span></code></pre><h3 id="5-3-有参数有返回值"><a href="#5-3-有参数有返回值" class="headerlink" title="5.3 有参数有返回值"></a>5.3 有参数有返回值</h3><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	x, y := <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(i, j <span class="hljs-keyword">int</span>)</span> <span class="hljs-params">(max, min <span class="hljs-keyword">int</span>)</span></span> &#123;
+		<span class="hljs-keyword">if</span> i &gt; j &#123;
+			max = i
+			min = j
+		&#125; <span class="hljs-keyword">else</span> &#123;
+			max = j
+			min = i
+		&#125;
+		<span class="hljs-keyword">return</span> <span class="hljs-comment">//定义了返回值，必须写上return</span>
+	&#125;(<span class="hljs-number">10</span>, <span class="hljs-number">20</span>) <span class="hljs-comment">//这里加小括号表示直接调用</span>
+
+	fmt.Printf(<span class="hljs-string">&quot;max=%d,min=%d\n&quot;</span>, x, y) <span class="hljs-comment">//max=20,min=10</span>
+&#125;</code></pre><h3 id="5-4-闭包捕获外部变量的特点"><a href="#5-4-闭包捕获外部变量的特点" class="headerlink" title="5.4 闭包捕获外部变量的特点"></a>5.4 闭包捕获外部变量的特点</h3><p>闭包是以 <code>引用</code> 的方式去捕获外部变量，用的是同一个变量。<br>示例：</p><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	a := <span class="hljs-number">10</span>
+	b := <span class="hljs-string">&quot;str bbb&quot;</span>
+
+	<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;
+		<span class="hljs-comment">//闭包以引用方式捕获外部变量</span>
+		a = <span class="hljs-number">999</span>      <span class="hljs-comment">//直接赋值，这里改了会影响外部，外部也被修改了</span>
+		b = <span class="hljs-string">&quot;golang&quot;</span> <span class="hljs-comment">//直接赋值，这里改了会影响外部，外部也被修改了</span>
+		fmt.Printf(<span class="hljs-string">&quot;内部，a=%d,b=%s\n&quot;</span>, a, b)
+	&#125;() <span class="hljs-comment">//()代表直接调用，否则就需要用一个变量去接收这个匿名函数</span>
+
+	fmt.Printf(<span class="hljs-string">&quot;外部，a=%d,b=%s\n&quot;</span>, a, b)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">内部，a=999,b=golang</span>
+<span class="hljs-comment">外部，a=999,b=golang</span>
+<span class="hljs-comment">*/</span></code></pre><p>但是，如果在闭包内使用海象运算符 <code>:=</code> 声明了新变量，那么新变量就跟外部没有关系了。<br>示例：</p><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	a := <span class="hljs-number">10</span>
+	b := <span class="hljs-string">&quot;str bbb&quot;</span>
+
+	<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;
+		a := <span class="hljs-number">999</span>
+		b := <span class="hljs-string">&quot;golang&quot;</span>
+		fmt.Printf(<span class="hljs-string">&quot;内部，a=%d,b=%s\n&quot;</span>, a, b)
+	&#125;() <span class="hljs-comment">//()代表直接调用，否则就需要用一个变量去接收这个匿名函数</span>
+
+	fmt.Printf(<span class="hljs-string">&quot;外部，a=%d,b=%s\n&quot;</span>, a, b)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">内部，a=999,b=golang</span>
+<span class="hljs-comment">外部，a=10,b=str bbb</span>
+<span class="hljs-comment">*/</span></code></pre><h3 id="5-5-只要闭包还在使用，变量就还存在"><a href="#5-5-只要闭包还在使用，变量就还存在" class="headerlink" title="5.5 只要闭包还在使用，变量就还存在"></a>5.5 只要闭包还在使用，变量就还存在</h3><p>闭包”捕获”外部变量并不会去关心它的作用域，只要闭包还在使用这些变量，变量就会存在。也就是说闭包有记忆变量的特性。<br>示例：</p><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">test1</span><span class="hljs-params">()</span> <span class="hljs-title">func</span><span class="hljs-params">()</span> <span class="hljs-title">int</span></span> &#123; <span class="hljs-comment">//返回值是一个匿名函数，该匿名函数有一个int类型的返回值</span>
+	<span class="hljs-keyword">var</span> x <span class="hljs-keyword">int</span>
+
+	<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span> <span class="hljs-title">int</span></span> &#123; <span class="hljs-comment">//return语句后面接上这个匿名函数的函数体</span>
+		x++
+		<span class="hljs-keyword">return</span> x * x
+	&#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	f := test1()
+	fmt.Println(f())
+	fmt.Println(f())
+	fmt.Println(f())
+	fmt.Println(f())
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">1</span>
+<span class="hljs-comment">4</span>
+<span class="hljs-comment">9</span>
+<span class="hljs-comment">16</span>
+<span class="hljs-comment">*/</span></code></pre><h3 id="5-6-注意事项"><a href="#5-6-注意事项" class="headerlink" title="5.6 注意事项"></a>5.6 注意事项</h3><p>1.匿名函数定义了必须要有变量去接收，或者在最后接圆括号 <code>()</code> 直接调用它。<br>2.闭包不能在函数体外声明。</p><h2 id="六、defer"><a href="#六、defer" class="headerlink" title="六、defer"></a>六、defer</h2><p><code>defer</code> 用于延迟一个函数、方法、或者当前所创建的匿名函数的执行。常用于函数执行完毕被释放前的一些清理工作。<br><strong>defer 只能出现在函数或者方法的内部</strong>！</p><h3 id="6-1-最基本的例子"><a href="#6-1-最基本的例子" class="headerlink" title="6.1 最基本的例子"></a>6.1 最基本的例子</h3><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Println(<span class="hljs-string">&quot;aaa&quot;</span>)
+	<span class="hljs-keyword">defer</span> fmt.Println(<span class="hljs-string">&quot;bbb&quot;</span>) <span class="hljs-comment">//最后才执行的</span>
+	fmt.Println(<span class="hljs-string">&quot;ccc&quot;</span>)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">aaa</span>
+<span class="hljs-comment">ccc</span>
+<span class="hljs-comment">bbb</span>
+<span class="hljs-comment">*/</span></code></pre><h3 id="6-2-多个defer的执行顺序"><a href="#6-2-多个defer的执行顺序" class="headerlink" title="6.2 多个defer的执行顺序"></a>6.2 多个defer的执行顺序</h3><p>一个函数中有多个<code>defer</code>语句，它们会以<code>FILO</code>(先进后出)的顺序执行，哪怕函数或某个延迟调用发生错误，这些调用依旧会被执行。<br>多个<code>defer</code>的执行顺序的演示：</p><pre><code class="hljs go"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span>
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">test</span><span class="hljs-params">(a <span class="hljs-keyword">int</span>)</span></span> &#123;
+	x := <span class="hljs-number">100</span> / a
+	fmt.Println(<span class="hljs-string">&quot;x = &quot;</span>, x)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+
+	<span class="hljs-comment">/**</span>
+<span class="hljs-comment">	fmt.Println(&quot;aaaaaaaaaaa&quot;)</span>
+<span class="hljs-comment">	fmt.Println(&quot;bbbbbbbbbbb&quot;)</span>
+<span class="hljs-comment"></span>
+<span class="hljs-comment">	//调用一个函数，导致内存出问题</span>
+<span class="hljs-comment">	test(0)</span>
+<span class="hljs-comment"></span>
+<span class="hljs-comment">	fmt.Println(&quot;ccccccccccc&quot;)</span>
+<span class="hljs-comment"></span>
+<span class="hljs-comment">	运行结果：</span>
+<span class="hljs-comment">	aaaaaaaaaaa</span>
+<span class="hljs-comment">	bbbbbbbbbbb</span>
+<span class="hljs-comment">	panic: runtime error: integer divide by zero</span>
+<span class="hljs-comment">	**/</span>
+
+	<span class="hljs-comment">/**</span>
+<span class="hljs-comment">	defer fmt.Println(&quot;aaaaaaaaaaa&quot;)</span>
+<span class="hljs-comment">	defer fmt.Println(&quot;bbbbbbbbbbb&quot;)</span>
+<span class="hljs-comment"></span>
+<span class="hljs-comment">	//调用一个函数，导致内存出问题</span>
+<span class="hljs-comment">	test(0)</span>
+<span class="hljs-comment"></span>
+<span class="hljs-comment">	defer fmt.Println(&quot;ccccccccccc&quot;) //这个defer还没有进栈中，所以不会打印出这行的内容，只会打印上面两行的内容</span>
+<span class="hljs-comment"></span>
+<span class="hljs-comment">	运行结果：</span>
+<span class="hljs-comment">	bbbbbbbbbbb</span>
+<span class="hljs-comment">	aaaaaaaaaaa</span>
+<span class="hljs-comment">	panic: runtime error: integer divide by zero</span>
+<span class="hljs-comment">	**/</span>
+
+	<span class="hljs-comment">/*</span>
+<span class="hljs-comment">		defer fmt.Println(&quot;aaaaaaaaaaa&quot;)</span>
+<span class="hljs-comment">		defer fmt.Println(&quot;bbbbbbbbbbb&quot;)</span>
+<span class="hljs-comment"></span>
+<span class="hljs-comment">		//调用一个函数，导致内存出问题</span>
+<span class="hljs-comment">		defer test(0) //报错时，会放到最后一个被显示出来</span>
+<span class="hljs-comment"></span>
+<span class="hljs-comment">		defer fmt.Println(&quot;ccccccccccc&quot;)</span>
+<span class="hljs-comment"></span>
+<span class="hljs-comment"></span>
+<span class="hljs-comment">			运行结果：</span>
+<span class="hljs-comment">			ccccccccccc</span>
+<span class="hljs-comment">			bbbbbbbbbbb</span>
+<span class="hljs-comment">			aaaaaaaaaaa</span>
+<span class="hljs-comment">			panic: runtime error: integer divide by zero</span>
+<span class="hljs-comment">	*/</span>
+
+	<span class="hljs-keyword">defer</span> fmt.Println(<span class="hljs-string">&quot;aaaaaaaaaaa&quot;</span>)
+	<span class="hljs-keyword">defer</span> fmt.Println(<span class="hljs-string">&quot;bbbbbbbbbbb&quot;</span>)
+	<span class="hljs-keyword">defer</span> test(<span class="hljs-number">1</span>) <span class="hljs-comment">//在没有报错的情况下，defer 将按照先进后出的顺序执行</span>
+	<span class="hljs-keyword">defer</span> fmt.Println(<span class="hljs-string">&quot;ccccccccccc&quot;</span>)
+
+	<span class="hljs-comment">/*运行结果：</span>
+<span class="hljs-comment">	ccccccccccc</span>
+<span class="hljs-comment">	x =  100</span>
+<span class="hljs-comment">	bbbbbbbbbbb</span>
+<span class="hljs-comment">	aaaaaaaaaaa</span>
+<span class="hljs-comment">	*/</span>
+&#125;</code></pre><h3 id="6-2-defer和匿名函数结合使用"><a href="#6-2-defer和匿名函数结合使用" class="headerlink" title="6.2 defer和匿名函数结合使用"></a>6.2 defer和匿名函数结合使用</h3><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	a := <span class="hljs-number">10</span>
+	b := <span class="hljs-number">20</span>
+
+	<span class="hljs-keyword">defer</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;
+		fmt.Printf(<span class="hljs-string">&quot;defer语句，匿名函数内部：a=%d,b=%d\n&quot;</span>, a, b)
+	&#125;() <span class="hljs-comment">//()代表匿名函数直接执行</span>
+
+	a = <span class="hljs-number">111</span>
+	b = <span class="hljs-number">222</span>
+	fmt.Printf(<span class="hljs-string">&quot;外部：a=%d,b=%d\n&quot;</span>, a, b)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">外部：a=111,b=222</span>
+<span class="hljs-comment">defer语句，匿名函数内部：a=111,b=222</span>
+<span class="hljs-comment">*/</span></code></pre><p>在上例的基础中，给匿名函数传递两个实参：</p><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	a := <span class="hljs-number">10</span>
+	b := <span class="hljs-number">20</span>
+
+	<span class="hljs-keyword">defer</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(a, b <span class="hljs-keyword">int</span>)</span></span> &#123;
+		fmt.Printf(<span class="hljs-string">&quot;匿名函数内部：a=%d,b=%d\n&quot;</span>, a, b)
+	&#125;(a, b) <span class="hljs-comment">//()代表匿名函数直接执行，把参数传递过去，已经先传递参数，只是没有调用</span>
+
+	a = <span class="hljs-number">111</span>
+	b = <span class="hljs-number">222</span>
+	fmt.Printf(<span class="hljs-string">&quot;外部：a=%d,b=%d\n&quot;</span>, a, b)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">外部：a=111,b=222</span>
+<span class="hljs-comment">匿名函数内部：a=10,b=20</span>
+<span class="hljs-comment">*/</span></code></pre><h2 id="七、获取命令行参数"><a href="#七、获取命令行参数" class="headerlink" title="七、获取命令行参数"></a>七、获取命令行参数</h2><p>无论在哪个系统中敲命令，或多或少都会遇到带着参数的命令。比如：<code>ping www.google.com</code>，<code>ping</code> 是一个可执行程序 ，<a target="_blank" rel="noopener" href="http://www.google.com/">www.google.com</a> 就是参数。<br>命令行以空格 <code>space</code> 区分各个参数，且以字符串方式传递！</p><h3 id="7-1-如何实现"><a href="#7-1-如何实现" class="headerlink" title="7.1 如何实现"></a>7.1 如何实现</h3><p>需要用到 Golang 自带的 <code>os.Args</code> 变量，按<code>F2</code>即可看到官方对于这个变量的描述：</p><pre><code class="hljs go"><span class="hljs-comment">// Args hold the command-line arguments, starting with the program name.</span>
+<span class="hljs-keyword">var</span> Args []<span class="hljs-keyword">string</span></code></pre><p>Args 保持住命令行参数，从程序自身的名字开始。</p><h3 id="7-2-最基本的例子"><a href="#7-2-最基本的例子" class="headerlink" title="7.2 最基本的例子"></a>7.2 最基本的例子</h3><pre><code class="hljs go"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-keyword">import</span> (
+	<span class="hljs-string">&quot;fmt&quot;</span>
+	<span class="hljs-string">&quot;os&quot;</span>
+)
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	list := os.Args
+
+	n := <span class="hljs-built_in">len</span>(list)
+	fmt.Println(<span class="hljs-string">&quot;n = &quot;</span>, n)
+
+	<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">len</span>(list); i++ &#123;
+		fmt.Printf(<span class="hljs-string">&quot;list[%d] = %s\n&quot;</span>, i, list[i])
+	&#125;
+
+	fmt.Println(<span class="hljs-string">&quot;++++++++++++++++&quot;</span>)
+
+	<span class="hljs-keyword">for</span> i, data := <span class="hljs-keyword">range</span> list &#123;
+		fmt.Printf(<span class="hljs-string">&quot;list[%d] = %s\n&quot;</span>, i, data)
+	&#125;
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">go run 48_获取命令行参数.go 4 42</span>
+<span class="hljs-comment">n =  3</span>
+<span class="hljs-comment">list[0] = C:\Users\ADMINI~1\AppData\Local\Temp\go-build346730226\b001\exe\48_获取命令行参数.exe</span>
+<span class="hljs-comment">list[1] = 4</span>
+<span class="hljs-comment">list[2] = 42</span>
+<span class="hljs-comment">++++++++++++++++</span>
+<span class="hljs-comment">list[0] = C:\Users\ADMINI~1\AppData\Local\Temp\go-build346730226\b001\exe\48_获取命令行参数.exe</span>
+<span class="hljs-comment">list[1] = 4</span>
+<span class="hljs-comment">list[2] = 42</span>
+<span class="hljs-comment">*/</span></code></pre><p>第一个参数是程序自己本身的名称。<br>直接 <code>go run</code> 的方式只是人类自己看起来省力而已，Golang 底层依旧会先去编译并生成一个可执行程序，然后再运行这个可执行程序，如下图所示：</p><h2 id="八、作用域"><a href="#八、作用域" class="headerlink" title="八、作用域"></a>八、作用域</h2><p>作用域就是：变量起作用的范围。</p><h3 id="8-1-局部变量的特点"><a href="#8-1-局部变量的特点" class="headerlink" title="8.1 局部变量的特点"></a>8.1 局部变量的特点</h3><p>执行到定义变量的那句话，才开始分配内存空间，离开作用域被自动回收且被释放。</p><pre><code class="hljs go"><span class="hljs-keyword">package</span> main <span class="hljs-comment">//必须</span>
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span>
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">test</span><span class="hljs-params">()</span></span> &#123;
+	a := <span class="hljs-number">10</span>
+	fmt.Println(<span class="hljs-string">&quot;a = &quot;</span>, a)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-comment">//定义在&#123;&#125;里面的变量就是局部变量，只能在&#123;&#125;里面有效</span>
+	<span class="hljs-comment">//执行到定义变量那句话，才开始分配空间，离开作用域自动释放</span>
+	<span class="hljs-comment">//作用域，变量其作用的范围</span>
+
+	<span class="hljs-comment">//a = 111</span>
+	&#123;
+		i := <span class="hljs-number">10</span> <span class="hljs-comment">//块级作用域，出了这对大括号的范围，i就会被自动释放</span>
+		fmt.Println(<span class="hljs-string">&quot;i = &quot;</span>, i)
+	&#125;
+	<span class="hljs-comment">//i = 111</span>
+
+	<span class="hljs-keyword">if</span> flag := <span class="hljs-number">3</span>; flag == <span class="hljs-number">3</span> &#123; <span class="hljs-comment">//flag同样也是块级作用域内的变量，出了if块被自动回收并释放</span>
+		fmt.Println(<span class="hljs-string">&quot;flag = &quot;</span>, flag)
+	&#125;
+
+	flag = <span class="hljs-number">4</span>
+&#125;</code></pre><h3 id="8-2-全局变量的特点"><a href="#8-2-全局变量的特点" class="headerlink" title="8.2 全局变量的特点"></a>8.2 全局变量的特点</h3><p>1.定义在函数外部的变量叫全局变量。<br>2.全局变量不能使用海象运算符 <code>:=</code> 声明。<br>3.<code>const</code> 声明的名称不再是全局变量，而是 <code>常量</code> 了，是不允许被修改的。</p><pre><code class="hljs go"><span class="hljs-keyword">var</span> a <span class="hljs-keyword">int</span> <span class="hljs-comment">//这个a是全局变量，可以给赋值</span>
+
+<span class="hljs-keyword">const</span> b = <span class="hljs-number">10</span> <span class="hljs-comment">//const声明的b是常量了，不能给赋值</span>
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	a = <span class="hljs-number">10</span>
+	fmt.Println(<span class="hljs-string">&quot;a=&quot;</span>, a)
+
+	b = <span class="hljs-number">20</span> <span class="hljs-comment">//cannot assign to b ===&gt; 不能赋值给b</span>
+&#125;</code></pre><h3 id="8-3-不同作用域同名变量"><a href="#8-3-不同作用域同名变量" class="headerlink" title="8.3 不同作用域同名变量"></a>8.3 不同作用域同名变量</h3><p>1.不同作用域允许定义同名变量。<br>2.使用变量的原则：就近原则。</p><pre><code class="hljs go"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span>
+
+<span class="hljs-keyword">var</span> a <span class="hljs-keyword">int</span>
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">test</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;in test, a type is : %T\n&quot;</span>, a)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-keyword">var</span> a <span class="hljs-keyword">byte</span>
+	fmt.Printf(<span class="hljs-string">&quot;in main, a type is : %T\n&quot;</span>, a)
+
+	&#123;
+		<span class="hljs-keyword">var</span> a <span class="hljs-keyword">float64</span>
+		fmt.Printf(<span class="hljs-string">&quot;in block, a type is : %T\n&quot;</span>, a)
+	&#125;
+
+	test()
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">in main, a type is : uint8</span>
+<span class="hljs-comment">in block, a type is : float64</span>
+<span class="hljs-comment">in test, a type is : int</span>
+<span class="hljs-comment">*/</span></code></pre><p>找全局变量的时候，是<code>引用</code>全局变量：</p><pre><code class="hljs go"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span>
+
+<span class="hljs-keyword">var</span> a <span class="hljs-keyword">int</span>
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">test</span><span class="hljs-params">()</span></span> &#123;
+	a = <span class="hljs-number">10</span> <span class="hljs-comment">//引用全局变量，会修改其结果</span>
+	fmt.Println(<span class="hljs-string">&quot;a=&quot;</span>, a)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	test()
+	fmt.Println(<span class="hljs-string">&quot;a=&quot;</span>, a) <span class="hljs-comment">//依然是引用，test函数中已改变了其值，所以也将引用改变后的值</span>
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">a= 10</span>
+<span class="hljs-comment">a= 10</span>
+<span class="hljs-comment">*/</span></code></pre><h2 id="九、工程管理"><a href="#九、工程管理" class="headerlink" title="九、工程管理"></a>九、工程管理</h2><h3 id="9-1-Go1-11-版本之前的工作区"><a href="#9-1-Go1-11-版本之前的工作区" class="headerlink" title="9.1 Go1.11 版本之前的工作区"></a>9.1 Go1.11 版本之前的工作区</h3><p>Go1.11 版本之前，使用 GOPATH 来管理工程。</p><h4 id="9-1-1-工作区介绍"><a href="#9-1-1-工作区介绍" class="headerlink" title="9.1.1 工作区介绍"></a>9.1.1 工作区介绍</h4><p>Golang 代码必须放在工作区中。工作区是对应一个特定工程的目录，它应包含 3 个子目录：<br>1.src目录<br>用于以代码包的形式组织并保存 Go 源代码文件。（比如：<code>.go</code> <code>.c</code> <code>.h</code> <code>.s</code> …）<br>src用于包含所有的源代码，是 Go1.11 版本之前，命令行工具的强制规则。<br>2.pkg目录<br>用于存放由 <code>go install</code> 命令构建安装后的代码包（包含 go 库源码文件）的 <code>.a</code> 归档文件。<br>3.bin目录<br>与 pkg 目录类似，在通过 <code>go install</code> 命令完成安装后，保存由 Go 命令源码文件生成的可执行文件。</p><h4 id="9-1-2-GOPATH设置"><a href="#9-1-2-GOPATH设置" class="headerlink" title="9.1.2 GOPATH设置"></a>9.1.2 GOPATH设置</h4><p>标准库中的包会在安装 Go 语言的位置找到。程序员自己创建的包会在 <code>GOPATH</code> 环境变量指定的目录中查找。<br>首先需要把工程目录的根路径加入到环境变量 <code>GOPATH</code> 中，这样才能构建这个工程。否则，即使处于同一工作目录（工作区），代码之间也无法通过绝对代码包路径完成调用。<br>src 这个目录是强制要求存在，而 pkg 和 bin 目录则无需手动创建，Go 命令行工具在构建过程中会自动创建这些目录。<br>特别注意：只有当环境变量 <code>GOPATH</code> 中只包含一个工作区的目录路径时，<code>go install</code> 命令才会把命令源码安装到当前工作区的 bin 目录下。如果环境变量 <code>GOPATH</code> 中包含多个工作区的路径，则必须设置环境变量 <code>GOBIN</code>，否则执行 <code>go install</code> 命令就会失效。</p><h4 id="9-1-3-分文件编程（同一个目录下）"><a href="#9-1-3-分文件编程（同一个目录下）" class="headerlink" title="9.1.3 分文件编程（同一个目录下）"></a>9.1.3 分文件编程（同一个目录下）</h4><p>1.多个源文件，必须放在 <code>src</code> 目录下。<br>2.设置 <code>GOPATH</code> 环境变量时，注意：别把 <code>src</code> 目录包含进去。<br>3.同一个目录，包名必须一样。<br>4.同一个目录，调用别的文件中的函数，无需加包名引用直接调用即可。</p><h4 id="9-1-4-分文件编程（不同目录下）"><a href="#9-1-4-分文件编程（不同目录下）" class="headerlink" title="9.1.4 分文件编程（不同目录下）"></a>9.1.4 分文件编程（不同目录下）</h4><p>1.依旧必须放在 <code>src</code> 目录下。<br>2.不同目录，包名不一样。<br>3.调用不同包里面的函数，格式：<code>包名.函数名()</code>。<br>4.<strong>被调用的其他包里的函数名称首字母必须大写，否则对其他包不可见</strong></p><h4 id="9-1-5-包"><a href="#9-1-5-包" class="headerlink" title="9.1.5 包"></a>9.1.5 包</h4><h5 id="9-1-5-1-自定义包"><a href="#9-1-5-1-自定义包" class="headerlink" title="9.1.5.1 自定义包"></a>9.1.5.1 自定义包</h5><p>创建的自定义包最好放在<code>GOPATH</code>的<code>src</code>目录下（或者<code>GOPATH</code> <code>src</code>的某个子目录下）<br>在Golang中，代码包中的源码文件名是可以任意的，但这些源码文件都必须以包声明语句作为文件中非注释语句的第一行，每个包都对应一个独立的空间<br>例：<br><code>package calc</code><br>包中成员以名称首字母大小写决定访问权限：首字母大写可被包外访问，首字母小写仅包内成员可以访问。<br>注意：<strong>同一个目录（文件夹）中，每个 go 文件所声明的包名称必须一样</strong>！</p><h5 id="9-1-5-2-给包起个别名"><a href="#9-1-5-2-给包起个别名" class="headerlink" title="9.1.5.2 给包起个别名"></a>9.1.5.2 给包起个别名</h5><p>语法：<code>import 新名字 原本的包名</code>。</p><pre><code class="hljs go"><span class="hljs-comment">//新名字+原本的名字</span>
+<span class="hljs-keyword">import</span> myFMT <span class="hljs-string">&quot;fmt&quot;</span>
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	myFMT.Println(<span class="hljs-string">&quot;test info.&quot;</span>)
+&#125;</code></pre><h5 id="9-1-5-3-忽略丢弃一个包"><a href="#9-1-5-3-忽略丢弃一个包" class="headerlink" title="9.1.5.3 忽略丢弃一个包"></a>9.1.5.3 忽略丢弃一个包</h5><p>引入包的时候使用 <code>_</code>，主要是为了让 Golang 自动调用那个包中的 init() 函数。<br>例如，我有这么一个项目结构：</p><pre><code class="hljs go">hello
+	hello.<span class="hljs-keyword">go</span>
+main.<span class="hljs-keyword">go</span></code></pre><p>hello/hello.go 中的代码如下：</p><pre><code class="hljs go"><span class="hljs-keyword">package</span> hello
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span>
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">init</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Println(<span class="hljs-string">&quot;this message from hello/hello.go init() function.&quot;</span>)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Add</span><span class="hljs-params">(a, b <span class="hljs-keyword">int</span>)</span> <span class="hljs-title">int</span></span> &#123;
+	<span class="hljs-keyword">return</span> a + b
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">PrintHello</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Println(<span class="hljs-string">&quot;hello message.&quot;</span>)
+&#125;</code></pre><p>我只想引入这个模块，但不想用这个模块的任何函数。那么可以在引入这个模块的时候，使用<code>_</code>丢弃这个包。<br>main.go 中的代码：</p><pre><code class="hljs go"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-keyword">import</span> _ <span class="hljs-string">&quot;gitee.com/quanquan616/hello&quot;</span> <span class="hljs-comment">//引入的同时，丢弃这个包，我只想做初始化使用</span>
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">this message from hello/hello.go init() function.</span>
+<span class="hljs-comment"></span>
+<span class="hljs-comment">Process finished with exit code 0</span>
+<span class="hljs-comment">*/</span></code></pre><p>编译通过，没有任何问题，而且也可以看到 Golang 自动调用了 hello/hello.go 中的 init() 函数。</p><h5 id="9-1-5-4-下划线-丢弃包的常用场景1"><a href="#9-1-5-4-下划线-丢弃包的常用场景1" class="headerlink" title="9.1.5.4 下划线_丢弃包的常用场景1"></a>9.1.5.4 下划线<code>_</code>丢弃包的常用场景1</h5><pre><code class="hljs go"><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;database/sql&quot;</span>
+<span class="hljs-keyword">import</span> _ <span class="hljs-string">&quot;github.com/go-sql-driver/mysql&quot;</span></code></pre><p>第二个 import 就是不使用 mysql 包，将其丢弃，只是执行一下这个包的 init() 函数，把 mysql 的驱动注册到 sql 包里，然后程序里就可以使用 sql 包来访问 mysql 数据库了。</p><h3 id="9-2-Go-Module-模块管理"><a href="#9-2-Go-Module-模块管理" class="headerlink" title="9.2 Go Module 模块管理"></a>9.2 Go Module 模块管理</h3><p>Go1.11 开始，官方推出并建议使用 <code>Go Module</code> 来管理工程。<br>详情使用：<a target="_blank" rel="noopener" href="https://blog.csdn.net/zhangyibei2008/article/details/104672471">link</a></p><h2 id="十、main-函数和init-函数"><a href="#十、main-函数和init-函数" class="headerlink" title="十、main()函数和init()函数"></a>十、main()函数和init()函数</h2><p>Golang 有两个保留函数：<code>main()</code> 和 <code>init()</code>。这两个函数在定义时不能有任何的参数和返回值，Go 程序会自动调用这两个函数。</p><h3 id="10-1-main-函数的特性"><a href="#10-1-main-函数的特性" class="headerlink" title="10.1 main()函数的特性"></a>10.1 main()函数的特性</h3><p>1.main() 函数是 Go 程序的唯一入口。<br>2.main() 函数只能应用于 main 包中，main 包中必须包含有且只有一个 <code>main()</code> 函数。</p><h3 id="10-2-init-函数的特性"><a href="#10-2-init-函数的特性" class="headerlink" title="10.2 init()函数的特性"></a>10.2 init()函数的特性</h3><p>1.init() 函数是用于程序执行前做包的初始化的函数，比如初始化包里的变量等。<br>init() 函数能够应用于所有的包中，可选的，可写可不写。init() 函数会在程序执行开始的时候被调用。所有被编译器发现的 init() 函数，都会安排在 main() 函数之前执行。init() 函数通常用在设置包、初始化变量或者其他先行引导工作。<br>2.不同包的 init() 函数，按照包导入的依赖关系决定该初始化函数的执行顺序。<br>3.init() 函数不能被其他函数调用，而是在 main() 函数执行之前，自动被调用。<br>4.每个包可以拥有多个 init() 函数。<br>不推荐这么做，强烈建议每个文件只写一个 init() 函数。</p><h3 id="10-3-包的其他特性"><a href="#10-3-包的其他特性" class="headerlink" title="10.3 包的其他特性"></a>10.3 包的其他特性</h3><p>1.有时候一个包会被多个包同时导入，那么它只会被导入一次。（例如：很多包都会用到fmt包，但它只会被导入一次）<br>2.当一个包被导入时，如果该包还导入了其他的包，那么会先将其他包导入进来，然后再对这些包中的包级常量和变量进行初始化，紧接着执行 init() 函数（如果有）。等所有被导入的包都加载完毕了，就会对 main 包中的包级常量和变量进行初始化，然后执行 main 包中的 init() 函数（如果有），最后执行 main() 函数。</p><h3 id="10-4-init-函数和main-函数的异同"><a href="#10-4-init-函数和main-函数的异同" class="headerlink" title="10.4 init()函数和main()函数的异同"></a>10.4 init()函数和main()函数的异同</h3><p>共同点：两个函数在定义时不能有任何的参数和返回值，且由 Go 程序自动调用。<br>不同电：init() 函数可以应用于任意包中，且可以重复定义多个。main() 函数只能用于 main 包中，且只能定义一个。</p></div><hr><div><div class="post-metas mb-3"><div class="post-meta mr-3"><i class="iconfont icon-category"></i> <a class="hover-with-bg" href="/categories/%E7%BC%96%E7%A8%8B%E4%B9%8B%E7%BE%8E/">编程之美</a></div><div class="post-meta"><i class="iconfont icon-tags"></i> <a class="hover-with-bg" href="/tags/Golang/">Golang</a></div></div><p class="note note-warning"><strong>本文作者: </strong><a href="/">iceH</a><br><strong>本文链接: </strong><a href="http://www.secice.cn/p/8fdd12c0.html">http://www.secice.cn/p/8fdd12c0.html</a><br><strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p><div class="post-prevnext row"><article class="post-prev col-6"></article><article class="post-next col-6"><a href="/p/f6d90fce.html"><span class="hidden-mobile">Golang学习之基本类型与流程控制</span> <span class="visible-mobile">下一篇</span> <i class="iconfont icon-arrowright"></i></a></article></div></div><article class="comments" id="comments"><div id="vcomments"></div><script type="text/javascript">Fluid.utils.waitElementVisible("vcomments",(function(){Fluid.utils.createScript("https://cdn.staticfile.org/valine/1.4.14/Valine.min.js",(function(){new Valine({el:"#vcomments",app_id:"MnjV8raNBztIVGGKiicFL3Sq-MdYXbMMI",app_key:"hS70MmgmzDqbMSkSAfkDe42h",placeholder:"留下你的小脚印吧...",path:window.location.pathname,avatar:"wavatar",meta:["nick","mail"],pageSize:"10",lang:"zh-CN",highlight:!1,recordIP:!1,serverURLs:""})}))}))</script><noscript>Please enable JavaScript to view the <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments powered by Valine.</a></noscript></article></article></div></div></div><div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn"><div id="toc"><p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p><div class="toc-body" id="toc-body"></div></div></div></div></div><div class="col-lg-7 mx-auto nopadding-md"><div class="container custom post-custom mx-auto"><img src="/img/psb.gif" srcset="/img/loading.gif" class="rounded mx-auto d-block mt-5" style="width:300px;height:150px"></div></div><a id="scroll-top-button" href="#" role="button"><i class="iconfont icon-arrowup" aria-hidden="true"></i></a><div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable modal-lg" role="document"><div class="modal-content"><div class="modal-header text-center"><h4 class="modal-title w-100 font-weight-bold">搜索</h4><button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body mx-3"><div class="md-form mb-5"><input type="text" id="local-search-input" class="form-control validate"> <label data-error="x" data-success="v" for="local-search-input">关键词</label></div><div class="list-group" id="local-search-result"></div></div></div></div></div></main><footer class="text-center mt-5 py-3"><div class="footer-content"><span>iceH</span> <i class="iconfont icon-love"></i> <span>一条啥也不会的咸鱼！</span></div></footer><script src="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js"></script><link rel="stylesheet" href="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css"><script>NProgress.configure({showSpinner:!1,trickleSpeed:200}),NProgress.start(),document.addEventListener("DOMContentLoaded",(function(){window.NProgress&&window.NProgress.inc()})),window.addEventListener("load",(function(){NProgress.done()}))</script><script src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js"></script><script src="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script><script src="/js/debouncer.js"></script><script src="/js/events.js"></script><script src="/js/plugins.js"></script><script src="/js/lazyload.js"></script><script src="https://cdn.staticfile.org/tocbot/4.12.0/tocbot.min.js"></script><script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script><script src="https://cdn.staticfile.org/anchor-js/4.3.0/anchor.min.js"></script><script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script><script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script><script>!function(t,i){(0,Fluid.plugins.typing)(i.getElementById("subtitle").title)}(window,document)</script><script src="/js/local-search.js"></script><script>document.querySelector("#local-search-input").onclick=function(){searchFunc("/local-search.xml","local-search-input","local-search-result"),this.onclick=null}</script><script src="/js/qipao.js"></script><script src="/js/jingtaisidai.js"></script><script src="/js/dianjichuzi.js"></script><script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="//cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script src="/js/boot.js"></script></body></html>
