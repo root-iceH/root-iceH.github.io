@@ -508,13 +508,6 @@
   </url>
   
   <url>
-    <loc>http://www.secice.cn/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/</loc>
-    <lastmod>2021-03-22</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://www.secice.cn/tags/msf/</loc>
     <lastmod>2021-03-22</lastmod>
     <changefreq>daily</changefreq>
@@ -522,7 +515,7 @@
   </url>
   
   <url>
-    <loc>http://www.secice.cn/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/</loc>
+    <loc>http://www.secice.cn/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/</loc>
     <lastmod>2021-03-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -530,6 +523,13 @@
   
   <url>
     <loc>http://www.secice.cn/tags/%E5%AD%A6%E4%B9%A0%E6%96%87%E7%AB%A0/</loc>
+    <lastmod>2021-03-22</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.secice.cn/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/</loc>
     <lastmod>2021-03-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -564,14 +564,14 @@
   </url>
   
   <url>
-    <loc>http://www.secice.cn/tags/App-CMS/</loc>
+    <loc>http://www.secice.cn/tags/Typecho/</loc>
     <lastmod>2021-03-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://www.secice.cn/tags/Typecho/</loc>
+    <loc>http://www.secice.cn/tags/App-CMS/</loc>
     <lastmod>2021-03-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -592,6 +592,13 @@
   </url>
   
   <url>
+    <loc>http://www.secice.cn/tags/Ecshop/</loc>
+    <lastmod>2021-03-22</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://www.secice.cn/tags/phpstudy/</loc>
     <lastmod>2021-03-22</lastmod>
     <changefreq>daily</changefreq>
@@ -600,13 +607,6 @@
   
   <url>
     <loc>http://www.secice.cn/tags/Tomcat/</loc>
-    <lastmod>2021-03-22</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://www.secice.cn/tags/Ecshop/</loc>
     <lastmod>2021-03-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
