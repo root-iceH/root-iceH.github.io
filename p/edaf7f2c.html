@@ -1,0 +1,1391 @@
+<!DOCTYPE html><html lang="zh-CN" data-default-color-scheme="&#34;auto&#34;"><head><meta charset="UTF-8"><link rel="apple-touch-icon" sizes="76x76" href="https://gitee.com/sec-pengyy/sec-pengyy/raw/master/img/favicon.png"><link rel="icon" type="image/png" href="https://gitee.com/sec-pengyy/sec-pengyy/raw/master/img/favicon.png"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no"><meta http-equiv="x-ua-compatible" content="ie=edge"><meta name="theme-color" content="#2f4154"><meta name="description" content="没有天生的大牛，更没有永远的菜鸟求知若饥 , 虚心若愚"><meta name="author" content="iceH"><meta name="keywords" content=""><title>Golang学习之面向对象编程 - iceH’s Blog</title><link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css"><link rel="stylesheet" href="/lib/hint/hint.min.css"><link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.1.2/styles/github-gist.min.css"><link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css"><link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css"><link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css"><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="https://gitee.com/sec-pengyy/sec-pengyy/raw/master/css/gundongtiao.css# 滚动条颜色.css"><link rel="stylesheet" href="https://gitee.com/sec-pengyy/sec-pengyy/raw/master/css/shubiao.css# 鼠标指针.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><link rel="stylesheet" href="https://gitee.com/sec-pengyy/sec-pengyy/raw/master/css/valine.css"><script id="fluid-configs">var Fluid=window.Fluid||{},CONFIG={hostname:"www.secice.cn",root:"/",version:"1.8.5",typing:{enable:!0,typeSpeed:70,cursorChar:"_",loop:!1},toc:{enable:!0,headingSelector:"h1,h2,h3,h4,h5,h6",collapseDepth:0},anchorjs:{enable:!0,element:"h1,h2,h3,h4,h5,h6",placement:"right",visible:"hover",icon:""},copy_btn:!0,image_zoom:{enable:!0},lazyload:{enable:!0,onlypost:!1},web_analytics:{enable:!1,baidu:null,google:null,gtag:null,tencent:{sid:null,cid:null},woyaola:null,cnzz:null,leancloud:{app_id:null,app_key:null,server_url:null}}}</script><script src="/js/utils.js"></script><script src="/js/color-schema.js"></script><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/atom.xml" title="iceH’s Blog" type="application/atom+xml">
+</head><body><header style="height:70vh"><nav id="navbar" class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar"><div class="container"><a class="navbar-brand" href="/">&nbsp;<strong>iceH's Blog</strong>&nbsp;</a> <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><div class="animated-icon"><span></span><span></span><span></span></div></button><div class="collapse navbar-collapse" id="navbarSupportedContent"><ul class="navbar-nav ml-auto text-center"><li class="nav-item"><a class="nav-link" href="/"><i class="iconfont icon-home-fill"></i> 首页</a></li><li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="iconfont icon-books"></i> 博文</a><div class="dropdown-menu" aria-labelledby="navbarDropdown"><a class="dropdown-item" href="/archives/"><i class="iconfont icon-archive-fill"></i> 归档 </a><a class="dropdown-item" href="/categories/"><i class="iconfont icon-category-fill"></i> 分类 </a><a class="dropdown-item" href="/tags/"><i class="iconfont icon-tags-fill"></i> 标签</a></div></li><li class="nav-item"><a class="nav-link" target="_blank" rel="noopener" href="https://wiki.secice.cn/"><i class="iconfont icon-kaggle"></i> Wiki</a></li><li class="nav-item"><a class="nav-link" href="/playlist/"><i class="iconfont icon-music"></i> 音乐</a></li><li class="nav-item"><a class="nav-link" href="/about/"><i class="iconfont icon-user-fill"></i> 关于</a></li><li class="nav-item"><a class="nav-link" href="/links/"><i class="iconfont icon-link-fill"></i> 友链</a></li><li class="nav-item" id="search-btn"><a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a></li><li class="nav-item" id="color-toggle-btn"><a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a></li></ul></div></div></nav><div class="banner intro-2" id="background" parallax="true" style="background:url(https://gitee.com/sec-pengyy/sec-pengyy/raw/master/img/background1.jpg) no-repeat center center;background-size:cover"><div class="full-bg-img"><div class="mask flex-center" style="background-color:rgba(0,0,0,.3)"><div class="page-header text-center fade-in-up"><span class="h2" id="subtitle" title="Golang学习之面向对象编程"></span><div class="mt-3"><span class="post-meta"><i class="iconfont icon-date-fill" aria-hidden="true"></i> <time datetime="2021-01-08 20:53" pubdate>2021年1月8日 晚上</time></span></div><div class="mt-1"><span class="post-meta mr-2"><i class="iconfont icon-chart"></i> 13.5k 字 </span><span class="post-meta mr-2"><i class="iconfont icon-clock-fill"></i> 187 分钟</span></div></div></div></div></div></header><main><div class="container-fluid"><div class="row"><div class="d-none d-lg-block col-lg-2"></div><div class="col-lg-8 nopadding-md"><div class="container nopadding-md" id="board-ctn"><div class="py-5" id="board"><article class="post-content mx-auto"><h1 style="display:none">Golang学习之面向对象编程</h1><div class="markdown-body"><h2 id="一、Golang面向对象编程概念"><a href="#一、Golang面向对象编程概念" class="headerlink" title="一、Golang面向对象编程概念"></a>一、Golang面向对象编程概念</h2><p><strong>Golang没有沿袭其他传统编程语言面向对象的概念</strong>：没有封装、继承、多态这些概念，但可以通过别的方式来实现这些特性：</p><ul><li>封装：通过方法实现</li><li>继承：通过匿名字段实现</li><li>多态：通过接口实现</li></ul><h2 id="二、匿名字段"><a href="#二、匿名字段" class="headerlink" title="二、匿名字段"></a>二、匿名字段</h2><h3 id="2-1-匿名字段的概念"><a href="#2-1-匿名字段的概念" class="headerlink" title="2.1 匿名字段的概念"></a>2.1 匿名字段的概念</h3><p>一般情况下，定义结构体的时候是字段名与其类型一一对应，实际上<code>Golang支持只提供类型而不写字段名</code>的方式，这就是匿名字段。<br>匿名字段的简单体验：<br>当匿名字段也是一个结构体s1且存在于另一个结构体s2的时候，那么s1结构体的全部字段都会被隐式地引入到结构体s2。此时，匿名字段也可以被称为嵌入字段，实现了”继承”的思想。<br>例如：</p><pre><code class="hljs go"><span class="hljs-comment">//人</span>
+<span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-comment">//学生</span>
+<span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	Person <span class="hljs-comment">//匿名字段，只有Person类型而没有名字，那么Student默认就包含了Person的所有字段</span>
+
+	<span class="hljs-comment">//学生额外的字段</span>
+	stuNo   <span class="hljs-keyword">int</span> <span class="hljs-comment">//学号</span>
+	address <span class="hljs-keyword">string</span>
+&#125;</code></pre><p>Student中的Person，Person只是个类型而没有给它起名称，所以Person就是匿名字段！Student中的Person会把Person类型中的字段全部引用过来。</p><h3 id="2-2-匿名字段初始化"><a href="#2-2-匿名字段初始化" class="headerlink" title="2.2 匿名字段初始化"></a>2.2 匿名字段初始化</h3><h4 id="2-2-1-顺序初始化"><a href="#2-2-1-顺序初始化" class="headerlink" title="2.2.1 顺序初始化"></a>2.2.1 顺序初始化</h4><p>对应结构体中的字段，一个个给值。<br>示例：</p><pre><code class="hljs go"><span class="hljs-comment">//人</span>
+<span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span> <span class="hljs-comment">//最终以ASCII码值的方式打印</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-comment">//学生</span>
+<span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	Person <span class="hljs-comment">//结构体匿名字段，Student默认就包含了Person的所有字段</span>
+
+	stuNo   <span class="hljs-keyword">int</span> <span class="hljs-comment">//学号</span>
+	address <span class="hljs-keyword">string</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-keyword">var</span> s1 = Student&#123;
+		Person:  Person&#123;<span class="hljs-string">&quot;go&quot;</span>, <span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-number">11</span>&#125;, <span class="hljs-comment">//Person本身也是一个结构体，对结构体匿名字段进行初始化需要这样写</span>
+		stuNo:   <span class="hljs-number">0</span>,
+		address: <span class="hljs-string">&quot;Google Inc.&quot;</span>,
+	&#125;
+	fmt.Println(<span class="hljs-string">&quot;s1=&quot;</span>, s1) <span class="hljs-comment">//s1= &#123;&#123;go 77 11&#125; 0 Google Inc.&#125;</span>
+&#125;</code></pre><h4 id="2-2-2-自动推导类型"><a href="#2-2-2-自动推导类型" class="headerlink" title="2.2.2 自动推导类型"></a>2.2.2 自动推导类型</h4><p>示例：</p><pre><code class="hljs go"><span class="hljs-comment">//人</span>
+<span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span> <span class="hljs-comment">//最终以ASCII码值的方式打印</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-comment">//学生</span>
+<span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	Person <span class="hljs-comment">//结构体匿名字段，Student默认就包含了Person的所有字段</span>
+
+	stuNo   <span class="hljs-keyword">int</span> <span class="hljs-comment">//学号</span>
+	address <span class="hljs-keyword">string</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	s1 := Student&#123;Person&#123;<span class="hljs-string">&quot;go&quot;</span>, <span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-number">11</span>&#125;, <span class="hljs-number">0</span>, <span class="hljs-string">&quot;Google Inc.&quot;</span>&#125;
+	fmt.Printf(<span class="hljs-string">&quot;s1=%+v\n&quot;</span>, s1) <span class="hljs-comment">//s1=&#123;Person:&#123;name:go sex:77 age:11&#125; stuNo:0 address:Google Inc.&#125;</span>
+&#125;</code></pre><p><code>%+v</code> 信息显示地更加详细！从上例中可以看到，每个字段名也打印了出来。<br>注意：如果结构体中使用了另一个结构体，就必须显示地带上类型，不然就报错！<br>例如：</p><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	s2 := Student&#123;&#123;<span class="hljs-string">&quot;go&quot;</span>, <span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-number">11</span>&#125;, <span class="hljs-number">0</span>, <span class="hljs-string">&quot;&quot;</span>&#125; <span class="hljs-comment">//报错：missing type in composite literal ===&gt; 组合字面量中缺少类型</span>
+	fmt.Println(<span class="hljs-string">&quot;s2=&quot;</span>, s2)
+&#125;</code></pre><p><code>&#123;&quot;go&quot;, &#39;M&#39;, 11&#125;</code> 前面一定要带上 <code>Person</code> 这个类型！<br>匿名函数在Golang官方中的叫法是：函数字面量，这里再次看到了字面量这个词语，也可以得知匿名字段也只一个结构体的字面量。</p><h4 id="2-2-3-指定成员初始化"><a href="#2-2-3-指定成员初始化" class="headerlink" title="2.2.3 指定成员初始化"></a>2.2.3 指定成员初始化</h4><p>指定结构体匿名字段的话，就一层套一层地去写。例如：<code>StructName:StructName&#123;FieldName:Value&#125;</code>。</p><pre><code class="hljs go"><span class="hljs-comment">//人</span>
+<span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span> <span class="hljs-comment">//最终以ASCII码值的方式打印</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-comment">//学生</span>
+<span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	Person <span class="hljs-comment">//结构体匿名字段，Student默认就包含了Person的所有字段</span>
+
+	stuNo   <span class="hljs-keyword">int</span> <span class="hljs-comment">//学号</span>
+	address <span class="hljs-keyword">string</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-comment">//一层套一层的写法，Person:Person&#123;字段名:值&#125;</span>
+	s1 := Student&#123;Person: Person&#123;name: <span class="hljs-string">&quot;go&quot;</span>&#125;, address: <span class="hljs-string">&quot;Google Inc.&quot;</span>&#125;
+	fmt.Printf(<span class="hljs-string">&quot;s1=%+v\n&quot;</span>, s1) <span class="hljs-comment">//s1=&#123;Person:&#123;name:go sex:0 age:0&#125; stuNo:0 address:Google Inc.&#125;</span>
+&#125;</code></pre><h3 id="2-3-成员操作"><a href="#2-3-成员操作" class="headerlink" title="2.3 成员操作"></a>2.3 成员操作</h3><p>跟操作普通结构体的方式一模一样。</p><h4 id="2-3-1-方式一"><a href="#2-3-1-方式一" class="headerlink" title="2.3.1 方式一"></a>2.3.1 方式一</h4><p>结构体字面量（结构体匿名字段）已经被直接引入了，可以用 <code>.</code> 来访问。<br>示例：</p><pre><code class="hljs go"><span class="hljs-comment">//人</span>
+<span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span> <span class="hljs-comment">//最终以ASCII码值的方式打印</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-comment">//学生</span>
+<span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	Person <span class="hljs-comment">//结构体匿名字段，Student默认就包含了Person的所有字段</span>
+
+	stuNo   <span class="hljs-keyword">int</span> <span class="hljs-comment">//学号</span>
+	address <span class="hljs-keyword">string</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	s1 := Student&#123;Person&#123;<span class="hljs-string">&quot;go&quot;</span>, <span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-number">11</span>&#125;, <span class="hljs-number">0</span>, <span class="hljs-string">&quot;&quot;</span>&#125;
+	fmt.Printf(<span class="hljs-string">&quot;s1.name=%v\n&quot;</span>, s1.name) <span class="hljs-comment">//直接可以使用了</span>
+	fmt.Printf(<span class="hljs-string">&quot;s1.sex=%v\n&quot;</span>, s1.sex)
+	fmt.Printf(<span class="hljs-string">&quot;s1.age=%v\n&quot;</span>, s1.age)
+	fmt.Printf(<span class="hljs-string">&quot;s1.stuNo=%v\n&quot;</span>, s1.stuNo)
+	fmt.Printf(<span class="hljs-string">&quot;s1.address=%v\n&quot;</span>, s1.address)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">s1.name=go</span>
+<span class="hljs-comment">s1.sex=77</span>
+<span class="hljs-comment">s1.age=11</span>
+<span class="hljs-comment">s1.stuNo=0</span>
+<span class="hljs-comment">s1.address=</span>
+<span class="hljs-comment">*/</span></code></pre><h4 id="2-3-2-方式二"><a href="#2-3-2-方式二" class="headerlink" title="2.3.2 方式二"></a>2.3.2 方式二</h4><pre><code class="hljs go"><span class="hljs-comment">//人</span>
+<span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span> <span class="hljs-comment">//最终以ASCII码值的方式打印</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-comment">//学生</span>
+<span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	Person <span class="hljs-comment">//结构体匿名字段，Student默认就包含了Person的所有字段</span>
+
+	stuNo   <span class="hljs-keyword">int</span> <span class="hljs-comment">//学号</span>
+	address <span class="hljs-keyword">string</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	s1 := Student&#123;Person&#123;<span class="hljs-string">&quot;go&quot;</span>, <span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-number">11</span>&#125;, <span class="hljs-number">0</span>, <span class="hljs-string">&quot;&quot;</span>&#125;
+	s1.name = <span class="hljs-string">&quot;Golang&quot;</span> <span class="hljs-comment">//修改成员的值，也是直接用点&quot;.&quot;来操作</span>
+	s1.address = <span class="hljs-string">&quot;Google Inc.&quot;</span>
+	fmt.Printf(<span class="hljs-string">&quot;s1=%+v\n&quot;</span>, s1) <span class="hljs-comment">//s1=&#123;Person:&#123;name:Golang sex:77 age:11&#125; stuNo:0 address:Google Inc.&#125;</span>
+&#125;</code></pre><h4 id="2-3-3-方式三"><a href="#2-3-3-方式三" class="headerlink" title="2.3.3 方式三"></a>2.3.3 方式三</h4><p>结构体中的字面量当做一个整体赋值。<br>示例：</p><pre><code class="hljs go"><span class="hljs-comment">//人</span>
+<span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span> <span class="hljs-comment">//最终以ASCII码值的方式打印</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-comment">//学生</span>
+<span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	Person <span class="hljs-comment">//结构体匿名字段，Student默认就包含了Person的所有字段</span>
+
+	stuNo   <span class="hljs-keyword">int</span> <span class="hljs-comment">//学号</span>
+	address <span class="hljs-keyword">string</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	s1 := Student&#123;Person&#123;<span class="hljs-string">&quot;go&quot;</span>, <span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-number">11</span>&#125;, <span class="hljs-number">0</span>, <span class="hljs-string">&quot;&quot;</span>&#125;
+
+	<span class="hljs-comment">//Person在Student中是一个结构体，可以被整体赋值</span>
+	s1.Person = Person&#123;name: <span class="hljs-string">&quot;go-lang&quot;</span>&#125; <span class="hljs-comment">//注意等号&quot;=&quot;后面要带上类型，未给值的将把原来的值给覆盖使用其类型的零值</span>
+
+	fmt.Printf(<span class="hljs-string">&quot;s1=%+v\n&quot;</span>, s1) <span class="hljs-comment">//s1=&#123;Person:&#123;name:go-lang sex:0 age:0&#125; stuNo:0 address:&#125;</span>
+&#125;</code></pre><p>注意：<strong>当做一个整体赋值的时候，如果有字段没给值，那么就会使用其类型对应的零值覆盖原值</strong>。</p><h3 id="2-4-同名字段"><a href="#2-4-同名字段" class="headerlink" title="2.4 同名字段"></a>2.4 同名字段</h3><p>实质上跟作用域的规则一样：能在当前作用域内找到的就用当前作用域内的字段，没有找到才往上去找。<br>例1：</p><pre><code class="hljs go"><span class="hljs-comment">//人</span>
+<span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span> <span class="hljs-comment">//最终以ASCII码值的方式打印</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-comment">//学生</span>
+<span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	Person <span class="hljs-comment">//结构体匿名字段，Student默认就包含了Person的所有字段</span>
+
+	stuNo   <span class="hljs-keyword">int</span> <span class="hljs-comment">//学号</span>
+	address <span class="hljs-keyword">string</span>
+
+	name <span class="hljs-keyword">string</span> <span class="hljs-comment">//和Person中的name同名了</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-keyword">var</span> s Student
+	s.name = <span class="hljs-string">&quot;Golang&quot;</span>
+	s.sex = <span class="hljs-string">&#x27;M&#x27;</span>
+	s.age = <span class="hljs-number">11</span>
+	fmt.Printf(<span class="hljs-string">&quot;s=%+v\n&quot;</span>, s)
+	<span class="hljs-comment">//s=&#123;Person:&#123;name: sex:77 age:11&#125; stuNo:0 address: name:Golang&#125;</span>
+&#125;</code></pre><p>可以看到Person中的name是空字符串，跟作用域的规则一样：<code>s.name</code>能在Student中找到，那么就用了Student中的name，不会去管Person中的name了；而Student中没有sex这个字段，那么程序就会往上去找，找到了Person中有sex字段，就给Person中的sex字段赋值了。<br>想要使用Person中的name，就需要<code>显示调用</code>。<br>例2：</p><pre><code class="hljs go"><span class="hljs-comment">//人</span>
+<span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span> <span class="hljs-comment">//最终以ASCII码值的方式打印</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-comment">//学生</span>
+<span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	Person <span class="hljs-comment">//结构体匿名字段，Student默认就包含了Person的所有字段</span>
+
+	stuNo   <span class="hljs-keyword">int</span> <span class="hljs-comment">//学号</span>
+	address <span class="hljs-keyword">string</span>
+
+	name <span class="hljs-keyword">string</span> <span class="hljs-comment">//和Person中的name同名了</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-keyword">var</span> s Student
+	s.name = <span class="hljs-string">&quot;Golang&quot;</span>
+	s.sex = <span class="hljs-string">&#x27;M&#x27;</span> <span class="hljs-comment">//Student中没有sex这个字段，会往上去找，找到Person中有sex字段</span>
+	s.age = <span class="hljs-number">11</span>
+	s.Person.name = <span class="hljs-string">&quot;01&quot;</span> <span class="hljs-comment">//显示调用，指定为Person中的name</span>
+	s.Person.sex = <span class="hljs-string">&#x27;u&#x27;</span> <span class="hljs-comment">//指定调用，这里会覆盖之前的值</span>
+	s.Person.age = <span class="hljs-number">219</span>
+	fmt.Printf(<span class="hljs-string">&quot;s=%+v\n&quot;</span>, s)
+	<span class="hljs-comment">//s=&#123;Person:&#123;name:01 sex:117 age:219&#125; stuNo:0 address: name:Golang&#125;</span>
+&#125;</code></pre><p>显示调用后，两个name都被指定了，就各管各的了。</p><h3 id="2-5-非结构体匿名字段"><a href="#2-5-非结构体匿名字段" class="headerlink" title="2.5 非结构体匿名字段"></a>2.5 非结构体匿名字段</h3><p>就是只写数据类型而不写变量名。</p><pre><code class="hljs go"><span class="hljs-keyword">type</span> myAddress <span class="hljs-keyword">string</span> <span class="hljs-comment">//自定义类型，说白了就是给一个类型起个别名</span>
+
+<span class="hljs-comment">//人</span>
+<span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span> <span class="hljs-comment">//最终以ASCII码值的方式打印</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-comment">//学生</span>
+<span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	Person    <span class="hljs-comment">//结构体匿名字段</span>
+	<span class="hljs-keyword">int</span>       <span class="hljs-comment">//普通类型的匿名字段</span>
+	myAddress <span class="hljs-comment">//使用自定义类型</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	s := Student&#123;Person&#123;<span class="hljs-string">&quot;Go&quot;</span>, <span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-number">11</span>&#125;, <span class="hljs-number">101010</span>, <span class="hljs-string">&quot;Google Inc.&quot;</span>&#125;
+	fmt.Printf(<span class="hljs-string">&quot;s=%+v\n&quot;</span>, s)
+
+	s.Person = Person&#123;name: <span class="hljs-string">&quot;C&quot;</span>, sex: <span class="hljs-string">&#x27;m&#x27;</span>&#125; <span class="hljs-comment">//当做一个整体赋值</span>
+	s.<span class="hljs-keyword">int</span> = <span class="hljs-number">999</span> <span class="hljs-comment">//直接操作那个类型即可</span>
+	s.myAddress = <span class="hljs-string">&quot;贝尔实验室&quot;</span> <span class="hljs-comment">//直接操作结构体里的字段即可</span>
+	fmt.Printf(<span class="hljs-string">&quot;s=%+v\n&quot;</span>, s)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">s=&#123;Person:&#123;name:Go sex:77 age:11&#125; int:101010 myAddress:Google Inc.&#125;</span>
+<span class="hljs-comment">s=&#123;Person:&#123;name:C sex:109 age:0&#125; int:999 myAddress:贝尔实验室&#125;</span>
+<span class="hljs-comment">*/</span></code></pre><p>Student 中的 int 字段就是非结构体（普通类型）匿名字段。</p><h3 id="2-6-结构体匿名字段的指针类型"><a href="#2-6-结构体匿名字段的指针类型" class="headerlink" title="2.6 结构体匿名字段的指针类型"></a>2.6 结构体匿名字段的指针类型</h3><p>示例：</p><pre><code class="hljs go"><span class="hljs-keyword">type</span> myAddress <span class="hljs-keyword">string</span> <span class="hljs-comment">//自定义类型，说白了就是给一个类型起个别名</span>
+
+<span class="hljs-comment">//人</span>
+<span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span> <span class="hljs-comment">//最终以ASCII码值的方式打印</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-comment">//学生</span>
+<span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	*Person   <span class="hljs-comment">//结构体匿名字段的指针类型</span>
+	<span class="hljs-keyword">int</span>       <span class="hljs-comment">//普通类型的匿名字段</span>
+	myAddress <span class="hljs-comment">//使用自定义类型</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-comment">//第一种方式，使用取地址符&quot;&amp;&quot;</span>
+	<span class="hljs-comment">//Student中的Person是指针类型，这里的Person需要在前面加上取地址符&quot;&amp;&quot;</span>
+	s := Student&#123;&amp;Person&#123;<span class="hljs-string">&quot;Go&quot;</span>, <span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-number">11</span>&#125;, <span class="hljs-number">101010</span>, <span class="hljs-string">&quot;Google Inc.&quot;</span>&#125;
+	fmt.Printf(<span class="hljs-string">&quot;s=%+v\n&quot;</span>, s) <span class="hljs-comment">//&amp;Person是取内存地址，这样写只会打印出内存地址的值</span>
+	<span class="hljs-comment">//需要一个个写才能显示真正的内容</span>
+	fmt.Println(s.Person.name, s.Person.sex, s.Person.age, s.<span class="hljs-keyword">int</span>, s.myAddress) <span class="hljs-comment">//Go 77 11 101010 Google Inc.</span>
+
+	<span class="hljs-comment">//第二种方式，new()</span>
+	<span class="hljs-keyword">var</span> s2 Student
+	s2.Person = <span class="hljs-built_in">new</span>(Person) <span class="hljs-comment">//分配一个内存地址，让*Person变成一个指向Person的合法指针</span>
+	<span class="hljs-comment">//有合法指向后，即可操作里面的成员</span>
+	s2.name = <span class="hljs-string">&quot;C&quot;</span>
+	s2.sex = <span class="hljs-string">&#x27;m&#x27;</span>
+	s2.age = <span class="hljs-number">48</span>
+	s2.<span class="hljs-keyword">int</span> = <span class="hljs-number">999</span> <span class="hljs-comment">//s2.int不是指针，只是普通类型的匿名字段</span>
+	s2.myAddress = <span class="hljs-string">&quot;贝尔实验室&quot;</span>
+	fmt.Println(s2.Person.name, s2.Person.sex, s2.Person.age, s2.<span class="hljs-keyword">int</span>, s2.myAddress)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">s=&#123;Person:0xc0000044a0 int:101010 myAddress:Google Inc.&#125;</span>
+<span class="hljs-comment">Go 77 11 101010 Google Inc.</span>
+<span class="hljs-comment">C 109 48 999 贝尔实验室</span>
+<span class="hljs-comment">*/</span></code></pre><h2 id="三、方法"><a href="#三、方法" class="headerlink" title="三、方法"></a>三、方法</h2><p>在 Golang 中，方法本质上也是一个函数，它要和自定义类型绑定在一起。绑定了某一个类型的函数，被称为方法。带有接收者的函数叫方法，换言之：为某个类型绑定了一个函数，那个函数就被称为方法。<br>可以给任意自定义类型添加相应的方法（指针和接口类型除外）。<br>语法：<code>func (receiver ReceiverType) funcName(params) (results)</code>。<br><code>receiver</code>：接收者的名称，可任意命名，符合变量命名规则即可。方法要跟自定义类型绑定在一起，被绑定的那个叫接收者。<br><code>ReceiverType</code>：接收者的数据类型，可以是T或者*T，但它自身的基类型T不能是接口或指针。</p><h3 id="3-1-基本数据类型绑定方法"><a href="#3-1-基本数据类型绑定方法" class="headerlink" title="3.1 基本数据类型绑定方法"></a>3.1 基本数据类型绑定方法</h3><p>示例：</p><pre><code class="hljs go"><span class="hljs-comment">//自定义一个类型</span>
+<span class="hljs-keyword">type</span> long <span class="hljs-keyword">int</span>
+
+<span class="hljs-comment">//给long类型绑定一个Add函数，由tmp来接收，tmp就是接收者</span>
+<span class="hljs-comment">//接收者就是传递过来的一个参数，other是调用时小括号里的另一个参数</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(tmp long)</span> <span class="hljs-title">Add</span><span class="hljs-params">(other long)</span> <span class="hljs-title">long</span></span> &#123;
+	<span class="hljs-keyword">return</span> tmp + other
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-keyword">var</span> a long <span class="hljs-comment">//定义一个变量a，类型是long</span>
+	a = <span class="hljs-number">10</span>     <span class="hljs-comment">//long指向的是int类型，所以可以直接给int类型的值，其他类型是不可以的</span>
+
+	<span class="hljs-comment">//a是一个long类型，long类型绑定了一个Add函数，所以a可以调用long类型中的这个Add函数</span>
+	<span class="hljs-comment">//这里的a其实是一个接收者，传递过去一个参数即可</span>
+	result := a.Add(<span class="hljs-number">20</span>)
+
+	<span class="hljs-comment">//注意：Add返回的是一个long类型了</span>
+	fmt.Printf(<span class="hljs-string">&quot;result type is : %T, result=%v\n&quot;</span>, result, result)
+	<span class="hljs-comment">//result type is : main.long, result=30</span>
+&#125;</code></pre><p><code>result := a.Add(20)</code> 这行代码中，a 是一个 long 类型的变量，对应地传递给了 long 类型的接收者，20 传递给方法中的形参：</p><h3 id="3-2-结构体类型绑定方法"><a href="#3-2-结构体类型绑定方法" class="headerlink" title="3.2 结构体类型绑定方法"></a>3.2 结构体类型绑定方法</h3><h4 id="3-2-1-示例：绑定一个方法，实现修改结构体成员值"><a href="#3-2-1-示例：绑定一个方法，实现修改结构体成员值" class="headerlink" title="3.2.1 示例：绑定一个方法，实现修改结构体成员值"></a>3.2.1 示例：绑定一个方法，实现修改结构体成员值</h4><p>注意：结构体是值传递，要修改结构体成员的值需要用到指针。<br>示例：</p><pre><code class="hljs go"><span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span> <span class="hljs-comment">//最终以ASCII码值的方式打印</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-comment">//带有接收者的函数被称为方法，使用类型来调用</span>
+<span class="hljs-comment">//接收者本身就是一个参数</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(tmp Person)</span> <span class="hljs-title">PrintInfo</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Println(<span class="hljs-string">&quot;person infos =&quot;</span>, tmp)
+&#125;
+
+<span class="hljs-comment">//修改结构体的成员需要用到指针</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p *Person)</span> <span class="hljs-title">SetInfo</span><span class="hljs-params">(name <span class="hljs-keyword">string</span>, sex <span class="hljs-keyword">byte</span>, age <span class="hljs-keyword">int</span>)</span></span> &#123;
+	p.name = name
+	(*p).sex = sex
+	p.age = age
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-comment">//自动推导</span>
+	p := Person&#123;<span class="hljs-string">&quot;go&quot;</span>, <span class="hljs-string">&#x27;m&#x27;</span>, <span class="hljs-number">11</span>&#125;
+	p.PrintInfo() <span class="hljs-comment">//p本身就是一个参数，传递给tmp这个接收者</span>
+
+	<span class="hljs-comment">//接收者是一个指针类型，需要一个指向合法内存地址的指针</span>
+	<span class="hljs-comment">//new()方式</span>
+	p1 := <span class="hljs-built_in">new</span>(Person)
+	p1.SetInfo(<span class="hljs-string">&quot;C&quot;</span>, <span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-number">48</span>)
+	p1.PrintInfo()
+
+	<span class="hljs-comment">//取地址符方式</span>
+	<span class="hljs-keyword">var</span> p2 Person
+	(&amp;p2).SetInfo(<span class="hljs-string">&quot;Ada&quot;</span>, <span class="hljs-string">&#x27;F&#x27;</span>, <span class="hljs-number">40</span>)
+	p2.PrintInfo() <span class="hljs-comment">//没有取地址符在这里也可以</span>
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">person infos = &#123;go 109 11&#125;</span>
+<span class="hljs-comment">person infos = &#123;C 77 48&#125;</span>
+<span class="hljs-comment">person infos = &#123;Ada 70 40&#125;</span>
+<span class="hljs-comment">*/</span></code></pre><h4 id="3-2-2-针对上面例子的反面教材"><a href="#3-2-2-针对上面例子的反面教材" class="headerlink" title="3.2.2 针对上面例子的反面教材"></a>3.2.2 针对上面例子的反面教材</h4><p>如果不传递结构体的内存地址，结构体将以值传递的方式进行传参，不同作用域内的结构体是各管各的。<br>修改3.2.1的代码成如下：</p><pre><code class="hljs go"><span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span> <span class="hljs-comment">//最终以ASCII码值的方式打印</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(tmp Person)</span> <span class="hljs-title">PrintInfo</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Println(<span class="hljs-string">&quot;person infos =&quot;</span>, tmp)
+&#125;
+
+<span class="hljs-comment">//修改结构体的成员需要用到指针</span>
+<span class="hljs-comment">//未使用指针，接收的是一个拷贝过来的副本，在函数中的任何操作都只是在操作副本</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p Person)</span> <span class="hljs-title">SetInfo</span><span class="hljs-params">(name <span class="hljs-keyword">string</span>, sex <span class="hljs-keyword">byte</span>, age <span class="hljs-keyword">int</span>)</span></span> &#123;
+	p.name = name
+	p.sex = sex
+	p.age = age
+	fmt.Println(<span class="hljs-string">&quot;inner SetInfo():&quot;</span>, p)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	p1 := Person&#123;<span class="hljs-string">&quot;go&quot;</span>, <span class="hljs-string">&#x27;m&#x27;</span>, <span class="hljs-number">11</span>&#125;
+	fmt.Printf(<span class="hljs-string">&quot;main(), before setting ... &quot;</span>)
+	p1.PrintInfo()
+
+	p1.SetInfo(<span class="hljs-string">&quot;C&quot;</span>, <span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-number">48</span>)
+	fmt.Printf(<span class="hljs-string">&quot;main(), after setting ... &quot;</span>)
+	p1.PrintInfo()
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">main(), before setting ... person infos = &#123;go 109 11&#125;</span>
+<span class="hljs-comment">inner SetInfo(): &#123;C 77 48&#125;</span>
+<span class="hljs-comment">main(), after setting ... person infos = &#123;go 109 11&#125;</span>
+<span class="hljs-comment">*/</span></code></pre><p><strong>结构体传参，默认是值传递：只是把一份副本拷贝过去</strong>。在SetInfo()函数中的所有操作都只是在操作这个副本，SetInfo()函数结束后，这个副本就被回收了。那么在main()中，是找不到这个副本的，所以依然会使用之前的。<br>在另外一个函数中想要修改结构体成员的值，必须传址！</p><h3 id="3-3-注意事项"><a href="#3-3-注意事项" class="headerlink" title="3.3 注意事项"></a>3.3 注意事项</h3><h4 id="3-3-1-ReceiverType接收者的基类型不能是指针"><a href="#3-3-1-ReceiverType接收者的基类型不能是指针" class="headerlink" title="3.3.1 ReceiverType接收者的基类型不能是指针"></a>3.3.1 <code>ReceiverType</code>接收者的基类型不能是指针</h4><pre><code class="hljs go"><span class="hljs-keyword">type</span> long <span class="hljs-keyword">int</span>
+
+<span class="hljs-comment">//接收者不使用的话，可以省略不写</span>
+<span class="hljs-comment">//没问题可以编译通过</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(long)</span> <span class="hljs-title">Add</span><span class="hljs-params">(second <span class="hljs-keyword">int</span>)</span></span> &#123;
+&#125;
+
+<span class="hljs-comment">//</span>
+
+<span class="hljs-keyword">type</span> bigInt *<span class="hljs-keyword">int</span>
+<span class="hljs-comment">//报错：invalid receiver type bigInt (bigInt is a pointer type)</span>
+<span class="hljs-comment">//非法的接收者类型（bigInt是一个指针类型）</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(tmp bigInt)</span> <span class="hljs-title">Add</span><span class="hljs-params">(second <span class="hljs-keyword">int</span>)</span></span> &#123;
+&#125;
+
+<span class="hljs-comment">//这样是能编译通过的</span>
+<span class="hljs-comment">//接收者接收一个内存地址，而long本身它是int类型，不是指针类型</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(tmp *long)</span> <span class="hljs-title">SetValue</span><span class="hljs-params">(value <span class="hljs-keyword">int</span>)</span></span> &#123;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+&#125;</code></pre><p>bigInt 是一个接收者类型，它本身是一个 int 指针，而** Golang 规定方法的接收者类型不允许为指针**！</p><h4 id="3-3-2-接收者类型不一样，就不同的方法"><a href="#3-3-2-接收者类型不一样，就不同的方法" class="headerlink" title="3.3.2 接收者类型不一样，就不同的方法"></a>3.3.2 接收者类型不一样，就不同的方法</h4><p>下例不会出现重复定义的错误：</p><pre><code class="hljs go"><span class="hljs-keyword">type</span> char <span class="hljs-keyword">byte</span>
+<span class="hljs-keyword">type</span> long <span class="hljs-keyword">int32</span>
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c char)</span> <span class="hljs-title">test</span><span class="hljs-params">()</span></span> &#123;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(l long)</span> <span class="hljs-title">test</span><span class="hljs-params">()</span></span> &#123;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+&#125;</code></pre><h3 id="3-4-值语义和引用语义"><a href="#3-4-值语义和引用语义" class="headerlink" title="3.4 值语义和引用语义"></a>3.4 值语义和引用语义</h3><p>就是值传递与引用传递的区别，值传递称为值语义，引用传递称为引用语义。<br>示例：</p><pre><code class="hljs go"><span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span> <span class="hljs-comment">//最终以ASCII码值的方式打印</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-comment">//值传递（值语义），传过来的是实参的一份副本</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p Person)</span> <span class="hljs-title">SetInfoValue</span><span class="hljs-params">(name <span class="hljs-keyword">string</span>, sex <span class="hljs-keyword">byte</span>, age <span class="hljs-keyword">int</span>)</span></span> &#123;
+	p.name = name
+	p.sex = sex
+	p.age = age
+
+	fmt.Printf(<span class="hljs-string">&quot;SetInfoValue(): p address:%p, p=%v\n&quot;</span>, &amp;p, p) <span class="hljs-comment">//这里的接收者不是一个指针类型，所以取地址要加上取地址符&quot;&amp;&quot;</span>
+&#125;
+
+<span class="hljs-comment">//引用传递（引用语义），接收一个内存地址的实参</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p *Person)</span> <span class="hljs-title">SetInfoPointer</span><span class="hljs-params">(name <span class="hljs-keyword">string</span>, sex <span class="hljs-keyword">byte</span>, age <span class="hljs-keyword">int</span>)</span></span> &#123;
+	p.name = name
+	p.sex = sex
+	p.age = age
+
+	<span class="hljs-comment">//这里的接收者本身就是一个指针，存放的就是内存地址，无需加取地址符</span>
+	<span class="hljs-comment">//取值还是需要加上星花符&quot;*&quot;</span>
+	fmt.Printf(<span class="hljs-string">&quot;SetInfoPointer():p address:%p, p=%v\n&quot;</span>, p, *p)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	s := Person&#123;<span class="hljs-string">&quot;Go&quot;</span>, <span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-number">11</span>&#125;
+	fmt.Printf(<span class="hljs-string">&quot;main(): s address:%p, s=%v\n&quot;</span>, &amp;s, s)
+
+	<span class="hljs-comment">//值语义</span>
+	s.SetInfoValue(<span class="hljs-string">&quot;C&quot;</span>, <span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-number">42</span>)
+
+	<span class="hljs-comment">//引用语义，取出内存地址当做参数传递过去</span>
+	(&amp;s).SetInfoPointer(<span class="hljs-string">&quot;C&quot;</span>, <span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-number">42</span>)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">main(): s address:0xc0000044a0, s=&#123;Go 77 11&#125;</span>
+<span class="hljs-comment">SetInfoValue(): p address:0xc000004500, p=&#123;C 77 42&#125;</span>
+<span class="hljs-comment">SetInfoPointer():p address:0xc0000044a0, p=&#123;C 77 42&#125;</span>
+<span class="hljs-comment">*/</span></code></pre><p>SetInfoValue() 它绑定的接收者是一个普通类型，结构体默认是值传递，所以得到的是一份实参的拷贝，进了这个函数中，main() 中的实参和 SetInfoValue() 中的实参，各管各的了，互不相关。<br>SetInfoPointer() 它绑定的接收者是一个指针类型，需要的是一个内存地址的实参。得到了变量的内存地址，那么无论哪里修改，都是在修改内存地址中的值，一处修改影响原本的实参。</p><h3 id="3-5-方法集"><a href="#3-5-方法集" class="headerlink" title="3.5 方法集"></a>3.5 方法集</h3><p>类型的方法集是指：可以被该类型变量调用的所有方法的集合。<br>用一个变量（value/pointer）调用方法（含匿名字段）不受方法集约束，编译器总能够查找全部方法，并自动转换 <code>receiver</code> 实参。</p><h4 id="3-5-1-指针变量的方法集"><a href="#3-5-1-指针变量的方法集" class="headerlink" title="3.5.1 指针变量的方法集"></a>3.5.1 指针变量的方法集</h4><p>结构体变量是一个指针变量，它能够调用哪些方法，这些方法就是一个集合，简称：方法集。<br>示例：</p><pre><code class="hljs go"><span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span> <span class="hljs-comment">//最终以ASCII码值的方式打印</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p Person)</span> <span class="hljs-title">SetInfoValue</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Println(<span class="hljs-string">&quot;SetInfoValue&quot;</span>)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p *Person)</span> <span class="hljs-title">SetInfoPointer</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Println(<span class="hljs-string">&quot;SetInfoPointer&quot;</span>)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-comment">//初始化一个指针变量</span>
+	p := &amp;Person&#123;<span class="hljs-string">&quot;Golang&quot;</span>, <span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-number">11</span>&#125; <span class="hljs-comment">//指针指向内存地址，所以用取地址符&quot;&amp;&quot;</span>
+
+	p.SetInfoPointer() <span class="hljs-comment">//指针变量理所当然能够调用指针接收者的方法</span>
+
+	<span class="hljs-comment">//SetInfoValue()的接收者是一个普通类型变量，但p是一个指针类型变量。此时，Golang内部就会做自动转换</span>
+	<span class="hljs-comment">//先把指针变量p，转换成(*p)，然后再调用。实际上它的操作就是 (*p).SetInfoValue()</span>
+	<span class="hljs-comment">//实参p是一个指针类型变量，但接收者是一个普通类型变量，此时Golang内部就会自动转换</span>
+	p.SetInfoValue() <span class="hljs-comment">//经过内部转换，指针变量同时也能调用非指针接收者的方法</span>
+	
+	<span class="hljs-comment">//这里手动显示转换，取值符把指针变量变成了普通变量，接收者也是一个普通变量，Golang不会去自动转换了，略微提高了性能</span>
+	(*p).SetInfoValue()
+
+	<span class="hljs-comment">//手动把指针变量p，转换为普通变量p，也能调用</span>
+	<span class="hljs-comment">//Golang内部会去再次做转换</span>
+	(*p).SetInfoPointer() <span class="hljs-comment">//取值了，就变成了普通变量</span>
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">SetInfoPointer</span>
+<span class="hljs-comment">SetInfoValue</span>
+<span class="hljs-comment">SetInfoValue</span>
+<span class="hljs-comment">SetInfoPointer</span>
+<span class="hljs-comment">*/</span></code></pre><h4 id="3-5-2-普通变量的方法集"><a href="#3-5-2-普通变量的方法集" class="headerlink" title="3.5.2 普通变量的方法集"></a>3.5.2 普通变量的方法集</h4><pre><code class="hljs go"><span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span> <span class="hljs-comment">//最终以ASCII码值的方式打印</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p Person)</span> <span class="hljs-title">SetInfoValue</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Println(<span class="hljs-string">&quot;SetInfoValue&quot;</span>)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p *Person)</span> <span class="hljs-title">SetInfoPointer</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Println(<span class="hljs-string">&quot;SetInfoPointer&quot;</span>)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-comment">//普通变量</span>
+	p := Person&#123;<span class="hljs-string">&quot;Golang&quot;</span>, <span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-number">11</span>&#125; <span class="hljs-comment">//指针指向内存地址，所以用取地址符&quot;&amp;&quot;</span>
+
+	<span class="hljs-comment">//内部先把普通变量p，转换为&amp;p后再调用</span>
+	<span class="hljs-comment">//实际上它是 (&amp;p).SetInfoPointer()</span>
+	p.SetInfoPointer()
+
+	p.SetInfoValue() <span class="hljs-comment">//p本身就是个普通变量，当然能掉普通接收者类型的方法</span>
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">SetInfoPointer</span>
+<span class="hljs-comment">SetInfoValue</span>
+<span class="hljs-comment">*/</span></code></pre><h4 id="3-5-3-方法集的总结"><a href="#3-5-3-方法集的总结" class="headerlink" title="3.5.3 方法集的总结"></a>3.5.3 方法集的总结</h4><p>结构体变量要去调用方法，无需关心结构体变量是指针类型还是普通类型，Golang 非常智能，内部都会去做对应的转换，以适应最终的 <code>ReceiverType</code>。</p><h3 id="3-6-方法的匿名"><a href="#3-6-方法的匿名" class="headerlink" title="3.6 方法的匿名"></a>3.6 方法的匿名</h3><p>使用了嵌入字段，同业也会将那个字段的方法引用过来。<br>示例：</p><pre><code class="hljs go"><span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-comment">//给Person结构体绑定一个方法</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p *Person)</span> <span class="hljs-title">PrintInfo</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;name=%s, sex=%c, age=%d\n&quot;</span>, p.name, p.sex, p.age)
+&#125;
+
+<span class="hljs-comment">//Student引用Person结构体</span>
+<span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	Person  <span class="hljs-comment">//匿名字段</span>
+	stuNo   <span class="hljs-keyword">int</span>
+	address <span class="hljs-keyword">string</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	s := Student&#123;Person&#123;<span class="hljs-string">&quot;Go&quot;</span>, <span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-number">11</span>&#125;, <span class="hljs-number">1010</span>, <span class="hljs-string">&quot;Google Inc.&quot;</span>&#125;
+
+	<span class="hljs-comment">//Student结构体引用Person，Person中有PrintInfo()方法，因此Student结构体变量也可以直接调用</span>
+	s.PrintInfo()
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">name=Go, sex=M, age=11</span>
+<span class="hljs-comment">*/</span></code></pre><p>Student 有对 Person 结构体的引用，Person 结构体绑定了一个方法，既然 Student 引用了 Person 这个结构体，那么同时也会得到 Person 所有的属性和方法。</p><h3 id="3-7-同名方法"><a href="#3-7-同名方法" class="headerlink" title="3.7 同名方法"></a>3.7 同名方法</h3><p>在 3.3.2 中已经提及过这个概念，接收者不一样，就算方法名一样，那么也是两个不同的方法，只是看起来名字一样而已。查找规则跟作用域原则一致！<br>示例：</p><pre><code class="hljs go"><span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p *Person)</span> <span class="hljs-title">PrintInfo</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;*Person=%+v\n&quot;</span>, *p)
+&#125;
+
+<span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	Person  <span class="hljs-comment">//匿名字段</span>
+	stuNo   <span class="hljs-keyword">int</span>
+	address <span class="hljs-keyword">string</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(s *Student)</span> <span class="hljs-title">PrintInfo</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;*Student=%+v\n&quot;</span>, *s)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	s := Student&#123;Person&#123;<span class="hljs-string">&quot;Go&quot;</span>, <span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-number">11</span>&#125;, <span class="hljs-number">1010</span>, <span class="hljs-string">&quot;Google Inc.&quot;</span>&#125;
+
+	<span class="hljs-comment">//查找规则跟作用域原则的一样，先找自己本身</span>
+	s.PrintInfo()
+
+	<span class="hljs-comment">//只想调用Person的那个PrintInfo()，就需要显示调用</span>
+	s.Person.PrintInfo()
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">*Student=&#123;Person:&#123;name:Go sex:77 age:11&#125; stuNo:1010 address:Google Inc.&#125;</span>
+<span class="hljs-comment">*Person=&#123;name:Go sex:77 age:11&#125;</span>
+<span class="hljs-comment">*/</span></code></pre><h3 id="3-8-方法值和方法表达式"><a href="#3-8-方法值和方法表达式" class="headerlink" title="3.8 方法值和方法表达式"></a>3.8 方法值和方法表达式</h3><h4 id="3-8-1-方法值"><a href="#3-8-1-方法值" class="headerlink" title="3.8.1 方法值"></a>3.8.1 方法值</h4><p>本质上是方法的字面量，将方法的入口（可以简单理解成：函数体）赋值给一个变量，变量保存了这个方法的入口，可以直接使用<code>变量名()</code>方式调用。</p><pre><code class="hljs go"><span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p Person)</span> <span class="hljs-title">SetValue</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;SetValue: p address=%p, p=%+v\n&quot;</span>, &amp;p, p) <span class="hljs-comment">//普通类型变量，格式化地址值需要加取地址符&quot;&amp;&quot;</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p *Person)</span> <span class="hljs-title">SetPointer</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;SetPointer: p address=%p, p=%+v\n&quot;</span>, p, p) <span class="hljs-comment">//p本身就是指针类型</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	p := Person&#123;<span class="hljs-string">&quot;Go&quot;</span>, <span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-number">11</span>&#125;
+	fmt.Printf(<span class="hljs-string">&quot;main: p address=%p, p=%+v\n&quot;</span>, &amp;p, p)
+
+	p.SetPointer() <span class="hljs-comment">//传统调用方式</span>
+
+	pFunc := p.SetPointer <span class="hljs-comment">//将方法的入口赋值给变量，变量就保存了该方法。这个就是方法值，调用方法时无需再传接收者，因为已经隐藏了接收者</span>
+	pFunc()               <span class="hljs-comment">//pFunc这个变量保存了一个方法，可以直接加圆括号调用。等价于 p.SetPointer()</span>
+
+	<span class="hljs-comment">//普通数据类型使用方法值也是一样的操作</span>
+	vFunc := p.SetValue <span class="hljs-comment">//将方法的入口赋值给一个变量，隐藏了接收者</span>
+	vFunc()             <span class="hljs-comment">//等价于 p.SetValue()</span>
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">main: p address=0xc0000044a0, p=&#123;name:Go sex:77 age:11&#125;</span>
+<span class="hljs-comment">SetPointer: p address=0xc0000044a0, p=&amp;&#123;name:Go sex:77 age:11&#125;</span>
+<span class="hljs-comment">SetPointer: p address=0xc0000044a0, p=&amp;&#123;name:Go sex:77 age:11&#125;</span>
+<span class="hljs-comment">SetValue: p address=0xc000004540, p=&#123;name:Go sex:77 age:11&#125;</span>
+<span class="hljs-comment">*/</span></code></pre><h4 id="3-8-2-方法表达式"><a href="#3-8-2-方法表达式" class="headerlink" title="3.8.2 方法表达式"></a>3.8.2 方法表达式</h4><pre><code class="hljs go"><span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	sex  <span class="hljs-keyword">byte</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p Person)</span> <span class="hljs-title">SetValue</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;SetValue: p address=%p, p=%+v\n&quot;</span>, &amp;p, p) <span class="hljs-comment">//普通类型变量，格式化地址值需要加取地址符&quot;&amp;&quot;</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p *Person)</span> <span class="hljs-title">SetPointer</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;SetPointer: p address=%p, p=%+v\n&quot;</span>, p, p) <span class="hljs-comment">//p本身就是指针类型</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	p := Person&#123;<span class="hljs-string">&quot;Go&quot;</span>, <span class="hljs-string">&#x27;M&#x27;</span>, <span class="hljs-number">11</span>&#125;
+	fmt.Printf(<span class="hljs-string">&quot;main: p address=%p, p=%+v\n&quot;</span>, &amp;p, p)
+
+	f1 := (*Person).SetPointer <span class="hljs-comment">//接收者是指针类型，就需要加上星花符&quot;*&quot;</span>
+	f1(&amp;p) <span class="hljs-comment">//显示地把实参传递给接收者，等价于 p.SetPointer()</span>
+
+	f2 := (Person).SetValue <span class="hljs-comment">//接收者是普通数据类型</span>
+	f2(p) <span class="hljs-comment">//显示地把变量传递给接收者</span>
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">main: p address=0xc0000044a0, p=&#123;name:Go sex:77 age:11&#125;</span>
+<span class="hljs-comment">SetPointer: p address=0xc0000044a0, p=&amp;&#123;name:Go sex:77 age:11&#125;</span>
+<span class="hljs-comment">SetValue: p address=0xc000004520, p=&#123;name:Go sex:77 age:11&#125;</span>
+<span class="hljs-comment">*/</span></code></pre><h4 id="3-8-3-两者的区别"><a href="#3-8-3-两者的区别" class="headerlink" title="3.8.3 两者的区别"></a>3.8.3 两者的区别</h4><p>方法值把接收者的实参给隐藏了起来，方法表达式需要显示传参，只是写法上的不同而已。本质上都是保存了方法的入口，让变量变成一个方法字面量。</p><h2 id="四、接口"><a href="#四、接口" class="headerlink" title="四、接口"></a>四、接口</h2><p>接口实现了”多态”的思想。接口跟结构体很像，<strong>结构体里面放的是成员（属性）、变量，接口里面放的是方法（实际上就是函数）的声明</strong>，方法由其他类型实现。<br>在 Golang 中，接口 <code>interface</code> 是一个自定义类型，接口类型具体描述了一系列方法的集合。（方法由其他类型定义）<br>接口类型只会展示出它们自己的方法，它不会暴露出它所代表的内部值的结构和支持的基础操作的集合。<br>Golang 的接口实现了鸭子类型 <code>duck-typing</code>，我不关心这只动物到底是鸟还是鸭子还是鸵鸟，我只要看到它走起来像鸭子、游泳起来像鸭子或者叫起来像鸭子，那么这只动物就是鸭子。总结：不关心数据类型，只关心行为。不关心最终由哪个类型来实现，只关心最终实现了什么行为！</p><h3 id="4-1-接口声明"><a href="#4-1-接口声明" class="headerlink" title="4.1 接口声明"></a>4.1 接口声明</h3><p>基本语法：</p><pre><code class="hljs go"><span class="hljs-keyword">type</span> Humaner <span class="hljs-keyword">interface</span> &#123;
+	SayHi() ReturnType
+&#125;
+<span class="hljs-number">123</span>
+<span class="hljs-string">``</span><span class="hljs-string">`go</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">注意事项：</span>
+<span class="hljs-string">1.接口命名习惯以 `</span>er<span class="hljs-string">` 结尾。</span>
+<span class="hljs-string">2.接口只有方法声明，没有实现，没有数据字段。</span>
+<span class="hljs-string">3.接口可以匿名嵌入其他接口，或嵌入到结构中。</span>
+<span class="hljs-string">4.声明带返回值的方法时，把返回值类型写在方法名的小括号后面。</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">### 4.2 接口实现</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">接口是用来定义行为（方法）的类型。这些被定义的行为不由接口直接实现，而是由用户定义的类型实现。</span>
+<span class="hljs-string">如果用户定义的类型实现了某个接口类型声明的一组方法，那么这个用户定义的类型的值就可以赋值给这个接口类型的值。这个赋值会把用户定义的类型的值存入接口类型的值。</span>
+<span class="hljs-string">示例：</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">`</span><span class="hljs-string">``</span><span class="hljs-keyword">go</span>
+<span class="hljs-comment">//定义接口类型</span>
+<span class="hljs-keyword">type</span> Humaner <span class="hljs-keyword">interface</span> &#123;
+	<span class="hljs-comment">//方法的声明，没有实现，由别的类型（自定义类型）实现</span>
+	sayhi()
+&#125;
+
+<span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	name  <span class="hljs-keyword">string</span>
+	stuNo <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-comment">//Student类型实现了sayhi()方法</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(s *Student)</span> <span class="hljs-title">sayhi</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;Student[%s, %d], say hi.\n&quot;</span>, s.name, s.stuNo)
+&#125;
+
+<span class="hljs-keyword">type</span> Teacher <span class="hljs-keyword">struct</span> &#123;
+	address <span class="hljs-keyword">string</span>
+	group   <span class="hljs-keyword">string</span>
+&#125;
+
+<span class="hljs-comment">//Teacher类型实现了sayhi()方法</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(t *Teacher)</span> <span class="hljs-title">sayhi</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;Teacher[%s, %s], say hi.\n&quot;</span>, t.address, t.group)
+&#125;
+
+<span class="hljs-keyword">type</span> MyStr <span class="hljs-keyword">string</span>
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(s *MyStr)</span> <span class="hljs-title">sayhi</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;MyStr[%s], say hi.\n&quot;</span>, *s) <span class="hljs-comment">//取地址中的值，需要星花符&quot;*&quot;</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-comment">//定义接口类型的变量</span>
+	<span class="hljs-keyword">var</span> i Humaner <span class="hljs-comment">//i的类型是Humaner接口</span>
+
+	<span class="hljs-comment">//只要实现了此接口方法的类型，那么这个类型的变量（接收者类型）就可以赋值给接口的变量</span>
+	s := &amp;Student&#123;<span class="hljs-string">&quot;Go&quot;</span>, <span class="hljs-number">1010</span>&#125; <span class="hljs-comment">//接收者是指针类型，需要取出内存地址</span>
+	i = s
+	i.sayhi()
+
+	t := &amp;Teacher&#123;<span class="hljs-string">&quot;Google Inc.&quot;</span>, <span class="hljs-string">&quot;Go&quot;</span>&#125;
+	i = t
+	i.sayhi()
+
+	<span class="hljs-comment">//把接口类型赋值给自定义类型</span>
+	<span class="hljs-keyword">var</span> str MyStr = <span class="hljs-string">&quot;hello go&quot;</span> <span class="hljs-comment">//需要显示写上MyStr类型，没有写，就会默认推导成字符串类型。字符串类型和MyStr类型，不是同一个类型</span>
+	i = &amp;str
+	i.sayhi()
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">Student[Go, 1010], say hi.</span>
+<span class="hljs-comment">Teacher[Google Inc., Go], say hi.</span>
+<span class="hljs-comment">MyStr[hello go], say hi.</span>
+<span class="hljs-comment">*/</span></code></pre><p>同一个接口实现了不同的表现，就看给接口类型的变量，赋值了一个什么类型。<br>大致流程分析：<br>首先：声明了一个接口类型，这个接口类型中有一个叫 sayhi() 的方法。<strong>接口类型只有方法的声明，没有方法的实现以及其他任何属性、变量</strong>。<br>接下来：每一个结构体都实现了该方法。以 <code>func (s *Student) sayhi() &#123;...&#125;</code> 为例，sayhi 中实现了一些行为（说白了就是写了些代码，要 <code>*Student</code> 这个类型干些什么事情），并绑定到了 <code>*Student</code> 类型中。<br>紧接着：定义了一个接口变量 i，<code>&amp;Student</code> 赋值给了 i（因为 Student 的接收者类型是一个指针类型，所以需要传递一个内存地址给它）。调用 <code>i.sayhi()</code> 的时候，就会去找 <code>&amp;Student</code> 中的那个 sayhi() 方法。<br>同理：Teacher 的地址重新赋值给了 i，再次调用 <code>i.sayhi()</code> 的时候，就会去找 <code>&amp;Teacher</code> 中的那个 sayhi() 方法。<br>最后：自定义类型 MyStr 的变量 <code>&amp;str</code> 赋值给了i，调用的时候就会去找 <code>&amp;MyStr</code> 中的那个 sayhi() 方法。注意：MyStr 一定要显示写法，不写的话，str 就会被自动推导成为 string 类型。string 类和 MyStr 类型，根本不是同一个数据类型，肯定会报错！<br>总结：就看给接口变量赋值了什么类型的变量，根据赋值的变量类型，自动选择赋值变量类型所匹配的方法。</p><h3 id="4-3-调用同一个函数，实现不同行为"><a href="#4-3-调用同一个函数，实现不同行为" class="headerlink" title="4.3 调用同一个函数，实现不同行为"></a>4.3 调用同一个函数，实现不同行为</h3><p>示例：</p><pre><code class="hljs go"><span class="hljs-comment">//定义接口类型</span>
+<span class="hljs-keyword">type</span> Humaner <span class="hljs-keyword">interface</span> &#123;
+	<span class="hljs-comment">//方法的声明，没有实现，由别的类型（自定义类型）实现</span>
+	sayhi()
+&#125;
+
+<span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	name  <span class="hljs-keyword">string</span>
+	stuNo <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-comment">//Student类型实现了sayhi()方法</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(s *Student)</span> <span class="hljs-title">sayhi</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;Student[%s, %d], say hi.\n&quot;</span>, s.name, s.stuNo)
+&#125;
+
+<span class="hljs-keyword">type</span> Teacher <span class="hljs-keyword">struct</span> &#123;
+	address <span class="hljs-keyword">string</span>
+	group   <span class="hljs-keyword">string</span>
+&#125;
+
+<span class="hljs-comment">//Teacher类型实现了sayhi()方法</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(t *Teacher)</span> <span class="hljs-title">sayhi</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;Teacher[%s, %s], say hi.\n&quot;</span>, t.address, t.group)
+&#125;
+
+<span class="hljs-keyword">type</span> MyStr <span class="hljs-keyword">string</span>
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(s *MyStr)</span> <span class="hljs-title">sayhi</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;MyStr[%s], say hi.\n&quot;</span>, *s)
+&#125;
+
+<span class="hljs-comment">//定义一个函数，接收接口类型的参数，一种接口实现多种行为</span>
+<span class="hljs-comment">//参数接收一个实现了Humaner接口类型中sayhi()方法的变量</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">WhoSayHi</span><span class="hljs-params">(i Humaner)</span></span> &#123;
+	i.sayhi()
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	s := &amp;Student&#123;<span class="hljs-string">&quot;Go&quot;</span>, <span class="hljs-number">1010</span>&#125;
+	t := &amp;Teacher&#123;<span class="hljs-string">&quot;Google Inc.&quot;</span>, <span class="hljs-string">&quot;Go&quot;</span>&#125;
+	<span class="hljs-keyword">var</span> str MyStr = <span class="hljs-string">&quot;hello go&quot;</span> <span class="hljs-comment">//需要显示写上MyStr类型，没有写，就会默认推导成字符串类型。string类型和MyStr类型，不是同一个类型</span>
+
+	<span class="hljs-comment">//下面3次调用同一个函数，但实现了不同的表现行为</span>
+	WhoSayHi(s) <span class="hljs-comment">//WhoSayHi的参数是一个普通接口类型，但结构体接收者的类型是*Student，所以s的类型需要是一个指针类型（内存地址）</span>
+	WhoSayHi(t)
+	WhoSayHi(&amp;str)
+
+	fmt.Println(<span class="hljs-string">&quot;-----------------------------&quot;</span>)
+
+	<span class="hljs-comment">//创建一个切片，数据类型是Humaner接口类型</span>
+	<span class="hljs-comment">//此例中的变量只有3个，长度千万不要超了，不然第4个开始，就是空指针了，会报错！除非再另外赋值新的变量并加入到切片中</span>
+	hs := <span class="hljs-built_in">make</span>([]Humaner, <span class="hljs-number">3</span>)
+	hs[<span class="hljs-number">0</span>] = s
+	hs[<span class="hljs-number">1</span>] = t
+	hs[<span class="hljs-number">2</span>] = &amp;str
+
+	<span class="hljs-keyword">for</span> _, i := <span class="hljs-keyword">range</span> hs &#123;
+		<span class="hljs-comment">//每个i都是实现了Humaner接口类型的结构体变量</span>
+		WhoSayHi(i) <span class="hljs-comment">//两者写法等价</span>
+		i.sayhi()   <span class="hljs-comment">//两者写法等价</span>
+	&#125;
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">Student[Go, 1010], say hi.</span>
+<span class="hljs-comment">Teacher[Google Inc., Go], say hi.</span>
+<span class="hljs-comment">MyStr[hello go], say hi.</span>
+<span class="hljs-comment">-----------------------------</span>
+<span class="hljs-comment">Student[Go, 1010], say hi.</span>
+<span class="hljs-comment">Student[Go, 1010], say hi.</span>
+<span class="hljs-comment">Teacher[Google Inc., Go], say hi.</span>
+<span class="hljs-comment">Teacher[Google Inc., Go], say hi.</span>
+<span class="hljs-comment">MyStr[hello go], say hi.</span>
+<span class="hljs-comment">MyStr[hello go], say hi.</span>
+<span class="hljs-comment">*/</span></code></pre><p>简单理解：<code>func WhoSayHi(i Humaner) &#123; i.sayhi() &#125;</code>这段代码中，<code>i Humaner</code> 不需要关心传过来的变量类型是什么，它只看那个变量有没有实现了 <code>sayhi()</code> 方法。只要传过来的变量中实现了 <code>sayhi()</code> 方法，那么Golang就会自行去查找该变量中的函数。如果该变量中没有实现 <code>sayhi()</code> 方法，让 Golang 怎么能找得到？</p><h3 id="4-4-接口组合"><a href="#4-4-接口组合" class="headerlink" title="4.4 接口组合"></a>4.4 接口组合</h3><p>接口组合的两种表现形式：接口嵌入、接口转换。</p><h4 id="4-4-1-接口嵌入"><a href="#4-4-1-接口嵌入" class="headerlink" title="4.4.1 接口嵌入"></a>4.4.1 接口嵌入</h4><p>如果一个 interface1 作为 interface2 的一个嵌入字段，那么 interface2 隐式地包含了 interface1 里面的所有方法。</p><pre><code class="hljs go"><span class="hljs-keyword">type</span> Humaner <span class="hljs-keyword">interface</span> &#123;
+	sayhi()
+&#125;
+
+<span class="hljs-keyword">type</span> Songster <span class="hljs-keyword">interface</span> &#123;
+	Humaner <span class="hljs-comment">//引用了Humaner这个接口，同时也包含了Humaner接口中的方法</span>
+	sing(lrc <span class="hljs-keyword">string</span>)
+&#125;
+
+<span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	name  <span class="hljs-keyword">string</span>
+	stuNo <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-comment">//Student实现Humaner中的sayhi()方法</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(s *Student)</span> <span class="hljs-title">sayhi</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;Student[%s, %d], sayhi.\n&quot;</span>, s.name, s.stuNo)
+&#125;
+
+<span class="hljs-comment">//Student同时也实现了sing()这个方法，定义时有参数，实现的时候也必须对应带上参数</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(s *Student)</span> <span class="hljs-title">sing</span><span class="hljs-params">(lrc <span class="hljs-keyword">string</span>)</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;Student %s, is sing: %s\n&quot;</span>, s.name, lrc)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-keyword">var</span> i Songster <span class="hljs-comment">//声明一个接口类型的变量</span>
+
+	<span class="hljs-comment">//结构体的接收者是个指针类型，所以需要给它一个内存地址</span>
+	s := &amp;Student&#123;<span class="hljs-string">&quot;xxxyyy&quot;</span>, <span class="hljs-number">999</span>&#125;
+	i = s
+
+	i.sayhi() <span class="hljs-comment">//Songster接口嵌入了Humaner接口，Humaner接口中有sayhi()方法，那么Songster接口也会有这个方法</span>
+	i.sing(<span class="hljs-string">&quot;god is a girl&quot;</span>) <span class="hljs-comment">//Songster接口自己独有的方法</span>
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">Student[xxxyyy, 999], sayhi.</span>
+<span class="hljs-comment">Student xxxyyy, is sing: god is a girl</span>
+<span class="hljs-comment">*/</span></code></pre><p>Songster 接口中嵌入了 Humaner 接口，那么 Songster 就会得到 Humaner 接口中的所有方法。只需要实现 Songster 接口中的方法即可！<br>还有一个更加简洁的写法，修改上述 main() 中的代码成如下：</p><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-comment">//结构体的接收者是个指针类型，所以需要给它一个内存地址</span>
+	s := &amp;Student&#123;<span class="hljs-string">&quot;xxxyyy&quot;</span>, <span class="hljs-number">999</span>&#125;
+
+	s.sayhi() <span class="hljs-comment">//Songster接口嵌入了Humaner接口，Humaner接口中有sayhi()方法，那么Songster接口也会有这个方法</span>
+	s.sing(<span class="hljs-string">&quot;god is a girl&quot;</span>) <span class="hljs-comment">//Songster接口自己独有的方法</span>
+&#125;</code></pre><p>运行结果一模一样，大致流程：结构体 Student 已经实现了 sayhi() 和 sing(lrc string) 这两个方法，那么就绑定在了一起。只需要有这个结构体类型的变量，即可找到它已经实现的这两个方法。</p><h4 id="4-4-2-接口转换"><a href="#4-4-2-接口转换" class="headerlink" title="4.4.2 接口转换"></a>4.4.2 接口转换</h4><p>需要配合接口嵌入来使用。如果 interface2 嵌入了 interface1，那么 interface2 就可以转换给 interface1，因为 interface2 中即包含了它自己本身的方法也包含了 interface1 的方法；而 interface1 不能转换给 interface2，因为 interface1 没有嵌入 interface2，就没有 interface2 中的方法，所以不能转换。</p><pre><code class="hljs go"><span class="hljs-keyword">type</span> Humaner <span class="hljs-keyword">interface</span> &#123;
+	sayhi()
+&#125;
+
+<span class="hljs-keyword">type</span> Songster <span class="hljs-keyword">interface</span> &#123;
+	Humaner <span class="hljs-comment">//引用了Humaner这个接口，同时也包含了Humaner接口中的方法</span>
+	sing(lrc <span class="hljs-keyword">string</span>)
+&#125;
+
+<span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	name  <span class="hljs-keyword">string</span>
+	stuNo <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-comment">//Student实现Humaner中的sayhi()方法</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(s *Student)</span> <span class="hljs-title">sayhi</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;Student[%s, %d], sayhi.\n&quot;</span>, s.name, s.stuNo)
+&#125;
+
+<span class="hljs-comment">//Student同时也实现了sing()这个方法，定义时有参数，实现的时候也必须对应带上参数</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(s *Student)</span> <span class="hljs-title">sing</span><span class="hljs-params">(lrc <span class="hljs-keyword">string</span>)</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;Student %s, is sing: %s\n&quot;</span>, s.name, lrc)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-keyword">var</span> i1 Humaner
+	<span class="hljs-keyword">var</span> i2 Songster
+
+	i1 = i2
+	fmt.Println(<span class="hljs-string">&quot;i1=&quot;</span>, i1)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">i1= &lt;nil&gt;</span>
+<span class="hljs-comment">*/</span></code></pre><p>上例中，Songster 接口嵌入了 Humaner 接口，所以 Songster 接口即有自己的方法又有 Humaner 的方法，Songster 可以转换给 Humaner；Humaner 没有 Songster 中的方法，所以不能把 Humaner 给 Songster 。<br>如果把 Songster 给了 Humaner，就会报错：</p><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-keyword">var</span> i1 Humaner
+	<span class="hljs-keyword">var</span> i2 Songster
+
+	i2 = i1 <span class="hljs-comment">//报错：Humaner does not implement Songster (missing sing method) ===&gt; Humaner没有实现Songster，缺少sing方法</span>
+	fmt.Println(<span class="hljs-string">&quot;i2=&quot;</span>, i2)
+&#125;</code></pre><p>可以用另外一种更加简洁的概念来理解：<code>超集</code> <code>子集</code>。<code>超集</code>就是方法数量多的那个接口，<code>子集</code>就是方法数量少的那个接口。<strong>超集可以给子集，子集不能给超集</strong><br>详看下例代码的注释：</p><pre><code class="hljs go"><span class="hljs-comment">//子集：这个接口的方法数量少</span>
+<span class="hljs-keyword">type</span> Humaner <span class="hljs-keyword">interface</span> &#123;
+	sayhi()
+&#125;
+
+<span class="hljs-comment">//超集：这个接口的方法数量多</span>
+<span class="hljs-keyword">type</span> Songster <span class="hljs-keyword">interface</span> &#123;
+	Humaner <span class="hljs-comment">//引用了Humaner这个接口，同时也包含了Humaner接口中的方法</span>
+	sing(lrc <span class="hljs-keyword">string</span>)
+&#125;
+
+<span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	name  <span class="hljs-keyword">string</span>
+	stuNo <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(s *Student)</span> <span class="hljs-title">sayhi</span><span class="hljs-params">()</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;Student[%s, %d], sayhi.\n&quot;</span>, s.name, s.stuNo)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(s *Student)</span> <span class="hljs-title">sing</span><span class="hljs-params">(lrc <span class="hljs-keyword">string</span>)</span></span> &#123;
+	fmt.Printf(<span class="hljs-string">&quot;Student %s, is sing: %s\n&quot;</span>, s.name, lrc)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-keyword">var</span> i1 Humaner  <span class="hljs-comment">//子集</span>
+	<span class="hljs-keyword">var</span> i2 Songster <span class="hljs-comment">//超集</span>
+
+	<span class="hljs-comment">//超集可以给子集</span>
+	i1 = i2
+	fmt.Println(<span class="hljs-string">&quot;i1=&quot;</span>, i1)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">i1= &lt;nil&gt;</span>
+<span class="hljs-comment">*/</span></code></pre><p>代码能编得过，没有问题。</p><h3 id="4-5-空接口"><a href="#4-5-空接口" class="headerlink" title="4.5 空接口"></a>4.5 空接口</h3><p>空接口 <code>interface(&#123;&#125;)</code> 不包含任何方法，可以接收任意类型。正因为如此，所有的类型都实现了空接口，空接口可以存储任意类型的数值。<strong>空接口就是个万能类型，能够保存任意类型的值</strong>。</p><h4 id="4-5-1-可以给空接口类型赋任意类型的值"><a href="#4-5-1-可以给空接口类型赋任意类型的值" class="headerlink" title="4.5.1 可以给空接口类型赋任意类型的值"></a>4.5.1 可以给空接口类型赋任意类型的值</h4><p>示例：</p><pre><code class="hljs go"><span class="hljs-keyword">type</span> Any <span class="hljs-keyword">interface</span>&#123;&#125; <span class="hljs-comment">//any或Any，是空接口一个很好的别名或缩写</span>
+
+<span class="hljs-keyword">type</span> Person <span class="hljs-keyword">struct</span> &#123;
+	name <span class="hljs-keyword">string</span>
+	age  <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-keyword">var</span> any Any <span class="hljs-comment">//空接口可以给任何值</span>
+
+	any = <span class="hljs-number">123</span>
+	fmt.Printf(<span class="hljs-string">&quot;any type is: %T, value = %v\n&quot;</span>, any, any)
+
+	any = <span class="hljs-string">&quot;Golang&quot;</span>
+	fmt.Printf(<span class="hljs-string">&quot;any type is: %T, value = %v\n&quot;</span>, any, any)
+
+	any = <span class="hljs-literal">true</span>
+	fmt.Printf(<span class="hljs-string">&quot;any type is: %T, value = %v\n&quot;</span>, any, any)
+
+	any = Person&#123;<span class="hljs-string">&quot;Golang&quot;</span>, <span class="hljs-number">11</span>&#125;
+	fmt.Printf(<span class="hljs-string">&quot;any type is: %T, value = %v\n&quot;</span>, any, any)
+
+	any = &amp;Person&#123;<span class="hljs-string">&quot;Rob Pike&quot;</span>, <span class="hljs-number">55</span>&#125;
+	fmt.Printf(<span class="hljs-string">&quot;any type is: %T, value = %v\n&quot;</span>, any, any)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">any type is: int, value = 123</span>
+<span class="hljs-comment">any type is: string, value = Golang</span>
+<span class="hljs-comment">any type is: bool, value = true</span>
+<span class="hljs-comment">any type is: main.Person, value = &#123;Golang 11&#125;</span>
+<span class="hljs-comment">any type is: *main.Person, value = &amp;&#123;Rob Pike 55&#125;</span>
+<span class="hljs-comment">*/</span></code></pre><h4 id="4-5-2-Print-系列函数的参数列表就是空接口类型"><a href="#4-5-2-Print-系列函数的参数列表就是空接口类型" class="headerlink" title="4.5.2 Print()系列函数的参数列表就是空接口类型"></a>4.5.2 <code>Print()</code>系列函数的参数列表就是空接口类型</h4><p>当函数可以接收任意类型的时候，我们会将其参数类型声明为：空接口 <code>interface&#123;&#125;</code> 类型。最经典的例子就是标准库 <code>fmt</code> 中 <code>Print</code> 系列的函数。<br>示例：</p><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-keyword">var</span> v1 <span class="hljs-keyword">interface</span>&#123;&#125; = <span class="hljs-number">1</span>
+	<span class="hljs-keyword">var</span> v2 <span class="hljs-keyword">interface</span>&#123;&#125; = <span class="hljs-string">&quot;Google&quot;</span>
+	<span class="hljs-keyword">var</span> v3 <span class="hljs-keyword">interface</span>&#123;&#125; = &amp;v2
+	<span class="hljs-keyword">var</span> v4 <span class="hljs-keyword">interface</span>&#123;&#125; = <span class="hljs-keyword">struct</span>&#123; X <span class="hljs-keyword">int</span> &#125;&#123;<span class="hljs-number">1</span>&#125;
+	<span class="hljs-keyword">var</span> v5 <span class="hljs-keyword">interface</span>&#123;&#125; = &amp;<span class="hljs-keyword">struct</span>&#123; X <span class="hljs-keyword">int</span> &#125;&#123;<span class="hljs-number">1</span>&#125;
+
+	fmt.Printf(<span class="hljs-string">&quot;v1=%v, v2=%v, v3=%v, v4=%v, v5=%v\n&quot;</span>, v1, v2, v3, v4, v5)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">v1=1, v2=Google, v3=0xc0000341f0, v4=&#123;1&#125;, v5=&amp;&#123;1&#125;</span>
+<span class="hljs-comment">*/</span></code></pre><p>标准库 <code>fmt</code> 中 <code>Println()</code> 函数的定义：<code>func Println(a ...interface&#123;&#125;) (n int, err error)</code>，它的参数就是可以接收 0 个或多个的任意类型参数。</p><h4 id="4-5-3-map-string-interface-演示"><a href="#4-5-3-map-string-interface-演示" class="headerlink" title="4.5.3 map[string]interface{} 演示"></a>4.5.3 <code>map[string]interface&#123;&#125;</code> 演示</h4><p>利用 <code>interface&#123;&#125;</code> 可以存放任意类型的值，这个特性。实现 <code>map</code> 多种数据类型的存储、读取。</p><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	m := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]<span class="hljs-keyword">interface</span>&#123;&#125;)
+	m[<span class="hljs-string">&quot;int&quot;</span>] = <span class="hljs-number">123</span>
+	m[<span class="hljs-string">&quot;string&quot;</span>] = <span class="hljs-string">&quot;hello&quot;</span>
+	m[<span class="hljs-string">&quot;bool&quot;</span>] = <span class="hljs-literal">true</span>
+	m[<span class="hljs-string">&quot;float64&quot;</span>] = <span class="hljs-number">123.111</span>
+	m[<span class="hljs-string">&quot;nil&quot;</span>] = <span class="hljs-literal">nil</span>
+	m[<span class="hljs-string">&quot;slice&quot;</span>] = []<span class="hljs-keyword">int</span>&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>&#125;
+
+	m2 := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]<span class="hljs-keyword">int</span>)
+	m2[<span class="hljs-string">&quot;aaa&quot;</span>] = <span class="hljs-number">0</span>
+
+	m[<span class="hljs-string">&quot;map&quot;</span>] = m2 <span class="hljs-comment">// 在 map 中，嵌套另一个 map</span>
+
+	<span class="hljs-keyword">for</span> key, value := <span class="hljs-keyword">range</span> m &#123;
+		fmt.Printf(<span class="hljs-string">&quot;key=%s, value=%v\n&quot;</span>, key, value)
+	&#125;
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">key=string, value=hello</span>
+<span class="hljs-comment">key=bool, value=true</span>
+<span class="hljs-comment">key=float64, value=123.111</span>
+<span class="hljs-comment">key=nil, value=&lt;nil&gt;</span>
+<span class="hljs-comment">key=slice, value=[1 2 3]</span>
+<span class="hljs-comment">key=map, value=map[aaa:0]</span>
+<span class="hljs-comment">key=int, value=123</span>
+<span class="hljs-comment">*/</span></code></pre><p><code>map</code> 是无序的，所以每次打印结果的顺序都有可能不同。<br>参考文献：</p><blockquote><p><a target="_blank" rel="noopener" href="https://github.com/fengchunjian/goexamples/blob/master/map_interface/null_interface.go">https://github.com/fengchunjian/goexamples/blob/master/map_interface/null_interface.go</a><br><a target="_blank" rel="noopener" href="http://blog.ninja911.com/blog-show-blog_id-76.html">http://blog.ninja911.com/blog-show-blog_id-76.html</a></p></blockquote><h3 id="4-6-示例：使用-Sorter-接口排序"><a href="#4-6-示例：使用-Sorter-接口排序" class="headerlink" title="4.6 示例：使用 Sorter 接口排序"></a>4.6 示例：使用 Sorter 接口排序</h3><p>编写一个接口，实现对不同数据类型的冒泡排序。<br>要对一组数字或字符串排序，只需要实现三个方法：<br>1.反映元素个数的 <code>Len()</code> 方法。<br>2.比较第 i 和 j 个元素的 <code>Less(i, j)</code> 方法。<br>3.交换第 i 和 j 个元素的 <code>Swap(i, j)</code> 方法。</p><h4 id="4-6-1-目录结构"><a href="#4-6-1-目录结构" class="headerlink" title="4.6.1 目录结构"></a>4.6.1 目录结构</h4><p>XXX</p><h4 id="4-6-2-编写接口的代码"><a href="#4-6-2-编写接口的代码" class="headerlink" title="4.6.2 编写接口的代码"></a>4.6.2 编写接口的代码</h4><p>编写一个接口，实现排序时，传过去的实参是这个接口类型。<br>./sort/sort.go 文件的代码如下：</p><pre><code class="hljs go"><span class="hljs-keyword">package</span> sort
+
+<span class="hljs-comment">//声明接口，并声明需要实现的3个方法</span>
+<span class="hljs-keyword">type</span> Sorter <span class="hljs-keyword">interface</span> &#123;
+	Len() <span class="hljs-keyword">int</span>
+	Less(i, j <span class="hljs-keyword">int</span>) <span class="hljs-keyword">bool</span>
+	Swap(i, j <span class="hljs-keyword">int</span>)
+&#125;
+
+<span class="hljs-comment">//实现冒泡排序的函数</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Sort</span><span class="hljs-params">(data Sorter)</span></span> &#123; <span class="hljs-comment">//参数为接口类型</span>
+	<span class="hljs-keyword">for</span> pass := <span class="hljs-number">1</span>; pass &lt; data.Len(); pass++ &#123; <span class="hljs-comment">//data.Len()，获取该类型的长度</span>
+		<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; data.Len()-pass; i++ &#123;
+			<span class="hljs-comment">//比较两个数值的大小</span>
+			<span class="hljs-keyword">if</span> data.Less(i+<span class="hljs-number">1</span>, i) &#123;
+				data.Swap(i, i+<span class="hljs-number">1</span>) <span class="hljs-comment">//实现交换</span>
+			&#125;
+		&#125;
+	&#125;
+&#125;
+
+<span class="hljs-comment">//检测是否已实现了排序</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">IsSorted</span><span class="hljs-params">(data Sorter)</span> <span class="hljs-title">bool</span></span> &#123;
+	n := data.Len()
+	<span class="hljs-keyword">for</span> i := n - <span class="hljs-number">1</span>; i &gt; <span class="hljs-number">0</span>; i-- &#123;
+		<span class="hljs-keyword">if</span> data.Less(i, i<span class="hljs-number">-1</span>) &#123;
+			<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+		&#125;
+	&#125;
+	<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
+&#125;
+
+<span class="hljs-comment">//声明IntArray变量为，切片类型存放int</span>
+<span class="hljs-keyword">type</span> IntArray []<span class="hljs-keyword">int</span>
+
+<span class="hljs-comment">//IntArray类型实现接口中的Len()方法，接收者为普通参数</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p IntArray)</span> <span class="hljs-title">Len</span><span class="hljs-params">()</span> <span class="hljs-title">int</span></span> &#123;
+	<span class="hljs-keyword">return</span> <span class="hljs-built_in">len</span>(p)
+&#125;
+
+<span class="hljs-comment">//IntArray类型实现接口中的Less(i, j int)bool方法，接收者为普通参数</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p IntArray)</span> <span class="hljs-title">Less</span><span class="hljs-params">(i, j <span class="hljs-keyword">int</span>)</span> <span class="hljs-title">bool</span></span> &#123;
+	<span class="hljs-keyword">return</span> p[i] &lt; p[j]
+&#125;
+
+<span class="hljs-comment">//IntArray类型实现接口中的Swap(i, j int)方法，接收者为普通参数</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p IntArray)</span> <span class="hljs-title">Swap</span><span class="hljs-params">(i, j <span class="hljs-keyword">int</span>)</span></span> &#123;
+	p[i], p[j] = p[j], p[i]
+&#125;
+
+<span class="hljs-comment">//定义StringArray变量为，切片类型存放字符串</span>
+<span class="hljs-keyword">type</span> StringArray []<span class="hljs-keyword">string</span>
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p StringArray)</span> <span class="hljs-title">Len</span><span class="hljs-params">()</span> <span class="hljs-title">int</span></span> &#123;
+	<span class="hljs-keyword">return</span> <span class="hljs-built_in">len</span>(p)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p StringArray)</span> <span class="hljs-title">Less</span><span class="hljs-params">(i, j <span class="hljs-keyword">int</span>)</span> <span class="hljs-title">bool</span></span> &#123;
+	<span class="hljs-keyword">return</span> p[i] &lt; p[j]
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p StringArray)</span> <span class="hljs-title">Swap</span><span class="hljs-params">(i, j <span class="hljs-keyword">int</span>)</span></span> &#123;
+	p[i], p[j] = p[j], p[i]
+&#125;
+
+<span class="hljs-comment">//对一个int切片进行排序</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">SortInts</span><span class="hljs-params">(a []<span class="hljs-keyword">int</span>)</span></span> &#123;
+	Sort(IntArray(a)) <span class="hljs-comment">//将a转换为IntArray类型</span>
+&#125;
+
+<span class="hljs-comment">//对一个string切片进行排序</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">SortStrings</span><span class="hljs-params">(a []<span class="hljs-keyword">string</span>)</span></span> &#123;
+	Sort(StringArray(a)) <span class="hljs-comment">//将a转换为StringArray类型</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">IntsAreSorted</span><span class="hljs-params">(a []<span class="hljs-keyword">int</span>)</span> <span class="hljs-title">bool</span></span> &#123;
+	<span class="hljs-keyword">return</span> IsSorted(IntArray(a))
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">StringsAreSorted</span><span class="hljs-params">(a []<span class="hljs-keyword">string</span>)</span> <span class="hljs-title">bool</span></span> &#123;
+	<span class="hljs-keyword">return</span> IsSorted(StringArray(a))
+&#125;
+</code></pre><h4 id="4-6-3-实现：不同数据类型调用同一个接口，完成排序"><a href="#4-6-3-实现：不同数据类型调用同一个接口，完成排序" class="headerlink" title="4.6.3 实现：不同数据类型调用同一个接口，完成排序"></a>4.6.3 实现：不同数据类型调用同一个接口，完成排序</h4><p>./main.go 文件的代码如下：</p><pre><code class="hljs go"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-keyword">import</span> (
+	<span class="hljs-string">&quot;fmt&quot;</span>
+	<span class="hljs-string">&quot;gitee.com/quanquan616/mySorter/sort&quot;</span>
+)
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">ints</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-comment">//初始化一个切片，里面存放int值</span>
+	data := []<span class="hljs-keyword">int</span>&#123;<span class="hljs-number">74</span>, <span class="hljs-number">59</span>, <span class="hljs-number">238</span>, <span class="hljs-number">-784</span>, <span class="hljs-number">9845</span>, <span class="hljs-number">959</span>, <span class="hljs-number">905</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">42</span>, <span class="hljs-number">7586</span>, <span class="hljs-number">-5467984</span>, <span class="hljs-number">7586</span>&#125;
+	<span class="hljs-comment">//将这个切片类型，转换为IntArray类型</span>
+	a := sort.IntArray(data)
+	<span class="hljs-comment">//因为IntArray类型已经实现了Sorter接口中的所有方法</span>
+	<span class="hljs-comment">//经过上一步的转换，此时a已经是IntArray类型，所以它与Sorter接口类型吻合</span>
+	sort.Sort(a)
+
+	<span class="hljs-keyword">if</span> !sort.IsSorted(a) &#123;
+		<span class="hljs-built_in">panic</span>(<span class="hljs-string">&quot;failed.&quot;</span>)
+	&#125;
+
+	fmt.Printf(<span class="hljs-string">&quot;The sorted array is: %v\n&quot;</span>, a)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">strings</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-comment">//初始化一个切片，存放string值</span>
+	data := []<span class="hljs-keyword">string</span>&#123;<span class="hljs-string">&quot;barry&quot;</span>, <span class="hljs-string">&quot;quanquan616&quot;</span>, <span class="hljs-string">&quot;Rita&quot;</span>, <span class="hljs-string">&quot;rita&quot;</span>, <span class="hljs-string">&quot;Barry&quot;</span>, <span class="hljs-string">&quot;sally&quot;</span>, <span class="hljs-string">&quot;Golang&quot;</span>, <span class="hljs-string">&quot;Sally&quot;</span>&#125;
+	<span class="hljs-comment">//将切片转换成StringArray类型</span>
+	a := sort.StringArray(data)
+	<span class="hljs-comment">//StringArray类型也已经实现了Sorter接口的所有方法</span>
+	<span class="hljs-comment">//所以a的类型可以被Sorter接口类型所接收</span>
+	sort.Sort(a)
+
+	<span class="hljs-keyword">if</span> !sort.IsSorted(a) &#123;
+		<span class="hljs-built_in">panic</span>(<span class="hljs-string">&quot;failed.&quot;</span>)
+	&#125;
+
+	fmt.Printf(<span class="hljs-string">&quot;The sorted array is: %v\n&quot;</span>, a)
+&#125;
+
+<span class="hljs-comment">//根据结构体day中的num进行排序</span>
+<span class="hljs-keyword">type</span> day <span class="hljs-keyword">struct</span> &#123;
+	num       <span class="hljs-keyword">int</span>
+	shortName <span class="hljs-keyword">string</span>
+	longName  <span class="hljs-keyword">string</span>
+&#125;
+
+<span class="hljs-keyword">type</span> dayArray <span class="hljs-keyword">struct</span> &#123;
+	data []*day <span class="hljs-comment">//声明data字段的类型为切片，存放day的指针变量</span>
+&#125;
+
+<span class="hljs-comment">//dayArray类型实现Len()方法，接收者为指针类型</span>
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p *dayArray)</span> <span class="hljs-title">Len</span><span class="hljs-params">()</span> <span class="hljs-title">int</span></span> &#123;
+	<span class="hljs-comment">//p是一个结构体类型，里面有一个data字段，data字段是一个切片类型</span>
+	<span class="hljs-comment">//p.data操作是取出那个一整个切片</span>
+	<span class="hljs-keyword">return</span> <span class="hljs-built_in">len</span>(p.data)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p *dayArray)</span> <span class="hljs-title">Less</span><span class="hljs-params">(i, j <span class="hljs-keyword">int</span>)</span> <span class="hljs-title">bool</span></span> &#123; <span class="hljs-comment">//接收者为指针类型</span>
+	<span class="hljs-comment">//p.data操作得到了一个切片，既然是切片类型就能使用索引进行取值</span>
+	<span class="hljs-keyword">return</span> p.data[i].num &lt; p.data[j].num
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p *dayArray)</span> <span class="hljs-title">Swap</span><span class="hljs-params">(i, j <span class="hljs-keyword">int</span>)</span></span> &#123; <span class="hljs-comment">//接收者为指针类型</span>
+	p.data[i], p.data[j] = p.data[j], p.data[i]
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">days</span><span class="hljs-params">()</span></span> &#123;
+	Sunday := day&#123;<span class="hljs-number">0</span>, <span class="hljs-string">&quot;SUN&quot;</span>, <span class="hljs-string">&quot;Sunday&quot;</span>&#125;
+	Monday := day&#123;<span class="hljs-number">1</span>, <span class="hljs-string">&quot;MON&quot;</span>, <span class="hljs-string">&quot;Monday&quot;</span>&#125;
+	Tuesday := day&#123;<span class="hljs-number">2</span>, <span class="hljs-string">&quot;TUE&quot;</span>, <span class="hljs-string">&quot;Tuesday&quot;</span>&#125;
+	Wednesday := day&#123;<span class="hljs-number">3</span>, <span class="hljs-string">&quot;WED&quot;</span>, <span class="hljs-string">&quot;Wednesday&quot;</span>&#125;
+	Thursday := day&#123;<span class="hljs-number">4</span>, <span class="hljs-string">&quot;THU&quot;</span>, <span class="hljs-string">&quot;Thursday&quot;</span>&#125;
+	Friday := day&#123;<span class="hljs-number">5</span>, <span class="hljs-string">&quot;FRI&quot;</span>, <span class="hljs-string">&quot;Friday&quot;</span>&#125;
+	Saturday := day&#123;<span class="hljs-number">6</span>, <span class="hljs-string">&quot;SAT&quot;</span>, <span class="hljs-string">&quot;Saturday&quot;</span>&#125;
+
+	<span class="hljs-comment">//初始化一个切片，存放day的指针变量</span>
+	<span class="hljs-comment">//结构体dayArray类型中的data字段的类型为切片，切片中存放的数据类型为day的指针变量</span>
+	data := []*day&#123;&amp;Tuesday, &amp;Thursday, &amp;Wednesday, &amp;Sunday, &amp;Monday, &amp;Friday, &amp;Saturday&#125;
+	a := dayArray&#123;data&#125; <span class="hljs-comment">//dayArray的数据类型是一个结构体，结构体的语法是大括号&quot;&#123;&#125;&quot;写法</span>
+	sort.Sort(&amp;a) <span class="hljs-comment">//接收者是指针类型，需要一个合法指向。所以必须取地址，把地址的值传过去</span>
+
+	<span class="hljs-keyword">if</span> !sort.IsSorted(&amp;a) &#123;
+		<span class="hljs-built_in">panic</span>(<span class="hljs-string">&quot;days sort failed.&quot;</span>)
+	&#125;
+
+	<span class="hljs-keyword">for</span> _, d := <span class="hljs-keyword">range</span> data &#123;
+		fmt.Printf(<span class="hljs-string">&quot;%s &quot;</span>, d.longName)
+	&#125;
+	fmt.Println()
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	ints()
+	strings()
+	days()
+&#125;</code></pre><h4 id="4-6-4-最终运行结果"><a href="#4-6-4-最终运行结果" class="headerlink" title="4.6.4 最终运行结果"></a>4.6.4 最终运行结果</h4><pre><code class="hljs go">运行结果：
+The sorted array is: [<span class="hljs-number">-5467984</span> <span class="hljs-number">-784</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">42</span> <span class="hljs-number">59</span> <span class="hljs-number">74</span> <span class="hljs-number">238</span> <span class="hljs-number">905</span> <span class="hljs-number">959</span> <span class="hljs-number">7586</span> <span class="hljs-number">7586</span> <span class="hljs-number">9845</span>]
+The sorted array is: [Barry Golang Rita Sally barry quanquan616 rita sally]
+Sunday Monday Tuesday Wednesday Thursday Friday Saturday</code></pre><h4 id="4-6-5-不将-dayArray-声明为结构体的写法"><a href="#4-6-5-不将-dayArray-声明为结构体的写法" class="headerlink" title="4.6.5 不将 dayArray 声明为结构体的写法"></a>4.6.5 不将 dayArray 声明为结构体的写法</h4><p>4.6.3 的代码中，dayArray 是一个结构体类型，里面包含了一个 data 字段，字段类型为一个切片，存放的数据类型是 day 的指针变量。<br>如果不想使用结构体的话，可以如下写法：（其余代码不改动）</p><pre><code class="hljs go"><span class="hljs-keyword">type</span> day <span class="hljs-keyword">struct</span> &#123;
+	num       <span class="hljs-keyword">int</span>
+	shortName <span class="hljs-keyword">string</span>
+	longName  <span class="hljs-keyword">string</span>
+&#125;
+
+<span class="hljs-comment">//类型为一个切片，存放的数据类型为day的指针变量</span>
+<span class="hljs-keyword">type</span> dayArray []*day
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p *dayArray)</span> <span class="hljs-title">Len</span><span class="hljs-params">()</span> <span class="hljs-title">int</span></span> &#123;
+	<span class="hljs-comment">//dayArray是一个切片了</span>
+	<span class="hljs-keyword">return</span> <span class="hljs-built_in">len</span>(*p) <span class="hljs-comment">//接收者是指针类型，因为指针类型存放的是内存地址的值，必须先取出值，才能进行计算</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p *dayArray)</span> <span class="hljs-title">Less</span><span class="hljs-params">(i, j <span class="hljs-keyword">int</span>)</span> <span class="hljs-title">bool</span></span> &#123;
+	<span class="hljs-comment">//接收者是指针类型，需要先用星花*运算符取出地址中的值，才能有后续的操作</span>
+	<span class="hljs-keyword">return</span> (*p)[i].num &lt; (*p)[j].num <span class="hljs-comment">//(*p)操作是取出内存地址中的那个一个整个切片</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p *dayArray)</span> <span class="hljs-title">Swap</span><span class="hljs-params">(i, j <span class="hljs-keyword">int</span>)</span></span> &#123;
+	(*p)[i], (*p)[j] = (*p)[j], (*p)[i]
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">days</span><span class="hljs-params">()</span></span> &#123;
+	Sunday := day&#123;<span class="hljs-number">0</span>, <span class="hljs-string">&quot;SUN&quot;</span>, <span class="hljs-string">&quot;Sunday&quot;</span>&#125;
+	Monday := day&#123;<span class="hljs-number">1</span>, <span class="hljs-string">&quot;MON&quot;</span>, <span class="hljs-string">&quot;Monday&quot;</span>&#125;
+	Tuesday := day&#123;<span class="hljs-number">2</span>, <span class="hljs-string">&quot;TUE&quot;</span>, <span class="hljs-string">&quot;Tuesday&quot;</span>&#125;
+	Wednesday := day&#123;<span class="hljs-number">3</span>, <span class="hljs-string">&quot;WED&quot;</span>, <span class="hljs-string">&quot;Wednesday&quot;</span>&#125;
+	Thursday := day&#123;<span class="hljs-number">4</span>, <span class="hljs-string">&quot;THU&quot;</span>, <span class="hljs-string">&quot;Thursday&quot;</span>&#125;
+	Friday := day&#123;<span class="hljs-number">5</span>, <span class="hljs-string">&quot;FRI&quot;</span>, <span class="hljs-string">&quot;Friday&quot;</span>&#125;
+	Saturday := day&#123;<span class="hljs-number">6</span>, <span class="hljs-string">&quot;SAT&quot;</span>, <span class="hljs-string">&quot;Saturday&quot;</span>&#125;
+
+	data := []*day&#123;&amp;Tuesday, &amp;Thursday, &amp;Wednesday, &amp;Sunday, &amp;Monday, &amp;Friday, &amp;Saturday&#125;
+	<span class="hljs-comment">//dayArray是一个存放day指针变量的切片了</span>
+	a := dayArray(data)
+	<span class="hljs-comment">//接收者是指针类型，所以必须传址</span>
+	sort.Sort(&amp;a)
+
+	<span class="hljs-keyword">if</span> !sort.IsSorted(&amp;a) &#123;
+		<span class="hljs-built_in">panic</span>(<span class="hljs-string">&quot;days sort failed.&quot;</span>)
+	&#125;
+
+	<span class="hljs-keyword">for</span> _, d := <span class="hljs-keyword">range</span> data &#123;
+		fmt.Printf(<span class="hljs-string">&quot;%s &quot;</span>, d.longName)
+	&#125;
+	fmt.Println()
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	days()
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">Sunday Monday Tuesday Wednesday Thursday Friday Saturday </span>
+<span class="hljs-comment">*/</span></code></pre><p>可以看到，运行结果一模一样。<br>4.6.3 代码中的写法是将切片再次封装成为一个数据类型，通过操作该数据类型中的字段，得到一整个切片，然后再根据下标进行取值。<br>本例中的写法是声明一个变量，类型为存放指针变量的切片，每次都是直接操作这个变量。</p><h4 id="4-6-6-参考文献"><a href="#4-6-6-参考文献" class="headerlink" title="4.6.6 参考文献"></a>4.6.6 参考文献</h4><p>本节内容均来源于：<br>原文作者：Go 技术论坛文档：《Go 入门指南（）》<br>转自链接：<a target="_blank" rel="noopener" href="https://learnku.com/docs/the-way-to-go/the-first-example-of-117-sorting-using-the-sorter-interface/3653">https://learnku.com/docs/the-way-to-go/the-first-example-of-117-sorting-using-the-sorter-interface/3653</a><br>版权声明：翻译文档著作权归译者和 LearnKu 社区所有。转载请保留原文链接</p><h3 id="4-7-反射包reflect"><a href="#4-7-反射包reflect" class="headerlink" title="4.7 反射包reflect"></a>4.7 反射包<code>reflect</code></h3><p>反射可以在运行时检查类型和变量，例如它的大小、方法。<br>变量的最基本信息是：类型和值。反射包的 <code>Type</code> 用来表示一个类型，反射包的 <code>Value</code> 为值提供了反射接口。</p><h4 id="4-7-1-最基本的两个函数"><a href="#4-7-1-最基本的两个函数" class="headerlink" title="4.7.1 最基本的两个函数"></a>4.7.1 最基本的两个函数</h4><p><code>reflect.TypeOf()</code>，返回变量的类型。<br><code>reflect.ValueOf()</code>，返回变量的值。<br>示例：</p><pre><code class="hljs go">
+<span class="hljs-string">``</span><span class="hljs-string">`go</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">## 五、类型断言</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">类型查询也叫类型断言，常用的有两种方式：</span>
+<span class="hljs-string">1.comma-ok 断言（`</span><span class="hljs-keyword">if</span><span class="hljs-string">`）</span>
+<span class="hljs-string">2.type-switch 测试（`</span><span class="hljs-keyword">switch</span><span class="hljs-string">`）</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">### 5.1 if 实现类型断言</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">被判断的变量必须是一个接口变量，否则编译器会报错：`</span>invalid <span class="hljs-keyword">type</span> assertion: varI.(T) (non-<span class="hljs-keyword">interface</span> <span class="hljs-keyword">type</span> (<span class="hljs-keyword">type</span> of varI) on left)<span class="hljs-string">` 。</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">#### 5.1.1 基本语法</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">`</span><span class="hljs-keyword">if</span> value, ok := varName.(Type); ok == <span class="hljs-literal">true</span> &#123;...&#125;<span class="hljs-string">`。</span>
+<span class="hljs-string">`</span>varName.(Type)<span class="hljs-string">` 采用`</span>变量名.(数据类型)<span class="hljs-string">`的方式获取到：该变量的值和该变量是否为指定数据类型的 `</span><span class="hljs-keyword">bool</span><span class="hljs-string">` 值。</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">#### 5.1.2 最基本的使用</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">`</span><span class="hljs-string">``</span><span class="hljs-keyword">go</span>
+<span class="hljs-keyword">if</span> v, ok := varI.(T); ok &#123;
+    Process(v)
+    <span class="hljs-keyword">return</span>
+&#125;</code></pre><p>如果断言成功（varI 是 T 类型），v 是 varI 本身的值，ok 会是布尔值 true。否则 v 是 T 类型的零值，ok 会是布尔值 false，不会造成运行时错误。<br>注意：varI 需要是一个接口变量。</p><h4 id="5-1-3-简洁写法"><a href="#5-1-3-简洁写法" class="headerlink" title="5.1.3 简洁写法"></a>5.1.3 简洁写法</h4><p>多数情况下，可能只是想在 if 中测试一下 ok 的值，此时使用下面的写法会显得更加简洁、方便。<br>示例：</p><pre><code class="hljs go"><span class="hljs-keyword">if</span> _, ok := varI.(T); ok &#123;
+    <span class="hljs-comment">//...</span>
+&#125;
+<span class="hljs-number">123</span>
+<span class="hljs-string">``</span><span class="hljs-string">`go</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">#### 5.1.4 示例</span>
+<span class="hljs-string"></span>
+<span class="hljs-string">`</span><span class="hljs-string">``</span><span class="hljs-keyword">go</span>
+<span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	name  <span class="hljs-keyword">string</span>
+	stuNo <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-comment">//声明一个长度为3的切片，里面的元素都是空接口。空接口可以接收任意的数据类型</span>
+	items := <span class="hljs-built_in">make</span>([]<span class="hljs-keyword">interface</span>&#123;&#125;, <span class="hljs-number">3</span>)
+
+	items[<span class="hljs-number">0</span>] = <span class="hljs-number">111</span>
+	items[<span class="hljs-number">1</span>] = <span class="hljs-string">&quot;Golang&quot;</span>
+	items[<span class="hljs-number">2</span>] = Student&#123;<span class="hljs-string">&quot;xxx&quot;</span>, <span class="hljs-number">999</span>&#125;
+
+	<span class="hljs-comment">//遍历，第一个返回元素的下标，第二个返回数据值。这里就是返回接口中的值</span>
+	<span class="hljs-keyword">for</span> index, data := <span class="hljs-keyword">range</span> items &#123;
+
+		<span class="hljs-comment">//data.(int)返回两个值，第一个是该变量本身的值，第二个返回该变量是否为指定数据类型的bool</span>
+		<span class="hljs-keyword">if</span> value, ok := data.(<span class="hljs-keyword">int</span>); ok == <span class="hljs-literal">true</span> &#123;
+			fmt.Printf(<span class="hljs-string">&quot;items[%d] type is int, value=%d\n&quot;</span>, index, value)
+		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> value, ok := data.(<span class="hljs-keyword">string</span>); ok == <span class="hljs-literal">true</span> &#123;
+			fmt.Printf(<span class="hljs-string">&quot;items[%d] type is string, value=%s\n&quot;</span>, index, value)
+		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> value, ok := data.(Student); ok == <span class="hljs-literal">true</span> &#123; <span class="hljs-comment">//data这个变量是否为Student类型，Student是自定义的结构体类型</span>
+			fmt.Printf(<span class="hljs-string">&quot;items[%d] type is Student, value=%+v\n&quot;</span>, index, value)
+		&#125;
+	&#125;
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">items[0] type is int, value=111</span>
+<span class="hljs-comment">items[1] type is string, value=Golang</span>
+<span class="hljs-comment">items[2] type is Student, value=&#123;name:xxx stuNo:999&#125;</span>
+<span class="hljs-comment">*/</span></code></pre><h3 id="5-2-type-switch"><a href="#5-2-type-switch" class="headerlink" title="5.2 type-switch"></a>5.2 type-switch</h3><p>在程序运行时的时候进行类型分析。在处理来自于外部的、类型未知的数据时，比如解析诸如 JSON 或 XML 编码的数据，类型测试和转换会非常有用。</p><h4 id="5-2-1-基本写法"><a href="#5-2-1-基本写法" class="headerlink" title="5.2.1 基本写法"></a>5.2.1 基本写法</h4><pre><code class="hljs go"><span class="hljs-keyword">switch</span> t := data.(<span class="hljs-keyword">type</span>) &#123;
+<span class="hljs-keyword">case</span> <span class="hljs-keyword">type</span>:
+	...
+<span class="hljs-keyword">case</span> <span class="hljs-keyword">type</span>:
+	...
+&#125;</code></pre><p>注意：<br>1.<code>switch t := data.(type)</code> 这条语句中，<code>type</code> 是关键字的那个<code>type</code>，不要写明数据类型。变量 t 在内存中占据两个字长：一个是其本身的类型，还有一个是其本身的值。<br>2.<code>case type</code> 语句中的 <code>type</code> 是写明具体的一个数据类型（例如：<code>int</code>, <code>string</code>, <code>StructName</code>），<code>case type</code> 根据 <code>switch</code> 语句中的 t 会去自行匹配。<br>3.<strong>data.(type) 必须在 switch 中使用，否则就报错</strong>！</p><h4 id="5-2-2-简洁写法"><a href="#5-2-2-简洁写法" class="headerlink" title="5.2.2 简洁写法"></a>5.2.2 简洁写法</h4><p>如果仅仅只是测试变量的类型，不想用它的值，那么就可以不需要赋值语句。<br>示例：</p><pre><code class="hljs go"><span class="hljs-keyword">switch</span> areaIntf.(<span class="hljs-keyword">type</span>) &#123;
+<span class="hljs-keyword">case</span> *Square:
+    <span class="hljs-comment">//...</span>
+<span class="hljs-keyword">case</span> *Circle:
+    <span class="hljs-comment">//...</span>
+<span class="hljs-keyword">default</span>:
+    <span class="hljs-comment">//...</span>
+&#125;</code></pre><h4 id="5-2-3-示例1：基本示例"><a href="#5-2-3-示例1：基本示例" class="headerlink" title="5.2.3 示例1：基本示例"></a>5.2.3 示例1：基本示例</h4><p>将所有值放入一个切片中，切片的数据类型是空接口。（空接口是万能类型，允许接收任意类型）<br>示例：</p><pre><code class="hljs go"><span class="hljs-keyword">type</span> Student <span class="hljs-keyword">struct</span> &#123;
+	name  <span class="hljs-keyword">string</span>
+	stuNo <span class="hljs-keyword">int</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	<span class="hljs-comment">//声明一个长度为4的切片，里面的元素都是空接口。空接口可以接收任意的数据类型</span>
+	items := <span class="hljs-built_in">make</span>([]<span class="hljs-keyword">interface</span>&#123;&#125;, <span class="hljs-number">4</span>)
+
+	items[<span class="hljs-number">0</span>] = <span class="hljs-number">111</span>
+	items[<span class="hljs-number">1</span>] = <span class="hljs-string">&quot;Golang&quot;</span>
+	items[<span class="hljs-number">2</span>] = Student&#123;<span class="hljs-string">&quot;xxx&quot;</span>, <span class="hljs-number">999</span>&#125;
+	items[<span class="hljs-number">3</span>] = <span class="hljs-literal">false</span>
+
+	<span class="hljs-comment">//遍历，第一个返回元素的下标，第二个返回数据值。这里就是返回接口中的值</span>
+	<span class="hljs-keyword">for</span> index, data := <span class="hljs-keyword">range</span> items &#123;
+		<span class="hljs-keyword">switch</span> data.(<span class="hljs-keyword">type</span>) &#123; <span class="hljs-comment">//type是关键字，会自行跟下面各个case去匹配</span>
+		<span class="hljs-keyword">case</span> <span class="hljs-keyword">int</span>:
+			fmt.Printf(<span class="hljs-string">&quot;items[%d] type is int, value=%d\n&quot;</span>, index, data)
+		<span class="hljs-keyword">case</span> <span class="hljs-keyword">string</span>:
+			fmt.Printf(<span class="hljs-string">&quot;items[%d] type is string, value=%s\n&quot;</span>, index, data)
+		<span class="hljs-keyword">case</span> Student:
+			fmt.Printf(<span class="hljs-string">&quot;items[%d] type is Student, value=%+v\n&quot;</span>, index, data)
+		<span class="hljs-keyword">case</span> <span class="hljs-keyword">bool</span>:
+			fmt.Printf(<span class="hljs-string">&quot;items[%d] type is bool, value=%v\n&quot;</span>, index, data)
+		&#125;
+	&#125;
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">items[0] type is int, value=111</span>
+<span class="hljs-comment">items[1] type is string, value=Golang</span>
+<span class="hljs-comment">items[2] type is Student, value=&#123;name:xxx stuNo:999&#125;</span>
+<span class="hljs-comment">items[3] type is bool, value=false</span>
+<span class="hljs-comment">*/</span></code></pre><h4 id="5-2-4-示例2：判定每个值的类型"><a href="#5-2-4-示例2：判定每个值的类型" class="headerlink" title="5.2.4 示例2：判定每个值的类型"></a>5.2.4 示例2：判定每个值的类型</h4><p>给定一些值，根据每个值的实际类型执行不同的动作。<br>示例：</p><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">classifier</span><span class="hljs-params">(params ...<span class="hljs-keyword">interface</span>&#123;&#125;)</span></span> &#123;
+	<span class="hljs-keyword">for</span> _, item := <span class="hljs-keyword">range</span> params &#123;
+		<span class="hljs-keyword">switch</span> t := item.(<span class="hljs-keyword">type</span>) &#123;
+		<span class="hljs-keyword">case</span> <span class="hljs-keyword">int</span>, <span class="hljs-keyword">int16</span>, <span class="hljs-keyword">int32</span>, <span class="hljs-keyword">int64</span>:
+			fmt.Printf(<span class="hljs-string">&quot;%v is an int type.\n&quot;</span>, t)
+		<span class="hljs-keyword">case</span> <span class="hljs-keyword">bool</span>:
+			fmt.Printf(<span class="hljs-string">&quot;%v is a bool type.\n&quot;</span>, t)
+		<span class="hljs-keyword">case</span> <span class="hljs-keyword">float32</span>, <span class="hljs-keyword">float64</span>:
+			fmt.Printf(<span class="hljs-string">&quot;%v is a float.\n&quot;</span>, t)
+		<span class="hljs-keyword">case</span> <span class="hljs-keyword">string</span>:
+			fmt.Printf(<span class="hljs-string">&quot;%v is a string.\n&quot;</span>, t)
+		<span class="hljs-keyword">case</span> <span class="hljs-literal">nil</span>:
+			fmt.Printf(<span class="hljs-string">&quot;it&#x27;s a nil.\n&quot;</span>)
+		<span class="hljs-keyword">default</span>:
+			fmt.Println(<span class="hljs-string">&quot;%v is unknow.\n&quot;</span>, t)
+		&#125;
+	&#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	classifier(<span class="hljs-number">13</span>, <span class="hljs-number">-14.3</span>, <span class="hljs-string">&quot;BELGIUM&quot;</span>, <span class="hljs-built_in">complex</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>), <span class="hljs-literal">nil</span>, <span class="hljs-literal">false</span>)
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">13 is an int type.</span>
+<span class="hljs-comment">-14.3 is a float.</span>
+<span class="hljs-comment">BELGIUM is a string.</span>
+<span class="hljs-comment">%v is unknow.</span>
+<span class="hljs-comment"> (1+2i)</span>
+<span class="hljs-comment">it&#x27;s a nil.</span>
+<span class="hljs-comment">false is a bool type.</span>
+<span class="hljs-comment">*/</span></code></pre><h4 id="5-2-5-示例3：type-switch-配合匿名函数"><a href="#5-2-5-示例3：type-switch-配合匿名函数" class="headerlink" title="5.2.5 示例3：type-switch 配合匿名函数"></a>5.2.5 示例3：<code>type-switch</code> 配合匿名函数</h4><p>示例：</p><pre><code class="hljs go"><span class="hljs-keyword">type</span> specialString <span class="hljs-keyword">string</span> <span class="hljs-comment">//声明一个自定义类型，其底层类型为string</span>
+
+<span class="hljs-keyword">var</span> whatItThis specialString = <span class="hljs-string">&quot;Hello Golang.&quot;</span> <span class="hljs-comment">//自定义类型的底层类型为string，因此可以把字符串复制给它</span>
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">TypeSwitch</span><span class="hljs-params">()</span></span> &#123;
+	testFunc := <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(any <span class="hljs-keyword">interface</span>&#123;&#125;)</span></span> &#123; <span class="hljs-comment">//匿名函数的参数是空接口（万能接口），可以接收任何值</span>
+		<span class="hljs-keyword">switch</span> v := any.(<span class="hljs-keyword">type</span>) &#123; <span class="hljs-comment">//v包含两个字长：一个是类型，另一个是本身的值</span>
+		<span class="hljs-keyword">case</span> <span class="hljs-keyword">bool</span>:
+			fmt.Printf(<span class="hljs-string">&quot;v type is bool, value = %v\n&quot;</span>, v)
+		<span class="hljs-keyword">case</span> <span class="hljs-keyword">int</span>:
+			fmt.Printf(<span class="hljs-string">&quot;v type is int, value = %v\n&quot;</span>, v)
+		<span class="hljs-keyword">case</span> <span class="hljs-keyword">float32</span>, <span class="hljs-keyword">float64</span>:
+			fmt.Printf(<span class="hljs-string">&quot;v type is float, value = %v\n&quot;</span>, v)
+		<span class="hljs-keyword">case</span> <span class="hljs-keyword">string</span>:
+			fmt.Printf(<span class="hljs-string">&quot;v type is string, value = %v\n&quot;</span>, v)
+		<span class="hljs-keyword">case</span> specialString:
+			fmt.Printf(<span class="hljs-string">&quot;v type is a customize type: specialString, value = %v\n&quot;</span>, v)
+		<span class="hljs-keyword">default</span>:
+			fmt.Println(<span class="hljs-string">&quot;v type is unkonw&quot;</span>)
+		&#125;
+	&#125;
+	testFunc(whatItThis)
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;
+	TypeSwitch()
+&#125;
+
+<span class="hljs-comment">/*</span>
+<span class="hljs-comment">运行结果：</span>
+<span class="hljs-comment">v type is a customize type: specialString, value = Hello Golang.</span>
+<span class="hljs-comment">*/</span></code></pre><p>本例的参考文献：</p><blockquote><p><a target="_blank" rel="noopener" href="https://learnku.com/docs/the-way-to-go/119-empty-interface/3655">https://learnku.com/docs/the-way-to-go/119-empty-interface/3655</a></p></blockquote><h4 id="5-2-6-注意事项"><a href="#5-2-6-注意事项" class="headerlink" title="5.2.6 注意事项"></a>5.2.6 注意事项</h4><h5 id="5-2-6-1-case-语句中列举的类型，都必须实现对应的接口"><a href="#5-2-6-1-case-语句中列举的类型，都必须实现对应的接口" class="headerlink" title="5.2.6.1 case 语句中列举的类型，都必须实现对应的接口"></a>5.2.6.1 case 语句中列举的类型，都必须实现对应的接口</h5><p>所有 case 语句中列举的类型（<code>nil</code> 除外）都必须实现对应的接口。如果被检测类型没有在 case 语句列举的类型中，就会执行 default 语句。</p><h5 id="5-2-6-2-在-type-switch-不允许有-fallthrough"><a href="#5-2-6-2-在-type-switch-不允许有-fallthrough" class="headerlink" title="5.2.6.2 在 type-switch 不允许有 fallthrough"></a>5.2.6.2 在 type-switch 不允许有 fallthrough</h5><p>可以用 type-switch 进行运行时类型分析，但是在 type-switch 不允许有 fallthrough。</p></div><hr><div><div class="post-metas mb-3"><div class="post-meta mr-3"><i class="iconfont icon-category"></i> <a class="hover-with-bg" href="/categories/%E7%BC%96%E7%A8%8B%E4%B9%8B%E7%BE%8E/">编程之美</a></div><div class="post-meta"><i class="iconfont icon-tags"></i> <a class="hover-with-bg" href="/tags/Golang/">Golang</a></div></div><p class="note note-warning"><strong>本文作者: </strong><a href="/">iceH</a><br><strong>本文链接: </strong><a href="http://www.secice.cn/p/edaf7f2c">http://www.secice.cn/p/edaf7f2c</a><br><strong>版权声明: </strong>本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p><div class="post-prevnext row"><article class="post-prev col-6"></article><article class="post-next col-6"><a href="/p/c2b96b2f"><span class="hidden-mobile">Golang学习之复合类型</span> <span class="visible-mobile">下一篇</span> <i class="iconfont icon-arrowright"></i></a></article></div></div><article class="comments" id="comments"><div id="vcomments"></div><script type="text/javascript">Fluid.utils.waitElementVisible("vcomments",(function(){Fluid.utils.createScript("https://cdn.staticfile.org/valine/1.4.14/Valine.min.js",(function(){new Valine({el:"#vcomments",app_id:"MnjV8raNBztIVGGKiicFL3Sq-MdYXbMMI",app_key:"hS70MmgmzDqbMSkSAfkDe42h",placeholder:"留下你的小脚印吧...",path:window.location.pathname,avatar:"wavatar",meta:["nick","mail"],pageSize:"10",lang:"zh-CN",highlight:!1,recordIP:!1,serverURLs:""})}))}))</script><noscript>Please enable JavaScript to view the <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments powered by Valine.</a></noscript></article></article></div></div></div><div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn"><div id="toc"><p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p><div class="toc-body" id="toc-body"></div></div></div></div></div><div class="col-lg-7 mx-auto nopadding-md"><div class="container custom post-custom mx-auto"><img src="https://cdn.jsdelivr.net/gh/root-iceH/root-iceH.github.io/img/psb.gif" srcset="/img/loading.gif" class="rounded mx-auto d-block mt-5" style="width:300px;height:150px"></div></div><a id="scroll-top-button" href="#" role="button"><i class="iconfont icon-arrowup" aria-hidden="true"></i></a><div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable modal-lg" role="document"><div class="modal-content"><div class="modal-header text-center"><h4 class="modal-title w-100 font-weight-bold">搜索</h4><button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body mx-3"><div class="md-form mb-5"><input type="text" id="local-search-input" class="form-control validate"> <label data-error="x" data-success="v" for="local-search-input">关键词</label></div><div class="list-group" id="local-search-result"></div></div></div></div></div></main><footer class="text-center mt-5 py-3"><div class="footer-content"><span>iceH</span> <i class="iconfont icon-love"></i> <span>一条啥也不会的咸鱼！</span></div></footer><script src="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js"></script><link rel="stylesheet" href="https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css"><script>NProgress.configure({showSpinner:!1,trickleSpeed:200}),NProgress.start(),document.addEventListener("DOMContentLoaded",(function(){window.NProgress&&window.NProgress.inc()})),window.addEventListener("load",(function(){NProgress.done()}))</script><script src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js"></script><script src="https://cdn.staticfile.org/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script><script src="/js/debouncer.js"></script><script src="/js/events.js"></script><script src="/js/plugins.js"></script><script src="/js/lazyload.js"></script><script src="https://cdn.staticfile.org/tocbot/4.12.0/tocbot.min.js"></script><script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script><script src="https://cdn.staticfile.org/anchor-js/4.3.0/anchor.min.js"></script><script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script><script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script><script>!function(t,i){(0,Fluid.plugins.typing)(i.getElementById("subtitle").title)}(window,document)</script><script src="/js/local-search.js"></script><script>document.querySelector("#local-search-input").onclick=function(){searchFunc("/local-search.xml","local-search-input","local-search-result"),this.onclick=null}</script><script src="https://gitee.com/sec-pengyy/sec-pengyy/raw/master/js/qipao.js"></script><script src="https://gitee.com/sec-pengyy/sec-pengyy/raw/master/js/jingtaisidai.js"></script><script src="https://gitee.com/sec-pengyy/sec-pengyy/raw/master/js/dianjichuzi.js"></script><script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="//cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script src="/js/boot.js"></script></body></html>
