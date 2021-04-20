@@ -2,14 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://www.secice.cn/p/1bc7f83f</loc>
+    <loc>http://www.secice.cn/wechat/</loc>
     
     <lastmod>2021-04-20</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.secice.cn/wxrce/</loc>
+    <loc>http://www.secice.cn/p/1bc7f83f</loc>
     
     <lastmod>2021-04-20</lastmod>
     
@@ -578,14 +578,14 @@
   </url>
   
   <url>
-    <loc>http://www.secice.cn/tags/Typecho/</loc>
+    <loc>http://www.secice.cn/tags/CVE-2017-8759/</loc>
     <lastmod>2021-04-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://www.secice.cn/tags/CVE-2017-8759/</loc>
+    <loc>http://www.secice.cn/tags/Typecho/</loc>
     <lastmod>2021-04-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
